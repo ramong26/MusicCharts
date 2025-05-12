@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
-
+import Image from 'next/image'
+import { TrackItem } from '../types/playlist'
 export default function Home() {
-  const [tracks, setTracks] = useState([])
+  const [tracks, setTracks] = useState<TrackItem[]>([])
 
   useEffect(() => {
     async function fetchData() {
@@ -18,6 +19,7 @@ export default function Home() {
       )
 
       const data = await playlistRes.json()
+      console.log(data)
       setTracks(data.tracks.items)
     }
 
@@ -28,8 +30,15 @@ export default function Home() {
     <div>
       <h1>🎵 Top 50 Global</h1>
       <ul>
-        {tracks.map((item: any, index) => (
+        {tracks.map((item, index) => (
           <li key={index}>
+            <Image
+              src={item.track.album.images[0].url}
+              alt="앨범표지"
+              width={300}
+              height={300}
+              priority
+            />
             {item.track.name} - {item.track.artists[0].name}
           </li>
         ))}
