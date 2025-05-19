@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { TrackItem } from '../types/playlist'
-export default function Home() {
+import { useRouter } from 'next/router'
+
+export default function Charts() {
   const [tracks, setTracks] = useState<TrackItem[]>([])
+  const router = useRouter()
 
   useEffect(() => {
     async function fetchData() {
@@ -25,13 +28,16 @@ export default function Home() {
 
     fetchData()
   }, [])
+  const handleClickTrack = (trackId: string) => {
+    router.push(`tracks/${trackId}`)
+  }
 
   return (
     <div>
       <h1>🎵 Top 50 Global</h1>
       <ul>
         {tracks.map((item, index) => (
-          <li key={index}>
+          <li key={index} onClick={() => handleClickTrack(item.track.id)}>
             <Image
               src={item.track.album.images[0].url}
               alt="앨범표지"

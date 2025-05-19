@@ -6,6 +6,7 @@ export interface Track {
   album: Album
   artists: Artist[]
   name: string
+  id: string
 }
 
 export interface Album {
