@@ -30,7 +30,7 @@ export default function Home() {
           </section>
           <section>최신곡 1개 차트 보러가기</section>
           <section>추천음악</section>
-          <section>추천 플레이리스트</section>
+          <Link href={'/playlists'}>플레이리스트</Link>
           <section>footer</section>
         </div>
       </div>
