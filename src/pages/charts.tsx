@@ -8,8 +8,8 @@ export default function Charts() {
 
   // 플레이리스트 id를 넣으면 해당 플레이리스트의 트랙을 가져오는 커스텀 훅
   const {
-    track: tracks,
-    loading,
+    data: tracks,
+    isLoading,
     error,
   } = useGetTopTrackPlaylist('2fmFoUa7WNxIfvUg2jghxD')
 
@@ -18,14 +18,14 @@ export default function Charts() {
     router.push(`tracks/${trackId}`)
   }
 
-  if (loading) return <p>로딩 중...</p>
+  if (isLoading) return <p>로딩 중...</p>
   if (error) return <p>에러: {error.message}</p>
 
   return (
     <div>
       <h1>🎵 Top 50 Global</h1>
       <ul>
-        {tracks.map((item, index) => (
+        {(tracks ?? []).map((item, index) => (
           <li key={index} onClick={() => handleClickTrack(item.track.id)}>
             <Image
               src={item.track.album.images[0].url}

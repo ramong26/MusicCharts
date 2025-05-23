@@ -9,7 +9,7 @@ export default function Charts() {
   const router = useRouter()
 
   // 플레이리스트 id를 넣으면 해당 플레이리스트의 트랙을 가져오는 커스텀 훅
-  const { track: tracks } = useGetTopTrackPlaylist(playlistId)
+  const { data: tracks } = useGetTopTrackPlaylist(playlistId)
 
   // 트랙 클릭 시 해당 트랙의 상세 페이지로 이동
   const handleClickTrack = (trackId: string) => {
@@ -26,7 +26,7 @@ export default function Charts() {
         onChange={(e) => setPlaylistId(e.target.value)}
       />
       <ul>
-        {tracks.map((item, index) => (
+        {(tracks ?? []).map((item, index) => (
           <li key={index} onClick={() => handleClickTrack(item.track.id)}>
             <Image
               src={item.track.album.images[0].url}
