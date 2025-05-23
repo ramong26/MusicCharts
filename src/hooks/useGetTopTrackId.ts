@@ -1,44 +1,33 @@
+import { useQuery } from '@tanstack/react-query'
 import { Track } from '@/types/playlist'
-import { useState, useEffect } from 'react'
 
 export default function useGetTopTrackId(id?: string) {
-  const [track, setTrack] = useState<Track | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<Error | null>(null)
+  return useQuery<Track>({
+    queryKey: ['topTrack', id],
+    queryFn: async () => {
+      if (!id) return null
+      // 토큰 가져오기
+      const tokenRes = await fetch('/api/spotify-token')
+      const { access_token } = await tokenRes.json()
 
-  useEffect(() => {
-    if (!id) return
-    async function fetchData() {
-      setLoading(true)
-      setError(null)
-      try {
-        const tokenRes = await fetch('/api/spotify-token')
-        const { access_token } = await tokenRes.json()
-
-        const topTrackRes = await fetch(
-          `https://api.spotify.com/v1/tracks/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${access_token}`,
-            },
-          }
-        )
-
-        if (!topTrackRes.ok) {
-          throw new Error('Failed to fetch data')
+      // 스포티파이 API 호출
+      const topTrackRes = await fetch(
+        `https://api.spotify.com/v1/tracks/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${access_token}`,
+          },
         }
+      )
 
-        const data = await topTrackRes.json()
-        setTrack(data)
-      } catch (error) {
-        const err = error as Error
-        setError(err)
-      } finally {
-        setLoading(false)
+      if (!topTrackRes.ok) {
+        throw new Error('Failed to fetch data')
       }
-    }
 
-    fetchData()
-  }, [id])
-  return { track, loading, error }
+      const data = await topTrackRes.json()
+      return data
+    },
+    enabled: !!id, // id가 있을 때만 쿼리 실행
+    staleTime: 1000 * 60, // 5분
+  })
 }

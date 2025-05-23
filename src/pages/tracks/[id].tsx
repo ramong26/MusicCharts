@@ -9,15 +9,21 @@ export default function Tracks() {
   const { id } = router.query as { id?: string }
 
   // 트랙 id를 넣으면 해당 트랙의 상세 페이지로 이동하는 커스텀 훅
-  const { track, loading, error } = useGetTopTrackId(id)
+  const { data: track, isLoading, error } = useGetTopTrackId(id)
   // 각 트랙 id에 해당하는 앨범 정보를 가져오는 커스텀 훅
-  const { album, albumLoading, albumError } = useGetTopTrackIdAlbum(track)
+  const {
+    data: album,
+    isLoading: albumLoading,
+    error: albumError,
+  } = useGetTopTrackIdAlbum(track ?? null)
   // 각 트랙 id에 해당하는 뮤직비디오 정보를 가져오는 커스텀 훅
-  const { videos, videosLoading } = useGetTrackVideo(track?.name ?? '')
+  const { data: videos, isLoading: videosLoading } = useGetTrackVideo(
+    track?.name ?? ''
+  )
 
   console.log(track)
   console.log(album)
-  if (loading && albumLoading && videosLoading) return <p>로딩 중...</p>
+  if (isLoading && albumLoading && videosLoading) return <p>로딩 중...</p>
   if (error && albumError) return <p>에러: {error.message}</p>
   return (
     <div>
@@ -43,7 +49,8 @@ export default function Tracks() {
       </div>
       <div>뮤직비디오</div>
       <div>
-        {videos.map((video) => (
+        {/* 비디오가 undefined일 수 있기 때문에 []로 처리*/}
+        {(videos ?? []).map((video) => (
           <div key={video.id.videoId}>
             <h3>{video.snippet.title}</h3>
             <iframe
