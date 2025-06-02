@@ -8,7 +8,7 @@ export default async function getTrackIdVideo(
   const res = await fetch(
     `${baseUrl}/api/youtube-search?q=${encodeURIComponent(trackName)}`,
     {
-      cache: "no-store", // 캐시를 사용하지 않도록 설정
+      cache: "no-store",
     }
   );
 
