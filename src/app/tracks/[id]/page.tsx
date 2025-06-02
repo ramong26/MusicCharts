@@ -1,32 +1,20 @@
-"use client";
+import getTrackId from "@/features/tracks/hooks/getTrackId";
+import getTrackIdAlbum from "@/features/tracks/hooks/getTrackIdAlbum";
+import getTrackIdVideo from "@/features/tracks/hooks/getTrackIdVideo";
 
-import { useParams } from "next/navigation";
+interface TrackPageProps {
+  params: { id: string };
+}
 
-import useGetTopTrackId from "@/features/tracks/hooks/useGetTopTrackId";
-import useGetTopTrackIdAlbum from "@/features/tracks/hooks/useGetTopTrackIdAlbum";
-import useGetTrackVideo from "@/features/tracks/hooks/useGetTrackVideo";
+export default async function TrackPage({ params }: TrackPageProps) {
+  const trackId = params.id;
+  // trackId로 트랙 정보 받아옴
+  const track = await getTrackId(trackId);
+  // trackId로 앨범 정보 받아옴
+  const album = await getTrackIdAlbum(track);
+  // trackId로 유튜브 비디오 정보 받아옴
+  const videos = await getTrackIdVideo(track.name);
 
-export default function TrackPage() {
-  const params = useParams();
-  const id = params?.id as string;
-
-  // 트랙 id를 넣으면 해당 트랙의 상세 페이지로 이동하는 커스텀 훅
-  const { data: track, isLoading, error } = useGetTopTrackId(id);
-  // 각 트랙 id에 해당하는 앨범 정보를 가져오는 커스텀 훅
-  const {
-    data: album,
-    isLoading: albumLoading,
-    error: albumError,
-  } = useGetTopTrackIdAlbum(track ?? null);
-  // 각 트랙 id에 해당하는 뮤직비디오 정보를 가져오는 커스텀 훅
-  const { data: videos, isLoading: videosLoading } = useGetTrackVideo(
-    track?.name ?? ""
-  );
-
-  console.log(track);
-  console.log(album);
-  if (isLoading && albumLoading && videosLoading) return <p>로딩 중...</p>;
-  if (error && albumError) return <p>에러: {error.message}</p>;
   return (
     <div>
       <div>곡정보</div>
@@ -51,7 +39,7 @@ export default function TrackPage() {
       </div>
       <div>뮤직비디오</div>
       <div>
-        {/* 비디오가 undefined일 수 있기 때문에 []로 처리*/}
+        {/*  비디오가 undefined일 수 있기 때문에 []로 처리*/}
         {(videos ?? []).map((video) => (
           <div key={video.id.videoId}>
             <h3>{video.snippet.title}</h3>
@@ -66,6 +54,7 @@ export default function TrackPage() {
           </div>
         ))}
       </div>
+      dsf
     </div>
   );
 }
