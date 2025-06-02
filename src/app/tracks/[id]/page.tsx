@@ -1,6 +1,8 @@
 import getTrackId from "@/features/tracks/hooks/getTrackId";
 import getTrackIdAlbum from "@/features/tracks/hooks/getTrackIdAlbum";
 import getTrackIdVideo from "@/features/tracks/hooks/getTrackIdVideo";
+import getTrackIdInterview from "@/features/tracks/hooks/getTrackIdInterview";
+import Link from "next/link";
 
 interface TrackPageProps {
   params: { id: string };
@@ -14,7 +16,9 @@ export default async function TrackPage({ params }: TrackPageProps) {
   const album = await getTrackIdAlbum(track);
   // trackId로 유튜브 비디오 정보 받아옴
   const videos = await getTrackIdVideo(track.name);
-
+  // trackId로 인터뷰 정보 받아옴
+  const interviews = await getTrackIdInterview(track.name);
+  console.log("interview", interviews);
   return (
     <div>
       <div>곡정보</div>
@@ -54,7 +58,14 @@ export default async function TrackPage({ params }: TrackPageProps) {
           </div>
         ))}
       </div>
-      dsf
+      <div>인터뷰</div>
+      <div>
+        {(interviews ?? []).map((interview, index) => (
+          <Link href={interview.link} key={index}>
+            <h3>{interview.title}</h3>
+          </Link>
+        ))}
+      </div>
     </div>
   );
 }
