@@ -1,34 +1,16 @@
-"use client";
+import getTopTrackPlaylist from "@/features/chart/hooks/getTopTrackPlaylist";
+import Link from "next/link";
 
-import Image from "next/image";
-import { useRouter } from "next/navigation";
-
-import useGetTopTrackPlaylist from "../../features/chart/hooks/useGetTopTrackPlaylist";
-
-export default function Charts() {
-  const router = useRouter();
-
-  // 플레이리스트 id를 넣으면 해당 플레이리스트의 트랙을 가져오는 커스텀 훅
-  const {
-    data: tracks,
-    isLoading,
-    error,
-  } = useGetTopTrackPlaylist("2fmFoUa7WNxIfvUg2jghxD");
-
-  // 트랙 클릭 시 해당 트랙의 상세 페이지로 이동
-  const handleClickTrack = (trackId: string) => {
-    router.push(`tracks/${trackId}`);
-  };
-
-  if (isLoading) return <p>로딩 중...</p>;
-  if (error) return <p>에러: {error.message}</p>;
-
+export default async function Charts() {
+  const playlistId = "2fmFoUa7WNxIfvUg2jghxD";
+  const tracksList = await getTopTrackPlaylist(playlistId);
+  console.log(tracksList);
   return (
     <div>
       <h1>🎵 Top 50 Global</h1>
       <ul>
-        {(tracks ?? []).map((item, index) => (
-          <li key={index} onClick={() => handleClickTrack(item.track.id)}>
+        {(tracksList ?? []).map((item, index) => (
+          <Link key={index} href={`/tracks/${item.track.id}`}>
             <img
               src={item.track.album.images[0].url}
               alt="앨범표지"
@@ -37,7 +19,7 @@ export default function Charts() {
               className="cursor-pointer"
             />
             {item.track.name} - {item.track.artists[0].name}
-          </li>
+          </Link>
         ))}
       </ul>
     </div>
