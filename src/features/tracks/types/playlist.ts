@@ -12,6 +12,9 @@ export interface Artist {
   name: string;
 }
 export interface Album {
+  external_urls: {
+    spotify: string;
+  };
   id: string;
   images: Images[];
   name: string;
