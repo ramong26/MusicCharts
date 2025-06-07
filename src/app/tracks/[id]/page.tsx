@@ -12,6 +12,7 @@ export default async function TrackPage({ params }: TrackPageProps) {
   const trackId = params.id;
   // trackId로 트랙 정보 받아옴
   const track = await getTrackId(trackId);
+  console.log("track", track);
   // trackId로 앨범 정보 받아옴
   const album = await getTrackIdAlbum(track);
   // trackId로 유튜브 비디오 정보 받아옴
@@ -38,9 +39,9 @@ export default async function TrackPage({ params }: TrackPageProps) {
       </div>
       <div>앨범 발매일: {album?.release_date}</div>
       <div>앨범 총 트랙 수: {album?.total_tracks}</div>
-      <div>
+      <Link href={track.album.external_urls.spotify}>
         <img src={album?.images[0]?.url} alt={album?.name} />
-      </div>
+      </Link>
       <div>뮤직비디오</div>
       <div>
         {/*  비디오가 undefined일 수 있기 때문에 []로 처리*/}
