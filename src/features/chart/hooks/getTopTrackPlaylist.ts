@@ -1,6 +1,5 @@
 import { TrackItem } from "../types/playlist";
 
-// fetch the top track playlist from Spotify ssr
 export default async function getTopTrackPlaylist(
   playlistId: string
 ): Promise<TrackItem[]> {

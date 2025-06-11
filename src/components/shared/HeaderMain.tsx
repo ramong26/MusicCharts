@@ -22,7 +22,7 @@ export default function HeaderMain() {
   }, []);
 
   return (
-    <header className="w-full bg-[#1000004d] backdrop-blur-lg text-amber-50 flex items-center justify-between fixed flex-col transition-all duration-300 shadow-lg">
+    <header className="w-full bg-[#1000004d] backdrop-blur-lg text-amber-50 flex items-center justify-between flex-col transition-all duration-300 shadow-lg fixed top-0 left-0 right-0 z-999">
       {!isScroll && (
         <div className=" flex items-center justify-between w-full h-fit p-7">
           <Image src={HeaderSort} alt="Header Sort" width={24} height={24} />

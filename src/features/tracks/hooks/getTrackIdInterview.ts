@@ -8,7 +8,7 @@ export default async function getTrackIdInterview(
 
   const res = await fetch(
     `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CSE_ID}&q=${encodeURIComponent(
-      trackName
+      trackName + " interview"
     )}`,
     {
       cache: "no-store",
