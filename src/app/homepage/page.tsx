@@ -3,17 +3,17 @@ import Image from "next/image";
 import HeaderMain from "@/components/shared/HeaderMain";
 import InterviewList from "@/features/homepage/components/InterviewList";
 import ChartTop5 from "@/features/homepage/components/ChartTop5";
-import MainVideo from "@/features/homepage/components/MainVideo";
+import YoutubePlaylist from "@/features/homepage/components/YoutubePlaylist";
 
 import useTrackList from "@/components/hooks/useTrackList";
 
 export default async function HomePage() {
   const tracksList = await useTrackList();
-
+  const topArtist = tracksList[0]?.track.artists[0].name;
   return (
     <div className="h-screen ">
       <HeaderMain />
-      <div>
+      <div className="w-[1043px] mx-auto">
         <div className="flex flex-col items-center justify-start h-full">
           <main className="flex mt-[168px]  gap-4 h-[617px]">
             <div className="flex items-center justify-center ">
@@ -27,17 +27,16 @@ export default async function HomePage() {
               </header>
             </div>
             <div className="flex items-center justify-between flex-col w-[400px] h-[600px]">
-              <InterviewList />
+              <InterviewList topArtist={topArtist} />
             </div>
           </main>
-          <div className="mx-auto mt-[50px]">
+          <div className="mx-auto mt-[100px] w-full">
             <ChartTop5 tracksList={tracksList} />
           </div>
-          <div className="w-full bg-[#000000] mt-10 h-100">
-            <MainVideo />
-          </div>
+          <YoutubePlaylist />
         </div>
       </div>
+      <div className="w-full bg-[#000000] mt-10 h-100 text-white"> footer</div>
     </div>
   );
 }

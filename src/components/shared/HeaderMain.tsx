@@ -37,9 +37,8 @@ export default function HeaderMain() {
         <div>검색 input</div>
         <div className="flex gap-[100px] font-bold text-2xl">
           <Link href={"/charts"}>chart</Link>
-          <Link href={"/music"}>music</Link>
-          <Link href={"/video"}>video</Link>
-          <Link href={"/awards"}>awards</Link>
+          <Link href={"/playlist"}>playlist</Link>
+          <Link href={"/channel"}>channel</Link>
           <Link href={"/interview"}>interview</Link>
         </div>
         {isScroll && (

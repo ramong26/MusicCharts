@@ -1,17 +1,19 @@
 import Image from "next/image";
-
-import { TrackItem } from "@/features/chart/types/playlist";
 import Link from "next/link";
 
+import { TrackItem } from "@/features/chart/types/playlist";
+
 export default function ChartTop5({ tracksList }: { tracksList: TrackItem[] }) {
-  console.log("tracksList in ChartTop5", tracksList);
   return (
-    <div>
-      <div className="font-bold h-[55px] flex items-center pl-[50px] text-[#ffffff] text-3xl bg-[#000000]">
-        TOP 5
+    <div className="w-full">
+      <div className="font-bold h-[55px] flex items-center px-[50px] text-[#ffffff] text-3xl bg-[#000000] justify-between">
+        <div>TOP 5</div>
+        <Link href="/charts" className="text-[#ffffff]">
+          <div className="cursor-pointer">Go Charts</div>
+        </Link>
       </div>
 
-      <div className="flex w-[1043px] h-[270px] bg-[#ffffff] border border-[#000000]">
+      <div className="flex h-[270px] bg-[#ffffff] border-2 border-[#000000]">
         <div className="w-[960px] mx-auto flex items-center justify-between ">
           {tracksList.slice(0, 5).map((track, index) => (
             <Link key={track.track.id} href={`/tracks/${track.track.id}`}>

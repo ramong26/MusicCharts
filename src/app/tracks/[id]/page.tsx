@@ -1,6 +1,6 @@
 import getTrackId from "@/features/tracks/hooks/getTrackId";
 import getTrackIdAlbum from "@/features/tracks/hooks/getTrackIdAlbum";
-import getTrackIdVideo from "@/features/tracks/hooks/getTrackIdVideo";
+import { getYoutubeTrackIdVideo } from "@/features/tracks/hooks/getYoutube";
 import getTrackIdInterview from "@/features/tracks/hooks/getTrackIdInterview";
 import Link from "next/link";
 
@@ -12,11 +12,11 @@ export default async function TrackPage({ params }: TrackPageProps) {
   const trackId = params.id;
   // trackId로 트랙 정보 받아옴
   const track = await getTrackId(trackId);
-  console.log("track", track);
+
   // trackId로 앨범 정보 받아옴
   const album = await getTrackIdAlbum(track);
   // trackId로 유튜브 비디오 정보 받아옴
-  const videos = await getTrackIdVideo(track.name);
+  const videos = await getYoutubeTrackIdVideo(track.name);
   // trackId로 인터뷰 정보 받아옴
   const interviews = await getTrackIdInterview(track.name);
 
