@@ -1,0 +1,58 @@
+import getTrackIdInterview from "@/features/tracks/hooks/getTrackIdInterview";
+import Link from "next/link";
+import { formatDate } from "@/lib/utils/date";
+
+export default async function InterviewList({
+  topArtist,
+}: {
+  topArtist: string;
+}) {
+  const LATEST_INTERVIEWS_QUERY = `${topArtist} interview site:rollingstone.com OR site:billboard.com OR site:pitchfork.com OR site:complex.com`;
+  const interviews = await getTrackIdInterview(LATEST_INTERVIEWS_QUERY);
+
+  const sortedInterviews = interviews
+    .filter(
+      (interview) =>
+        interview.pagemap?.metatags?.[0]?.["article:published_time"]
+    )
+    .sort((a, b) => {
+      const dateA = new Date(
+        a?.pagemap!.metatags[0]["article:published_time"]
+      ).getTime();
+      const dateB = new Date(
+        b?.pagemap!.metatags[0]["article:published_time"]
+      ).getTime();
+      return dateB - dateA;
+    });
+  return (
+    <div className=" pt-6 px-6   w-full max-w-2xl mx-auto border-2 border-black ">
+      <h1 className="text-2xl font-semibold mb-6 text-slate-700 text-center">
+        Latest Interviews
+      </h1>
+      <ul>
+        {sortedInterviews.slice(0, 5).map((interview) => (
+          <li key={interview.link} className="p-4  border-t border-black">
+            <Link
+              href={interview.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-black hover:text-indigo-800 hover:underline font-medium text-lg"
+            >
+              {interview.title}
+            </Link>
+
+            {interview.pagemap?.metatags?.[0]?.[
+              "article:published_time"
+            ]?.trim() && (
+              <p className="text-gray-600 mt-2">
+                {formatDate(
+                  interview.pagemap.metatags[0]["article:published_time"]
+                )}
+              </p>
+            )}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

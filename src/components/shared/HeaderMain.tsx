@@ -22,7 +22,7 @@ export default function HeaderMain() {
   }, []);
 
   return (
-    <header className="w-full bg-[#1000004d] backdrop-blur-lg text-amber-50 flex items-center justify-between flex-col transition-all duration-300 shadow-lg fixed top-0 left-0 right-0 z-999">
+    <header className="w-full bg-[rgba(18,18,18)] backdrop-blur-md text-amber-50 flex items-center justify-between flex-col transition-all duration-300 shadow-lg fixed top-0 left-0 right-0 z-999">
       {!isScroll && (
         <div className=" flex items-center justify-between w-full h-fit p-7">
           <Image src={HeaderSort} alt="Header Sort" width={24} height={24} />
@@ -37,9 +37,8 @@ export default function HeaderMain() {
         <div>검색 input</div>
         <div className="flex gap-[100px] font-bold text-2xl">
           <Link href={"/charts"}>chart</Link>
-          <Link href={"/music"}>music</Link>
-          <Link href={"/video"}>video</Link>
-          <Link href={"/awards"}>awards</Link>
+          <Link href={"/playlist"}>playlist</Link>
+          <Link href={"/channel"}>channel</Link>
           <Link href={"/interview"}>interview</Link>
         </div>
         {isScroll && (

@@ -1,26 +1,42 @@
+import Image from "next/image";
+
 import HeaderMain from "@/components/shared/HeaderMain";
-import Link from "next/link";
+import InterviewList from "@/features/homepage/components/InterviewList";
+import ChartTop5 from "@/features/homepage/components/ChartTop5";
+import YoutubePlaylist from "@/features/homepage/components/YoutubePlaylist";
+
 import useTrackList from "@/components/hooks/useTrackList";
 
 export default async function HomePage() {
   const tracksList = await useTrackList();
-
+  const topArtist = tracksList[0]?.track.artists[0].name;
   return (
     <div className="h-screen ">
       <HeaderMain />
-      <main className="flex items-start justify-center h-full mt-[168px]">
-        <div className="flex items-center justify-center">
-          <header className="w-[470px] h-[470px]">
-            <img
-              src={tracksList[0]?.track.album.images[0].url}
-              alt="Album Cover"
-            />
-          </header>
+      <div className="w-[1043px] mx-auto">
+        <div className="flex flex-col items-center justify-start h-full">
+          <main className="flex mt-[168px]  gap-4 h-[617px]">
+            <div className="flex items-center justify-center ">
+              <header className="w-[627px] h-[618px]">
+                <Image
+                  src={tracksList[0]?.track.album.images[0].url}
+                  alt="Album Cover"
+                  width={627}
+                  height={627}
+                />
+              </header>
+            </div>
+            <div className="flex items-center justify-between flex-col w-[400px] h-[600px]">
+              <InterviewList topArtist={topArtist} />
+            </div>
+          </main>
+          <div className="mx-auto mt-[100px] w-full">
+            <ChartTop5 tracksList={tracksList} />
+          </div>
+          <YoutubePlaylist />
         </div>
-        <div className="flex items-center justify-between flex-col h-full w-[400px]">
-          latest news
-        </div>
-      </main>
+      </div>
+      <div className="w-full bg-[#000000] mt-10 h-100 text-white"> footer</div>
     </div>
   );
 }
