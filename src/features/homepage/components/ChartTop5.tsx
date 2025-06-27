@@ -1,0 +1,48 @@
+import Image from "next/image";
+
+import { TrackItem } from "@/features/chart/types/playlist";
+import Link from "next/link";
+
+export default function ChartTop5({ tracksList }: { tracksList: TrackItem[] }) {
+  console.log("tracksList in ChartTop5", tracksList);
+  return (
+    <div>
+      <div className="font-bold h-[55px] flex items-center pl-[50px] text-[#ffffff] text-3xl bg-[#000000]">
+        TOP 5
+      </div>
+
+      <div className="flex w-[1043px] h-[270px] bg-[#ffffff] border border-[#000000]">
+        <div className="w-[960px] mx-auto flex items-center justify-between ">
+          {tracksList.slice(0, 5).map((track, index) => (
+            <Link key={track.track.id} href={`/tracks/${track.track.id}`}>
+              <div
+                className={`flex flex-col items-center gap-[10px] cursor-pointer pr-4 ${
+                  index !== 4 ? "border-r-[1px] border-[#000000]" : ""
+                }`}
+              >
+                <Image
+                  src={track?.track.album.images[0].url}
+                  alt={track?.track.name}
+                  width={150}
+                  height={150}
+                  className="rounded-full hover:animate-[spin_4s_linear_infinite] hover:scale-110 transition-transform duration-300 ease-in-out"
+                />
+                <div className="flex flex-col items-center text-[#000000] gap-1">
+                  <div className="bg-[#000000] rounded-full text-[#ffffff] h-[24px] w-[24px] flex items-center justify-center">
+                    {index + 1}
+                  </div>
+                  <div className="text-lg">{track?.track?.name}</div>
+                  <div className="text-sm">
+                    {track.track.artists
+                      .map((artist) => artist.name)
+                      .join(", ")}
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}

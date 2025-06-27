@@ -4,13 +4,13 @@ import Link from "next/link";
 export default async function Charts() {
   const playlistId = "2fmFoUa7WNxIfvUg2jghxD";
   const tracksList = await getTopTrackPlaylist(playlistId);
-  console.log(tracksList);
+
   return (
     <div>
       <h1>🎵 Top 50 Global</h1>
       <ul>
-        {(tracksList ?? []).map((item, index) => (
-          <Link key={index} href={`/tracks/${item.track.id}`}>
+        {(tracksList ?? []).map((item) => (
+          <Link key={item.track.id} href={`/tracks/${item.track.id}`}>
             <img
               src={item.track.album.images[0].url}
               alt="앨범표지"

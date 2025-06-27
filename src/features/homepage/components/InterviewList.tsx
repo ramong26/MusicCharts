@@ -5,9 +5,9 @@ const LATEST_INTERVIEWS_QUERY = `artist interview site:rollingstone.com OR site:
 
 export default async function InterviewList() {
   const interviews = await getTrackIdInterview(LATEST_INTERVIEWS_QUERY);
-  console.log("interviews", interviews);
+
   return (
-    <div className="bg-white p-6 rounded-lg  w-full max-w-2xl mx-auto">
+    <div className=" pt-6 px-6   w-full max-w-2xl mx-auto border border-black ">
       <h1 className="text-2xl font-semibold mb-6 text-slate-700 text-center">
         Latest Interviews
       </h1>

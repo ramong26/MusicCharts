@@ -5,7 +5,7 @@ export const formatDate = (isoDate: string) => {
   const month = String(date.getMonth() + 1).padStart(2, "0");
   const day = String(date.getDate()).padStart(2, "0");
 
-  return `${year}년${month}월${day}일`; // 연도.월.일
+  return `${year}년${month}월${day}일`;
 };
 
 // 날짜 비교 함수
@@ -13,7 +13,7 @@ export const diffDate = (isoDate: string) => {
   const createdDate = new Date(isoDate);
   const today = new Date();
 
-  createdDate.setHours(0, 0, 0, 0); // 자정을 초기화
+  createdDate.setHours(0, 0, 0, 0);
   today.setHours(0, 0, 0, 0);
 
   const diff = today.getTime() - createdDate.getTime();
