@@ -11,7 +11,7 @@ export default async function getTrackIdInterview(
       who + " interview"
     )}`,
     {
-      cache: "no-store",
+      next: { revalidate: 60 * 60 * 24 },
     }
   );
 

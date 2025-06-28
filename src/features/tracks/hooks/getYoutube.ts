@@ -1,46 +1,86 @@
 import { YoutubeVideo } from "../types/youtube-video";
+import { connectToDB } from "@/lib/mongo";
 
-// 유튜브 비디오를 가져오는 함수
+// 유튜브 뮤직비디오 가져오기
 export async function getYoutubeTrackIdVideo(
   trackName: string
 ): Promise<YoutubeVideo[]> {
+  const db = await connectToDB();
+  const collection = db.collection("musicVideos");
+
+  const cached = await collection.findOne({ trackName });
+
+  if (cached) {
+    return cached.videos;
+  }
+
   const baseUrl = "http://localhost:3000";
 
   const res = await fetch(
-    `${baseUrl}/api/youtube-search?q=${encodeURIComponent(trackName)}`,
-    {
-      cache: "no-store",
-    }
+    `${baseUrl}/api/youtube-search?q=${encodeURIComponent(trackName)}`
   );
 
   if (!res.ok) {
-    throw new Error("Failed to fetch YouTube videos");
+    throw new Error("유튜브 검색에 실패했습니다");
   }
 
   const data = await res.json();
-  return data.items || [];
+  const videos = data.items || [];
+
+  if (videos.length === 0) {
+    throw new Error("비디오를 찾을 수 없습니다");
+  }
+
+  await collection.updateOne(
+    { trackName },
+    {
+      $set: {
+        trackName,
+        videos,
+        updatedAt: Date.now(),
+      },
+    },
+    { upsert: true }
+  );
+
+  return videos;
 }
 
 // 유튜브 채널 가져오는 함수
 export async function getYoutubeChannelInfo(channelHandle: string) {
+  const db = await connectToDB();
+  const collection = db.collection("playlistChannels");
+
+  const ONE_DAY = 24 * 60 * 60 * 1000;
+  const now = Date.now();
+  const cachedChannel = await collection.findOne({ handle: channelHandle });
+
+  if (cachedChannel && now - cachedChannel.updatedAt < ONE_DAY) {
+    return cachedChannel.data;
+  }
+
   const API_KEY = process.env.GOOGLE_API_KEY!;
   const res = await fetch(
-    `https://www.googleapis.com/youtube/v3/search?part=snippet&type=channel&q=${encodeURIComponent(
-      "@" + channelHandle
-    )}&key=${API_KEY}`,
-    {
-      cache: "no-store",
-    }
+    `https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings,statistics&forHandle=${channelHandle}&key=${API_KEY}`
   );
 
   const data = await res.json();
-  const channelId = data.items?.[0]?.snippet?.channelId;
 
-  if (!channelId) throw new Error("채널을 찾을 수 없습니다");
+  if (!data.items || data.items.length === 0) {
+    throw new Error("채널 정보를 찾을 수 없습니다");
+  }
 
-  const detailRes = await fetch(
-    `https://www.googleapis.com/youtube/v3/channels?part=snippet,brandingSettings,statistics&id=${channelId}&key=${API_KEY}`
+  const channelData = { ...data.items[0], updatedAt: Date.now() };
+  await collection.updateOne(
+    { handle: channelHandle },
+    {
+      $set: {
+        handle: channelHandle,
+        data: channelData,
+        updatedAt: channelData.updatedAt,
+      },
+    },
+    { upsert: true }
   );
-  const detailData = await detailRes.json();
-  return detailData.items?.[0];
+  return channelData;
 }

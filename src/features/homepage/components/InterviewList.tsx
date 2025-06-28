@@ -2,12 +2,8 @@ import getTrackIdInterview from "@/features/tracks/hooks/getTrackIdInterview";
 import Link from "next/link";
 import { formatDate } from "@/lib/utils/date";
 
-export default async function InterviewList({
-  topArtist,
-}: {
-  topArtist: string;
-}) {
-  const LATEST_INTERVIEWS_QUERY = `${topArtist} interview site:rollingstone.com OR site:billboard.com OR site:pitchfork.com OR site:complex.com`;
+export default async function InterviewList() {
+  const LATEST_INTERVIEWS_QUERY = `artist interview site:rollingstone.com OR site:billboard.com OR site:pitchfork.com OR site:complex.com`;
   const interviews = await getTrackIdInterview(LATEST_INTERVIEWS_QUERY);
 
   const sortedInterviews = interviews

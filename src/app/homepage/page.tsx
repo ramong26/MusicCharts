@@ -9,7 +9,7 @@ import useTrackList from "@/components/hooks/useTrackList";
 
 export default async function HomePage() {
   const tracksList = await useTrackList();
-  const topArtist = tracksList[0]?.track.artists[0].name;
+
   return (
     <div className="h-screen ">
       <HeaderMain />
@@ -27,7 +27,7 @@ export default async function HomePage() {
               </header>
             </div>
             <div className="flex items-center justify-between flex-col w-[400px] h-[600px]">
-              <InterviewList topArtist={topArtist} />
+              <InterviewList />
             </div>
           </main>
           <div className="mx-auto mt-[100px] w-full">
