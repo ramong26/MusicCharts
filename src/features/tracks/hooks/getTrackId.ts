@@ -1,7 +1,7 @@
 import { Track } from "../types/playlist";
 
 export default async function getTrackId(trackId?: string): Promise<Track> {
-  const baseUrl = "http://localhost:3000";
+  const baseUrl = "http://127.0.0.1:3000";
 
   const tokenRes = await fetch(`${baseUrl}/api/spotify-token`, {
     cache: "no-store",

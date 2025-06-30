@@ -3,7 +3,7 @@ import { TrackItem } from "../types/playlist";
 export default async function getTopTrackPlaylist(
   playlistId: string
 ): Promise<TrackItem[]> {
-  const baseUrl = "http://localhost:3000";
+  const baseUrl = "http://127.0.0.1:3000";
 
   const tokenRes = await fetch(`${baseUrl}/api/spotify-token`, {
     cache: "no-store",
