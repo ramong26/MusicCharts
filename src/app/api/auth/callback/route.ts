@@ -42,10 +42,12 @@ export async function GET(request: Request) {
     }
 
     const data = await response.json();
-    console.log("Access token received:", data);
-    const res = NextResponse.redirect(
-      new URL(`/?access_token=${data.access_token}`, request.url) // access token을 쿼리스트링으로 전달 클라이언트 접근 가능
-    );
+
+    const res = NextResponse.redirect(new URL("/", request.url));
+    res.cookies.set("access_token", data.access_token, {
+      httpOnly: true,
+      path: "/",
+    });
     return res;
   } catch (error) {
     return NextResponse.json(
