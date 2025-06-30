@@ -43,12 +43,9 @@ export async function GET(request: Request) {
 
     const data = await response.json();
 
-    const res = NextResponse.redirect(new URL("/", request.url));
-    res.cookies.set("access_token", data.access_token, {
-      httpOnly: true,
-      path: "/",
-    });
-    return res;
+    const redirectUrl = new URL("/", request.url);
+    redirectUrl.searchParams.set("access_token", data.access_token);
+    return NextResponse.redirect(redirectUrl.toString());
   } catch (error) {
     return NextResponse.json(
       { error: "Failed to fetch token" },

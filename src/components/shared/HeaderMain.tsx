@@ -2,12 +2,13 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import {
-  fetchSpotifyProfile,
-  SpotifyProfile,
-} from "@/features/loginSignup/login/hooks/fetchSpotifyProfile";
+
 import HeaderSort from "../../../public/image/header-sort.png";
 
+interface SpotifyProfile {
+  name: string;
+  imageUrl?: string;
+}
 export default function HeaderMain() {
   const [isScroll, setIsScroll] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
@@ -23,24 +24,28 @@ export default function HeaderMain() {
   }, []);
 
   // 로그인 및 프로필 확인
-  // access_token이 쿼리스트링으로 넘어온 경우 localStorage에 저장
-  useEffect(() => {
-    const url = new URL(window.location.href);
-    const token = url.searchParams.get("access_token");
-    if (token) {
-      localStorage.setItem("token", token);
-      window.history.replaceState({}, "", "/");
-    }
-  }, []);
-
-  // 컴포넌트 마운트 시 프로필 로드
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
 
     setIsLogin(true);
-    fetchSpotifyProfile(token)
-      .then((data) => setProfile(data))
+
+    fetch("/api/profile", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("프로필 요청 실패");
+        return res.json();
+      })
+      .then((data) => {
+        setProfile({
+          name: data.name,
+          imageUrl: data.imageUrl,
+        });
+      })
+
       .catch((err) => {
         console.error("프로필 로드 실패:", err);
         setIsLogin(false);
