@@ -72,7 +72,7 @@ export default function Miniplayer() {
 
       {/* Controls */}
       <div className="flex items-center gap-4">
-        <button className="hover:text-green-500 transition">
+        <button className="hover:text-green-500 transition" aria-label="Pause">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="h-6 w-6"
