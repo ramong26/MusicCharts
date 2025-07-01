@@ -5,45 +5,51 @@ import { connectToDB } from "@/lib/mongo";
 export async function getYoutubeTrackIdVideo(
   trackName: string
 ): Promise<YoutubeVideo[]> {
-  const db = await connectToDB();
-  const collection = db.collection("musicVideos");
+  try {
+    const db = await connectToDB();
+    const collection = db.collection("musicVideos");
 
-  const cached = await collection.findOne({ trackName });
+    const cached = await collection.findOne({ trackName });
 
-  if (cached) {
-    return cached.videos;
-  }
+    if (cached) {
+      return cached.videos;
+    }
 
-  const baseUrl = process.env.BASE_URL || "http://127.0.0.1:3000";
+    const baseUrl = process.env.BASE_URL || "http://127.0.0.1:3000";
 
-  const res = await fetch(
-    `${baseUrl}/api/youtube-search?q=${encodeURIComponent(trackName)}`
-  );
+    const res = await fetch(
+      `${baseUrl}/api/youtube-search?q=${encodeURIComponent(trackName)}`
+    );
 
-  if (!res.ok) {
-    throw new Error("유튜브 검색에 실패했습니다");
-  }
+    if (!res.ok) {
+      throw new Error("유튜브 검색에 실패했습니다");
+      return [];
+    }
 
-  const data = await res.json();
-  const videos = data.items || [];
+    const data = await res.json();
+    const videos = data.items || [];
 
-  if (videos.length === 0) {
-    throw new Error("비디오를 찾을 수 없습니다");
-  }
+    if (videos.length === 0) {
+      throw new Error("비디오를 찾을 수 없습니다");
+      return [];
+    }
 
-  await collection.updateOne(
-    { trackName },
-    {
-      $set: {
-        trackName,
-        videos,
-        updatedAt: Date.now(),
+    await collection.updateOne(
+      { trackName },
+      {
+        $set: {
+          trackName,
+          videos,
+          updatedAt: Date.now(),
+        },
       },
-    },
-    { upsert: true }
-  );
-
-  return videos;
+      { upsert: true }
+    );
+    return videos;
+  } catch (error) {
+    console.error("getYoutubeTrackIdVideo() 에러:", error);
+    return [];
+  }
 }
 
 // 유튜브 채널 가져오는 함수
