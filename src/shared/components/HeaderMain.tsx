@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 
-import HeaderSort from "../../../public/image/header-sort.png";
+import HeaderSort from "@/public/image/header-sort.png";
 
 interface SpotifyProfile {
   name: string;

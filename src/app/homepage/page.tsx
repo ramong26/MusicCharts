@@ -1,11 +1,11 @@
 import Image from "next/image";
 
-import HeaderMain from "@/components/shared/HeaderMain";
+import HeaderMain from "@/shared/components/HeaderMain";
 import InterviewList from "@/features/homepage/components/InterviewList";
 import ChartTop5 from "@/features/homepage/components/ChartTop5";
 import YoutubePlaylist from "@/features/homepage/components/YoutubePlaylist";
 
-import useTrackList from "@/components/hooks/useTrackList";
+import useTrackList from "@/shared/hooks/useTrackList";
 
 export default async function HomePage() {
   const tracksList = await useTrackList();
