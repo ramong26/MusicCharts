@@ -19,8 +19,13 @@ jobs:
         with:
           node-version: 20
 
+      - name: Setup PNPM
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8
+
       - name: Install dependencies
-        run: pnpm install @google/generative-ai node-fetch
+        run: pnpm install
 
       - name: Run Gemini Review Script
         run: node scripts/reviewWithGemini.js
