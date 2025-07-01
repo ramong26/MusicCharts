@@ -19,8 +19,8 @@ export default function Miniplayer({ track }: { track: Track }) {
 
     const script = document.createElement("script");
     script.src = "https://sdk.scdn.co/spotify-player.js";
-    script.async = true; // 스크립트 비동기로
-    document.body.appendChild(script); //만들어진 스크립트를 실제 문서의 바디에 추가
+    script.async = true; // 비동기 로딩
+    document.body.appendChild(script);
 
     window.onSpotifyWebPlaybackSDKReady = () => {
       const player = new Spotify.Player({
@@ -30,7 +30,7 @@ export default function Miniplayer({ track }: { track: Track }) {
       });
       setPlayer(player);
 
-      player.addListener("ready", ({ device_id }) => {
+      const onReady = ({ device_id }: { device_id: string }) => {
         fetch(
           `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
           {
@@ -44,18 +44,65 @@ export default function Miniplayer({ track }: { track: Track }) {
             }),
           }
         ).catch(console.error);
-      });
-      player.addListener("player_state_changed", (state) => {
-        if (!state) return;
+      };
 
+      const onPlayerStateChanged = (state: any) => {
+        if (!state) return;
         setCurrentTrack(state.track_window.current_track as unknown as Track);
         setPaused(state.paused);
-      });
+      };
+
+      player.addListener("ready", onReady);
+      player.addListener("player_state_changed", onPlayerStateChanged);
 
       player.connect();
-    };
-  }, [track]);
 
+      // 클린업 함수
+      return () => {
+        player.removeListener("ready", onReady);
+        player.removeListener("player_state_changed", onPlayerStateChanged);
+        player.disconnect();
+      };
+    };
+
+    // 클린업 함수
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  // 트랙과 플레이어가 변경될 때마다 플레이어에 트랙을 설정
+  useEffect(() => {
+    if (!player) return;
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("스포티파이 프리미엄 계정이 필요합니다.");
+      return;
+    }
+
+    const onReady = ({ device_id }: { device_id: string }) => {
+      fetch(
+        `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
+        {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            uris: [`spotify:track:${track.id}`],
+          }),
+        }
+      ).catch(console.error);
+    };
+
+    player.addListener("ready", onReady);
+
+    // 클린업 함수
+    return () => {
+      player.removeListener("ready", onReady);
+    };
+  }, [track, player]);
   return (
     <div className="w-full bg-black text-white p-4 flex items-center justify-between">
       <div className="flex items-center">

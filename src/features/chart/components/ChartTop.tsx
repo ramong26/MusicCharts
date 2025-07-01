@@ -16,7 +16,9 @@ export default async function ChartTop({
   if (!musicVideo || musicVideo.length === 0) {
     return <div>뮤직비디오를 찾을 수 없습니다.</div>;
   }
-
+  if (!tracksList || tracksList.length === 0) {
+    return <div>트랙이 없습니다.</div>;
+  }
   return (
     <div className="relative border-2 border-black p-10 mt-10 max-w-7xl mx-auto bg-white">
       <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black  text-white px-6 py-2 border-2 border-black font-bold text-2xl">
