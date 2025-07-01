@@ -1,7 +1,6 @@
 import { NextResponse } from "next/server";
 
 export async function GET(request: Request) {
-  console.log("Spotify callback route called");
   const { searchParams } = new URL(request.url); // 로그인 요청시 해당 서치파람즈 가져오기
   const code = searchParams.get("code"); // authorization code를 가져옴
 
@@ -42,9 +41,9 @@ export async function GET(request: Request) {
     }
 
     const data = await response.json();
-
     const redirectUrl = new URL("/", request.url);
     redirectUrl.searchParams.set("access_token", data.access_token);
+
     return NextResponse.redirect(redirectUrl.toString());
   } catch (error) {
     return NextResponse.json(

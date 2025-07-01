@@ -1,4 +1,4 @@
-import { Track, Album } from "../types/playlist";
+import { Track, Album } from "@/shared/types/SpotifyTrack";
 
 export default async function getTrackIdAlbum(
   track: Track | null

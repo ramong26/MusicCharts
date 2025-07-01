@@ -21,3 +21,18 @@ export const diffDate = (isoDate: string) => {
 
   return Math.floor(diffDays);
 };
+
+// 시간 출력 함수
+export const formatTime = (seconds: number) => {
+  const sec = Math.floor(seconds);
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = sec % 60;
+  if (h > 0) {
+    return `${String(h).padStart(2, "0")}:${String(m).padStart(
+      2,
+      "0"
+    )}:${String(s).padStart(2, "0")}`;
+  }
+  return `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+};

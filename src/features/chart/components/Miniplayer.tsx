@@ -1,118 +1,132 @@
 "use client";
-
+import Image from "next/image";
 import { useEffect, useState } from "react";
-declare global {
-  interface Window {
-    onSpotifyWebPlaybackSDKReady: () => void;
-    Spotify: any;
-  }
-}
-export default function Miniplayer() {
-  const [player, setPlayer] = useState(null);
-  const [track, setTrack] = useState(null);
-  const [paused, setPaused] = useState(true);
-  const [deviceId, setDeviceId] = useState<string | null>(null);
+import { FaPlay, FaPause } from "react-icons/fa";
 
-  const token = localStorage.getItem("token");
+import { Track } from "@/shared/types/SpotifyTrack";
+
+export default function Miniplayer({ track }: { track: Track }) {
+  const [paused, setPaused] = useState(true);
+  const [currentTrack, setCurrentTrack] = useState(track);
+  const [player, setPlayer] = useState<any>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token") ?? "";
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("스포티파이 프리미엄 계정이 필요합니다.");
+      return;
+    }
+
     const script = document.createElement("script");
     script.src = "https://sdk.scdn.co/spotify-player.js";
-    script.async = true;
+    script.async = true; // 비동기 로딩
     document.body.appendChild(script);
 
     window.onSpotifyWebPlaybackSDKReady = () => {
-      const player = new window.Spotify.Player({
-        name: "My Web Player",
-        getOAuthToken: (cb: any) => cb(token),
+      const player = new Spotify.Player({
+        name: "Web Playback SDK",
+        getOAuthToken: (cb) => cb(token),
         volume: 0.5,
       });
+      setPlayer(player);
 
-      player.addListener("ready", async ({ device_id }: any) => {
-        console.log("Ready with Device ID", device_id);
-        setDeviceId(device_id);
+      const onReady = ({ device_id }: { device_id: string }) => {
+        fetch(
+          `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              uris: [`spotify:track:${track.id}`],
+            }),
+          }
+        ).catch(console.error);
+      };
 
-        await fetch("https://api.spotify.com/v1/me/player", {
+      const onPlayerStateChanged = (state: any) => {
+        if (!state) return;
+        setCurrentTrack(state.track_window.current_track as unknown as Track);
+        setPaused(state.paused);
+      };
+
+      player.addListener("ready", onReady);
+      player.addListener("player_state_changed", onPlayerStateChanged);
+
+      player.connect();
+
+      // 클린업 함수
+      return () => {
+        player.removeListener("ready", onReady);
+        player.removeListener("player_state_changed", onPlayerStateChanged);
+        player.disconnect();
+      };
+    };
+
+    // 클린업 함수
+    return () => {
+      document.body.removeChild(script);
+    };
+  }, []);
+
+  // 트랙과 플레이어가 변경될 때마다 플레이어에 트랙을 설정
+  useEffect(() => {
+    if (!player) return;
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("스포티파이 프리미엄 계정이 필요합니다.");
+      return;
+    }
+
+    const onReady = ({ device_id }: { device_id: string }) => {
+      fetch(
+        `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
+        {
           method: "PUT",
           headers: {
             Authorization: `Bearer ${token}`,
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            device_ids: [device_id],
-            play: true,
+            uris: [`spotify:track:${track.id}`],
           }),
-        });
-      });
-
-      player.addListener("not_ready", ({ device_id }: any) => {
-        console.log("Device ID has gone offline", device_id);
-      });
-
-      player.connect();
-      setPlayer(player);
+        }
+      ).catch(console.error);
     };
-  }, []);
 
+    player.addListener("ready", onReady);
+
+    // 클린업 함수
+    return () => {
+      player.removeListener("ready", onReady);
+    };
+  }, [track, player]);
   return (
-    <div className="fixed bottom-0 left-0 w-full bg-[#181818] text-white px-4 py-2 flex items-center justify-between shadow-md">
-      {/* Album Art */}
-      <div className="flex items-center gap-3">
-        <img
-          src="https://via.placeholder.com/50"
+    <div className="w-full bg-black text-white p-4 flex items-center justify-between">
+      <div className="flex items-center">
+        <Image
+          src={currentTrack?.album?.images[1]?.url}
           alt="Album Art"
-          className="w-12 h-12 rounded-md"
+          className="w-12 h-12  mr-4"
+          width={48}
+          height={48}
         />
         <div>
-          <div className="text-sm font-semibold">Song Title</div>
-          <div className="text-xs text-gray-400">Artist Name</div>
+          <h3 className="text-lg font-semibold">{currentTrack?.name}</h3>
+          <p className="text-sm text-gray-400">
+            {currentTrack?.artists[0]?.name}
+          </p>
         </div>
       </div>
 
-      {/* Controls */}
-      <div className="flex items-center gap-4">
-        <button className="hover:text-green-500 transition" aria-label="Pause">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M10 9v6m4-6v6"
-            />
-          </svg>
-        </button>
-        <button className="hover:text-green-500 transition">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-8 w-8"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M5 3v18l15-9L5 3z" />
-          </svg>
-        </button>
-        <button className="hover:text-green-500 transition">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M15 9v6m4-6v6"
-            />
-          </svg>
+      <div className="flex items-center space-x-4">
+        <button
+          onClick={() => player.togglePlay()}
+          className="text-white bg-green-500 p-2 rounded-full hover:bg-green-600"
+        >
+          {paused ? <FaPlay /> : <FaPause />}
         </button>
       </div>
     </div>

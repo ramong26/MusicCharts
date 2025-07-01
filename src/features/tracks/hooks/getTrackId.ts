@@ -1,4 +1,4 @@
-import { Track } from "../types/playlist";
+import { Track } from "@/shared/types/SpotifyTrack";
 
 export default async function getTrackId(trackId?: string): Promise<Track> {
   const baseUrl = "http://127.0.0.1:3000";
