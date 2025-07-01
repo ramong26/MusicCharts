@@ -20,7 +20,7 @@ jobs:
           node-version: 20
 
       - name: Install dependencies
-        run: npm install @google/generative-ai node-fetch
+        run: pnpm install @google/generative-ai node-fetch
 
       - name: Run Gemini Review Script
         run: node scripts/reviewWithGemini.js
