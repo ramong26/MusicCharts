@@ -2,7 +2,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 import { execSync } from "node:child_process";
 import fetch from "node-fetch";
 
-const gemini = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const gemini = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 async function createReviewComment(prNumber, body) {
   await fetch(
