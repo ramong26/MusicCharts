@@ -37,7 +37,7 @@ async function createReviewComment(prNumber, body) {
   }
 
   //  Gemini로 리뷰 생성
-  const model = gemini.getGenerativeModel({ model: "gemini-pro" });
+  const model = gemini.getGenerativeModel({ model: "gemini-2.5-pro" });
   const result = await model.generateContent(
     `아래는 Pull Request의 git diff입니다.\n\n${diff}\n\n이 변경사항에 대한 코드리뷰를 한국어로 친절히 작성해주세요.`
   );
