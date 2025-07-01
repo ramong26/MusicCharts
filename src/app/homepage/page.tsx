@@ -15,7 +15,7 @@ export default async function HomePage() {
       <HeaderMain />
       <div className="w-[1043px] mx-auto">
         <div className="flex flex-col items-center justify-start h-full">
-          <main className="flex mt-[186px]  gap-4 h-[617px]">
+          <main className="flex mt-[188px]  gap-4 h-[617px]">
             <div className="flex items-center justify-center ">
               <header className="w-[627px] h-[618px]">
                 <Image
