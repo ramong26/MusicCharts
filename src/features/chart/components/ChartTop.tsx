@@ -23,9 +23,9 @@ export default async function ChartTop({
   }
   return (
     <div className="relative border-3 border-black p-10 mt-10 max-w-7xl mx-auto bg-white">
-      <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black  text-white px-6 py-2 border-2 border-black font-bold text-2xl">
+      <h1 className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black  text-white px-6 py-2 border-2 border-black font-bold text-2xl">
         Global Top 1
-      </div>
+      </h1>
 
       <div className="flex flex-col items-center justify-center w-full gap-10">
         {musicVideo && musicVideo.length > 0 ? (

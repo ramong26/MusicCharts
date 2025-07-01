@@ -14,7 +14,6 @@ export default async function Charts() {
   const usaTracksList = await useTrackList({
     playlistId: "0TyhU3nPbWY8BNObcPXt4u",
   });
-  console.log("koraTracksList", koraTracksList);
 
   return (
     <div className="h-screen ">

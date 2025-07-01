@@ -16,9 +16,9 @@ export default function ChartComponent({
     <div
       className={`relative border-3 border-black p-5 mt-10 max-w-7xl bg-white w-full ${className}`}
     >
-      <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-2 border-2 border-black font-bold text-2xl">
+      <h2 className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-2 border-2 border-black font-bold text-2xl">
         {title}
-      </div>
+      </h2>
       {tracksList.map((item, index) => (
         <div
           key={index}
