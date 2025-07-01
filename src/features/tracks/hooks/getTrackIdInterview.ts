@@ -3,24 +3,28 @@ import { CustomSearchResult } from "../types/custom-search";
 export default async function getTrackIdInterview(
   who: string
 ): Promise<CustomSearchResult[]> {
-  const API_KEY = process.env.GOOGLE_API_KEY!;
-  const CSE_ID = process.env.GOOGLE_CSE_ID!;
+  try {
+    const API_KEY = process.env.GOOGLE_API_KEY!;
+    const CSE_ID = process.env.GOOGLE_CSE_ID!;
 
-  const res = await fetch(
-    `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CSE_ID}&q=${encodeURIComponent(
-      who + " interview"
-    )}`,
-    {
-      next: { revalidate: 60 * 60 * 24 },
+    const res = await fetch(
+      `https://www.googleapis.com/customsearch/v1?key=${API_KEY}&cx=${CSE_ID}&q=${encodeURIComponent(
+        who
+      )}`,
+      {
+        next: { revalidate: 60 * 60 * 24 },
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error("Failed to fetch YouTube videos");
     }
-  );
 
-  if (!res.ok) {
-    throw new Error("Failed to fetch YouTube videos");
+    const data = await res.json();
+    return data.items || [];
+  } catch (error) {
+    console.error("getTrackIdInterview() 에러:", error);
+    return [];
   }
-
-  const data = await res.json();
-  return data.items || [];
 }
-
 // 사용법:  const interviews = await getTrackIdInterview(who);

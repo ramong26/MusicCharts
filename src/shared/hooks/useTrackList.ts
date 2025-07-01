@@ -1,8 +1,10 @@
 import getTopTrackPlaylist from "@/features/chart/hooks/getTopTrackPlaylist";
 
-export default async function useTrackList() {
-  const playlistId = "2fmFoUa7WNxIfvUg2jghxD";
-  const tracksList = await getTopTrackPlaylist(playlistId);
+export default async function useTrackList({
+  playlistId,
+}: { playlistId?: string } = {}) {
+  const finalPlaylistId = playlistId || "2fmFoUa7WNxIfvUg2jghxD";
+  const tracksList = await getTopTrackPlaylist(finalPlaylistId);
 
   return tracksList;
 }

@@ -15,7 +15,7 @@ export default async function HomePage() {
       <HeaderMain />
       <div className="w-[1043px] mx-auto">
         <div className="flex flex-col items-center justify-start h-full">
-          <main className="flex mt-[168px]  gap-4 h-[617px]">
+          <main className="flex mt-[186px]  gap-4 h-[617px]">
             <div className="flex items-center justify-center ">
               <header className="w-[627px] h-[618px]">
                 <Image
@@ -27,10 +27,10 @@ export default async function HomePage() {
               </header>
             </div>
             <div className="flex items-center justify-between flex-col w-[400px] h-[600px]">
-              <InterviewList />
+              <InterviewList className="mx-auto h-[800px]" slice={4} />
             </div>
           </main>
-          <div className="mx-auto mt-[100px] w-full">
+          <div className="mx-auto mt-10 w-full">
             <ChartTop5 tracksList={tracksList} />
           </div>
           <YoutubePlaylist />
