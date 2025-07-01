@@ -28,7 +28,7 @@ async function createReviewComment(prNumber, body) {
 
   // 2. git diff 구하기
   const diff = execSync(
-    "git fetch origin main && git diff origin/main...HEAD",
+    "git fetch origin master && git diff origin/master...HEAD",
     { encoding: "utf8" }
   );
 
