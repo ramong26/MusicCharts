@@ -1,7 +1,6 @@
 import HeaderMain from "@/shared/components/HeaderMain";
 import HowPlaylist from "@/features/playlist/components/HowPlaylist";
 import SubmitPlaylist from "@/features/playlist/components/SubmitPlaylist";
-import PlaylistInterviewList from "@/features/playlist/components/PlaylistInterviewList";
 
 export default function PlaylistPage() {
   return (
@@ -10,8 +9,8 @@ export default function PlaylistPage() {
       <main className="flex mt-[188px] gap-4 h-[617px] w-[1043px] mx-auto">
         <div className="flex flex-col gap-10 w-full">
           <HowPlaylist />
-          <SubmitPlaylist />
-          <PlaylistInterviewList />
+          <SubmitPlaylist/>
+       
         </div>
       </main>
     </div>
