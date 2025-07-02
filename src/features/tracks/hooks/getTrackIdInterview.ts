@@ -16,9 +16,11 @@ export default async function getTrackIdInterview(
       }
     );
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch YouTube videos");
-    }
+   if (!res.ok) {
+  const errorText = await res.text();
+  console.error("Google API 호출 실패:", res.status, res.statusText, errorText);
+  throw new Error("Failed to fetch YouTube videos");
+}
 
     const data = await res.json();
     return data.items || [];
