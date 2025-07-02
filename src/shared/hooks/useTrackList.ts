@@ -9,10 +9,5 @@ export async function useTrackList({
   return tracksList;
 }
 
-export function useTrackListFetch({
-  playlistId,
-}: { playlistId?: string } = {}) {
-  const finalPlaylistId = playlistId || "2fmFoUa7WNxIfvUg2jghxD";
-  return getTopTrackPlaylist(finalPlaylistId);
-}
+
 // 사용법:   const tracksList = await useTrackList();

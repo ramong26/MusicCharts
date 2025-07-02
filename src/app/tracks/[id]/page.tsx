@@ -17,7 +17,7 @@ export default async function TrackPage({ params }: TrackPageProps) {
   const album = await getTrackIdAlbum(track);
   // trackId로 유튜브 비디오 정보 받아옴
   const videos = await getYoutubeTrackIdVideo(track.name);
-  // trackId로 인터뷰 정보 받아옴
+  // // trackId로 인터뷰 정보 받아옴
   const interviews = await getTrackIdInterview(track.name);
 
   return (
@@ -64,7 +64,7 @@ export default async function TrackPage({ params }: TrackPageProps) {
           <Link href={interview.link} key={index}>
             <h3>{interview.title}</h3>
           </Link>
-        ))}
+        ))} 
       </div>
     </div>
   );
