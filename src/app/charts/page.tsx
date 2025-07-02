@@ -2,7 +2,7 @@ import HeaderMain from "@/shared/components/HeaderMain";
 import ChartTop from "@/features/chart/components/ChartTop";
 import ChartComponent from "@/features/chart/components/ChartComponent";
 
-import useTrackList from "@/shared/hooks/useTrackList";
+import { useTrackList } from "@/shared/hooks/useTrackList";
 
 export default async function Charts() {
   // const playlistId = "2fmFoUa7WNxIfvUg2jghxD";
