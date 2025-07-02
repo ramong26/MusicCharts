@@ -9,7 +9,7 @@ export async function useTrackList({
   return tracksList;
 }
 
-export function useTrackListFetch({
+export function getTrackListFetch({
   playlistId,
 }: { playlistId?: string } = {}) {
   const finalPlaylistId = playlistId || "2fmFoUa7WNxIfvUg2jghxD";

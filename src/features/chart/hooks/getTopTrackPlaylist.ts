@@ -1,4 +1,4 @@
-import { TrackItem } from "../types/playlist";
+import { TrackItem } from '@/shared/types/SpotifyTrack';
 
 export default async function getTopTrackPlaylist(
   playlistId: string
