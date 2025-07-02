@@ -3,7 +3,7 @@
 import { useState,useEffect } from "react";
 import TrackComponent from "@/features/playlist/components/TrackComponent";
 import SubmitInput from "@/shared/components/SubmitInput";
-import { getTrackListFetch } from "@/shared/hooks/useTrackList";
+import { useTrackList } from "@/shared/hooks/useTrackList";
 import { TrackItem } from "@/shared/types/SpotifyTrack";
 
 export default function SubmitPlaylist() {
@@ -34,10 +34,10 @@ export default function SubmitPlaylist() {
       setLoading(true)
       setError(null)
       try{
-        const result = await getTrackListFetch(playlistId)
+        const result = await useTrackList({playlistId})
         setData(result)
       } catch (err) {
-        setError(err as Error)
+        setError(err instanceof Error ? err : new Error("알 수 없는 오류 발생"));
       } finally {
         setLoading(false)
       }
