@@ -1,6 +1,6 @@
 import getTopTrackPlaylist from "@/features/chart/hooks/getTopTrackPlaylist";
 
-export default async function useTrackList({
+export async function useTrackList({
   playlistId,
 }: { playlistId?: string } = {}) {
   const finalPlaylistId = playlistId || "2fmFoUa7WNxIfvUg2jghxD";
@@ -9,4 +9,10 @@ export default async function useTrackList({
   return tracksList;
 }
 
+export function useTrackListFetch({
+  playlistId,
+}: { playlistId?: string } = {}) {
+  const finalPlaylistId = playlistId || "2fmFoUa7WNxIfvUg2jghxD";
+  return getTopTrackPlaylist(finalPlaylistId);
+}
 // 사용법:   const tracksList = await useTrackList();
