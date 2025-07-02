@@ -19,7 +19,7 @@ export default async function getTrackIdInterview(
    if (!res.ok) {
   const errorText = await res.text();
   console.error("Google API 호출 실패:", res.status, res.statusText, errorText);
-  throw new Error("Failed to fetch YouTube videos");
+   throw new Error("Failed to fetch interview search results");
 }
 
     const data = await res.json();

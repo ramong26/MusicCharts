@@ -5,7 +5,7 @@ import { useState } from "react";
 import PlaylistInterviewList from "@/features/playlist/components/PlaylistInterviewList";
 import TrackComponent from "@/features/playlist/components/TrackComponent";
 import SubmitInput from "@/shared/components/SubmitInput";
-import { useTrackListQuery } from "@/features/playlist/hooks/useTrackListQuery";
+import { fetchTrackList } from "@/features/playlist/hooks/fetchTrackList";
 
 export default function SubmitPlaylist() {
   const [submitUrl, setSubmitUrl] = useState("");
@@ -22,7 +22,7 @@ export default function SubmitPlaylist() {
     setShowChart(true);
   };
 
-  const { data, isLoading, error } = useTrackListQuery(playlistId);
+  const { data, isLoading, error } = fetchTrackList(playlistId);
   const isValidData = Array.isArray(data) && data.length > 0;
 
   return (
