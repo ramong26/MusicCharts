@@ -28,42 +28,19 @@ export default function HeaderMain() {
     const accessToken = searchParams.get('access_token');
     if (accessToken) {
       localStorage.setItem('token', accessToken);
-      router.replace('/');
+      router.push('http://127.0.0.1:3000/');
     }
   }, [searchParams, router]);
   // 로그인 및 프로필 확인
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) return;
-
-    setIsLogin(true);
-
-    fetch('/api/profile', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error('프로필 요청 실패');
-        return res.json();
-      })
-      .then((data) => {
-        setProfile({
-          name: data.name,
-          imageUrl: data.imageUrl,
-        });
-      })
-
-      .catch((err) => {
-        console.error('프로필 로드 실패:', err);
-        setIsLogin(false);
-      });
+    fetch('/api/profile', { credentials: 'include' })
+      .then((res) => res.json())
+      .then((data) => setProfile(data))
+      .catch(() => setIsLogin(false));
   }, []);
 
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsLogin(false);
-    setProfile(null);
+  const handleLogout = async () => {
+    await fetch('/api/logout');
     window.location.href = '/';
   };
   return (
