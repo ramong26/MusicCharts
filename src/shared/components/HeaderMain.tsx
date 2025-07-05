@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
 import HeaderSort from '@/public/image/header-sort.png';
 
 interface SpotifyProfile {
@@ -13,8 +12,7 @@ export default function HeaderMain() {
   const [isScroll, setIsScroll] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [profile, setProfile] = useState<SpotifyProfile | null>(null);
-  const router = useRouter();
-  const searchParams = useSearchParams();
+
   // 스크롤 이벤트 핸들러
   useEffect(() => {
     const handleScroll = () => {
@@ -23,24 +21,30 @@ export default function HeaderMain() {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  // 로그인 후 access_token 처리
-  useEffect(() => {
-    const accessToken = searchParams.get('access_token');
-    if (accessToken) {
-      localStorage.setItem('token', accessToken);
-      router.push('http://127.0.0.1:3000/');
-    }
-  }, [searchParams, router]);
+
   // 로그인 및 프로필 확인
   useEffect(() => {
-    fetch('/api/profile', { credentials: 'include' })
-      .then((res) => res.json())
-      .then((data) => setProfile(data))
-      .catch(() => setIsLogin(false));
+    fetch('/api/profile', { credentials: 'include', cache: 'no-store' })
+      .then((res) => {
+        if (!res.ok) throw new Error('로그인 안 됨');
+        return res.json();
+      })
+      .then((data) => {
+        setProfile(data);
+        setIsLogin(true);
+      })
+      .catch(() => {
+        setProfile(null);
+        setIsLogin(false);
+      });
   }, []);
 
+  // 로그아웃 핸들러
   const handleLogout = async () => {
-    await fetch('/api/logout');
+    await fetch('/api/auth/logout', {
+      credentials: 'include',
+    });
+
     window.location.href = '/';
   };
   return (

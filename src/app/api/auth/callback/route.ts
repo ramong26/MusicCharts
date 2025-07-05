@@ -41,7 +41,8 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await tokenRes.json();
-    const response = NextResponse.redirect(new URL('/', request.url));
+    const baseUrl = process.env.BASE_URL || 'http://127.0.0.1:3000';
+    const response = NextResponse.redirect(`${baseUrl}/`);
 
     response.cookies.set('access_token', data.access_token, {
       httpOnly: true,
