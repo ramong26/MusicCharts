@@ -3,7 +3,6 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(req: NextRequest) {
   const tokenObj = req.cookies.get('access_token');
   const token = tokenObj?.value;
-  console.log('Access Token:', token);
   if (!token) {
     return NextResponse.json(
       { error: 'Access token not provided' },

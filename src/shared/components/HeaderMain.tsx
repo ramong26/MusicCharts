@@ -97,7 +97,7 @@ export default function HeaderMain() {
               </Link>
             ) : (
               profile && (
-                <div className="cursor-pointer" onClick={handleLogout}>
+                <div className="cursor-pointer">
                   <Link href="/profile" className="text-sm font-semibold">
                     환영합니다, {profile.name}님!
                   </Link>
