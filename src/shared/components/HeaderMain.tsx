@@ -1,9 +1,8 @@
-"use client";
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-
-import HeaderSort from "@/public/image/header-sort.png";
+'use client';
+import React, { useEffect, useState } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import HeaderSort from '@/public/image/header-sort.png';
 
 interface SpotifyProfile {
   name: string;
@@ -19,39 +18,35 @@ export default function HeaderMain() {
     const handleScroll = () => {
       setIsScroll(window.scrollY > 100);
     };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // 로그인 및 프로필 확인
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    setIsLogin(true);
-
-    fetch("/api/profile", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
+    fetch('/api/profile', { credentials: 'include', cache: 'no-store' })
       .then((res) => {
-        if (!res.ok) throw new Error("프로필 요청 실패");
+        if (!res.ok) throw new Error('로그인 안 됨');
         return res.json();
       })
       .then((data) => {
-        setProfile({
-          name: data.name,
-          imageUrl: data.imageUrl,
-        });
+        setProfile(data);
+        setIsLogin(true);
       })
-
-      .catch((err) => {
-        console.error("프로필 로드 실패:", err);
+      .catch(() => {
+        setProfile(null);
         setIsLogin(false);
       });
   }, []);
 
+  // 로그아웃 핸들러
+  const handleLogout = async () => {
+    await fetch('/api/auth/logout', {
+      credentials: 'include',
+    });
+
+    window.location.href = '/';
+  };
   return (
     <header className="w-full bg-[rgba(18,18,18)] backdrop-blur-md text-amber-50 flex items-center justify-between flex-col transition-all duration-300 shadow-lg fixed top-0 left-0 right-0 z-999">
       {/* 상단: 로고 및 로그인 상태 */}
@@ -63,21 +58,24 @@ export default function HeaderMain() {
           </div>
           {!isLogin && <Link href="/login">로그인</Link>}
           {isLogin && profile && (
-            <Link
-              href="/profile"
-              className="cursor-pointer text-sm font-semibold"
-            >
-              {profile.imageUrl && (
-                <Image
-                  src={profile.imageUrl}
-                  alt="Profile Image"
-                  width={24}
-                  height={24}
-                  className="rounded-full mr-2"
-                />
-              )}
-              {profile.name}
-            </Link>
+            <div className="cursor-pointer">
+              <Link
+                href="/profile"
+                className="cursor-pointer text-sm font-semibold  flex items-center"
+              >
+                {profile.imageUrl && (
+                  <Image
+                    src={profile.imageUrl}
+                    alt="Profile Image"
+                    width={24}
+                    height={24}
+                    className="rounded-full mr-2"
+                  />
+                )}
+                {profile.name}
+              </Link>
+              <button onClick={handleLogout}>로그아웃</button>
+            </div>
           )}
         </div>
       )}
@@ -99,9 +97,12 @@ export default function HeaderMain() {
               </Link>
             ) : (
               profile && (
-                <Link href="/profile" className="text-sm font-semibold">
-                  환영합니다, {profile.name}님!
-                </Link>
+                <div className="cursor-pointer">
+                  <Link href="/profile" className="text-sm font-semibold">
+                    환영합니다, {profile.name}님!
+                  </Link>
+                  <button onClick={handleLogout}>로그아웃</button>
+                </div>
               )
             )}
           </div>

@@ -1,14 +1,14 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   const response = NextResponse.json({ success: true });
   response.cookies.set({
-    name: "access_token",
-    value: "",
+    name: 'access_token',
+    value: '',
     maxAge: 0,
-    path: "/",
+    path: '/',
     httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
+    secure: process.env.NODE_ENV === 'production',
   });
   return response;
 }
