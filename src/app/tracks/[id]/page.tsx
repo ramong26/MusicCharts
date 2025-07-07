@@ -1,7 +1,7 @@
 import getTrackId from '@/features/tracks/hooks/getTrackId';
 import getTrackIdAlbum from '@/features/tracks/hooks/getTrackIdAlbum';
 import { getYoutubeTrackIdVideo } from '@/features/tracks/hooks/getYoutube';
-import { getTrackIdInterview } from '@/features/tracks/hooks/getTrackIdInterview';
+import { searchInterviews } from '@/features/tracks/hooks/searchInterviews';
 import Link from 'next/link';
 
 interface TrackPageProps {
@@ -18,7 +18,7 @@ export default async function TrackPage({ params }: TrackPageProps) {
   // trackId로 유튜브 비디오 정보 받아옴
   const videos = await getYoutubeTrackIdVideo(track.name);
   // // trackId로 인터뷰 정보 받아옴
-  const interviews = await getTrackIdInterview(track.name);
+  const interviews = await searchInterviews(track.name);
 
   return (
     <div>

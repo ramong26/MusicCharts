@@ -4,7 +4,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { TrackItem } from '@/shared/types/SpotifyTrack';
-import { getTrackIdInterview } from '@/features/tracks/hooks/getTrackIdInterview';
+import { searchInterviews } from '@/features/tracks/hooks/searchInterviews';
 
 interface PlaylistInterviewListProps {
   playlistId: string;
@@ -36,21 +36,21 @@ export default function PlaylistInterviewList({
     return Array.from(set).sort();
   }, [trackData]);
 
-  const calledRef = useRef(false);
-
   // 각 아티스트별로 개별 검색
   useEffect(() => {
-    if (!artists.length || calledRef.current) return;
-
-    calledRef.current = true;
+    if (!artists.length) return;
 
     artists.forEach(async (artist) => {
-      const query = `${artist} artist interview site:rollingstone.com OR site:billboard.com OR site:pitchfork.com OR site:complex.com`;
+      if (artistInterviews[artist] || loadingArtists.has(artist)) {
+        return;
+      }
 
       setLoadingArtists((prev) => new Set(prev).add(artist));
 
       try {
-        const data = await getTrackIdInterview(query);
+        const data = await searchInterviews(
+          `${artist} artist interview site:rollingstone.com OR site:billboard.com OR site:pitchfork.com OR site:complex.com`
+        );
         const links = data.map((item) => item.link).slice(0, 5);
 
         setArtistInterviews((prev) => ({
@@ -71,7 +71,7 @@ export default function PlaylistInterviewList({
         });
       }
     });
-  }, [artists]);
+  }, [artists, artistInterviews, loadingArtists]);
 
   if (!trackData) {
     return <p>트랙 데이터를 불러오는 중입니다...</p>;

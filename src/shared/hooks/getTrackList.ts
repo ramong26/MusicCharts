@@ -6,10 +6,10 @@ export async function getTrackList({
   offset = 0,
   limit = 10,
 }: {
-  playlistId: string;
+  playlistId?: string;
   offset?: number;
   limit?: number;
-}) {
+} = {}) {
   const finalPlaylistId = playlistId || '2fmFoUa7WNxIfvUg2jghxD';
   const tracksList = await getTopTrackPlaylist({
     playlistId: finalPlaylistId,
