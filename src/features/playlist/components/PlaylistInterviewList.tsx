@@ -1,27 +1,21 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { TrackItem } from '@/shared/types/SpotifyTrack';
 import { searchInterviews } from '@/features/tracks/hooks/searchInterviews';
 
 interface PlaylistInterviewListProps {
-  playlistId: string;
+  trackData?: TrackItem[];
 }
 
 export default function PlaylistInterviewList({
-  playlistId,
+  trackData,
 }: PlaylistInterviewListProps) {
-  const queryClient = useQueryClient();
-  const trackData = queryClient.getQueryData<TrackItem[]>([
-    'track-list',
-    playlistId,
-  ]);
-
   const [artistInterviews, setArtistInterviews] = useState<
     Record<string, string[]>
   >({});
+
   const [loadingArtists, setLoadingArtists] = useState<Set<string>>(new Set());
 
   // 중복 아티스트 이름 제거하고 배열로 반환 useMemo로 데이터 재계산 최적화
@@ -40,41 +34,44 @@ export default function PlaylistInterviewList({
   useEffect(() => {
     if (!artists.length) return;
 
-    artists.forEach(async (artist) => {
-      if (artistInterviews[artist] || loadingArtists.has(artist)) {
-        return;
-      }
+    const fetchAll = async () => {
+      const newResults: Record<string, string[]> = {};
+      const nextLoading = new Set(artists);
 
-      setLoadingArtists((prev) => new Set(prev).add(artist));
+      setLoadingArtists(nextLoading);
 
-      try {
-        const data = await searchInterviews(
+      const interviewPromises = artists.map((artist) => {
+        return searchInterviews(
           `${artist} artist interview site:rollingstone.com OR site:billboard.com OR site:pitchfork.com OR site:complex.com`
-        );
-        const links = data.map((item) => item.link).slice(0, 5);
+        )
+          .then((res) => ({
+            artist,
+            links: res.map((r) => r.link).slice(0, 5),
+          }))
+          .catch((error) => {
+            console.error(`인터뷰 fetch 실패: ${artist}`, error);
+            return { artist, links: [] };
+          });
+      });
 
-        setArtistInterviews((prev) => ({
-          ...prev,
-          [artist]: links,
-        }));
-      } catch (error) {
-        console.error(`Error fetching interviews for ${artist}:`, error);
-        setArtistInterviews((prev) => ({
-          ...prev,
-          [artist]: [],
-        }));
-      } finally {
-        setLoadingArtists((prev) => {
-          const newSet = new Set(prev);
-          newSet.delete(artist);
-          return newSet;
-        });
-      }
-    });
-  }, [artists, artistInterviews, loadingArtists]);
+      const results = await Promise.allSettled(interviewPromises);
 
-  if (!trackData) {
-    return <p>트랙 데이터를 불러오는 중입니다...</p>;
+      results.forEach((result) => {
+        if (result.status === 'fulfilled') {
+          const { artist, links } = result.value;
+          newResults[artist] = links;
+        }
+      });
+
+      setArtistInterviews((prev) => ({ ...prev, ...newResults }));
+      setLoadingArtists(new Set());
+    };
+
+    fetchAll();
+  }, [artists]);
+
+  if (!trackData || trackData.length === 0) {
+    return <p>트랙 데이터를 불러오는 중이거나 없습니다.</p>;
   }
 
   return (

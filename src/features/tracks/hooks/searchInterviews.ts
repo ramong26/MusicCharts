@@ -1,12 +1,16 @@
 import { CustomSearchResult } from '../types/custom-search';
 
-export async function getTrackIdInterview(
+const BASE_URL =
+  typeof window === 'undefined'
+    ? process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
+    : '';
+
+export async function searchInterviews(
   who: string
 ): Promise<CustomSearchResult[]> {
   try {
-    // 내부 API Route 호출로 변경
     const res = await fetch(
-      `/api/google-api/interviews?query=${encodeURIComponent(who)}`
+      `${BASE_URL}/api/google-api/interviews?query=${encodeURIComponent(who)}`
     );
 
     if (!res.ok) {
