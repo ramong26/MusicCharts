@@ -1,33 +1,36 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-
-import PlaylistInterviewList from "@/features/playlist/components/PlaylistInterviewList";
-import TrackComponent from "@/features/playlist/components/TrackComponent";
-import SubmitInput from "@/shared/components/SubmitInput";
-import { fetchTrackList } from "@/features/playlist/hooks/fetchTrackList";
+import { useState } from 'react';
+import PlaylistInterviewList from '@/features/playlist/components/PlaylistInterviewList';
+import TrackComponent from '@/features/playlist/components/TrackComponent';
+import SubmitInput from '@/shared/components/SubmitInput';
+import { useTrackList } from '@/shared/hooks/getTrackList';
 
 export default function SubmitPlaylist() {
-  const [submitUrl, setSubmitUrl] = useState("");
-  const [playlistId, setPlaylistId] = useState("");
+  const [submitUrl, setSubmitUrl] = useState('');
+  const [playlistId, setPlaylistId] = useState('');
   const [showChart, setShowChart] = useState(false);
+  const [page, setPage] = useState(0);
+
+  const limit = 10;
+  const offset = page * limit;
 
   const handleSubmit = (id: string) => {
     if (!id) {
-      console.error("플레이리스트 ID가 비어있음");
+      console.error('플레이리스트 ID가 비어있음');
       setShowChart(false);
       return;
     }
     setPlaylistId(id.trim());
+    setPage(0); // 새 검색 시 첫 페이지로 초기화
     setShowChart(true);
   };
 
-  const { data, isLoading, error } = fetchTrackList(playlistId);
+  const { data, isLoading, error } = useTrackList(playlistId, offset, limit);
   const isValidData = Array.isArray(data) && data.length > 0;
 
   return (
     <div>
-      <div>
       <SubmitInput
         placeholder="플레이리스트 ID를 넣어주세요"
         value={submitUrl}
@@ -40,16 +43,30 @@ export default function SubmitPlaylist() {
           {isLoading && <p>로딩 중...</p>}
           {error && <p>오류 발생: {error.message}</p>}
           {isValidData ? (
-            <TrackComponent tracksList={data} title="차트 제목" />
+            <>
+              <TrackComponent
+                tracksList={data}
+                title="차트 제목"
+                page={page}
+                limit={limit}
+              />
+              <div className="flex gap-4 mt-4">
+                <button
+                  onClick={() => setPage((p) => Math.max(0, p - 1))}
+                  disabled={page === 0}
+                >
+                  이전
+                </button>
+                <button onClick={() => setPage((p) => p + 1)}>다음</button>
+              </div>
+            </>
           ) : (
             !isLoading && !error && <p>불러올 수 있는 트랙이 없습니다.</p>
           )}
         </>
       )}
-      </div>
-      <div>
-         <PlaylistInterviewList playlistId={playlistId}/>
-      </div>
+
+      <PlaylistInterviewList playlistId={playlistId} />
     </div>
   );
 }

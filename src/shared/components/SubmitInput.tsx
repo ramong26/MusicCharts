@@ -17,7 +17,7 @@ export default function SubmitInput({
 }: SubmitInputProps) {
   return (
     <div
-      className={`${className} w-full border-2  border-black p-2  cursor-pointer hover:bg-gray-100 transition`}
+      className={`${className} w-full border-2  border-black p-2  hover:bg-gray-100 transition`}
     >
       <input
         type="text"

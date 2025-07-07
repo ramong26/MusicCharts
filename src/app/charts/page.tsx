@@ -1,18 +1,18 @@
-import HeaderMain from "@/shared/components/HeaderMain";
-import ChartTop from "@/features/chart/components/ChartTop";
-import ChartComponent from "@/features/chart/components/ChartComponent";
+import HeaderMain from '@/shared/components/HeaderMain';
+import ChartTop from '@/features/chart/components/ChartTop';
+import ChartComponent from '@/features/chart/components/ChartComponent';
 
-import { useTrackList } from "@/shared/hooks/useTrackList";
+import { getTrackList } from '@/shared/hooks/getTrackList';
 
 export default async function Charts() {
   // const playlistId = "2fmFoUa7WNxIfvUg2jghxD";
 
-  const tracksList = await useTrackList();
-  const koraTracksList = await useTrackList({
-    playlistId: "1Gg5BI7b5xljyHnGXXrX0E",
+  const tracksList = await getTrackList();
+  const koraTracksList = await getTrackList({
+    playlistId: '1Gg5BI7b5xljyHnGXXrX0E',
   });
-  const usaTracksList = await useTrackList({
-    playlistId: "0TyhU3nPbWY8BNObcPXt4u",
+  const usaTracksList = await getTrackList({
+    playlistId: '0TyhU3nPbWY8BNObcPXt4u',
   });
 
   return (
