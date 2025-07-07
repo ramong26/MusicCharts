@@ -23,7 +23,7 @@ export async function getTrackList({
 
 const ONE_HOUR = 1000 * 60 * 60;
 
-export const useTrackList = (playlistId: string, offset = 0, limit = 10) => {
+export const useTrackList = (playlistId: string, offset = 0, limit = 50) => {
   return useQuery({
     queryKey: ['track-list', playlistId, offset, limit],
     queryFn: () => getTopTrackPlaylist({ playlistId, offset, limit }),

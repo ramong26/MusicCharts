@@ -66,7 +66,7 @@ export default function SubmitPlaylist() {
         </>
       )}
 
-      <PlaylistInterviewList playlistId={playlistId} />
+      <PlaylistInterviewList trackData={data} />
     </div>
   );
 }

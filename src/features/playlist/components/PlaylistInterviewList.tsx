@@ -1,27 +1,21 @@
 'use client';
 
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 import { TrackItem } from '@/shared/types/SpotifyTrack';
 import { searchInterviews } from '@/features/tracks/hooks/searchInterviews';
 
 interface PlaylistInterviewListProps {
-  playlistId: string;
+  trackData?: TrackItem[];
 }
 
 export default function PlaylistInterviewList({
-  playlistId,
+  trackData = [],
 }: PlaylistInterviewListProps) {
-  const queryClient = useQueryClient();
-  const trackData = queryClient.getQueryData<TrackItem[]>([
-    'track-list',
-    playlistId,
-  ]);
-
   const [artistInterviews, setArtistInterviews] = useState<
     Record<string, string[]>
   >({});
+
   const [loadingArtists, setLoadingArtists] = useState<Set<string>>(new Set());
 
   // 중복 아티스트 이름 제거하고 배열로 반환 useMemo로 데이터 재계산 최적화
