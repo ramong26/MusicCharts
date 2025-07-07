@@ -1,14 +1,14 @@
-import Image from "next/image";
+import Image from 'next/image';
 
-import HeaderMain from "@/shared/components/HeaderMain";
-import InterviewList from "@/features/homepage/components/InterviewList";
-import ChartTop5 from "@/features/homepage/components/ChartTop5";
-import YoutubePlaylist from "@/features/homepage/components/YoutubePlaylist";
+import HeaderMain from '@/shared/components/HeaderMain';
+import InterviewList from '@/features/homepage/components/InterviewList';
+import ChartTop5 from '@/features/homepage/components/ChartTop5';
+import YoutubePlaylist from '@/features/homepage/components/YoutubePlaylist';
 
-import { useTrackList } from "@/shared/hooks/useTrackList";
+import { getTrackList } from '@/shared/hooks/getTrackList';
 
 export default async function HomePage() {
-  const tracksList = await useTrackList();
+  const tracksList = await getTrackList();
 
   return (
     <div className="h-screen ">

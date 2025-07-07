@@ -1,12 +1,12 @@
-import Link from "next/link";
+import Link from 'next/link';
 
-import getTrackIdInterview from "@/features/tracks/hooks/getTrackIdInterview";
+import { getTrackIdInterview } from '@/features/tracks/hooks/getTrackIdInterview';
 
-import { formatDate } from "@/lib/utils/date";
+import { formatDate } from '@/lib/utils/date';
 
 export default async function InterviewList({
   artistName,
-  className = "",
+  className = '',
   slice = 5,
 }: {
   artistName?: string;
@@ -19,14 +19,14 @@ export default async function InterviewList({
   const sortedInterviews = interviews
     .filter(
       (interview) =>
-        interview.pagemap?.metatags?.[0]?.["article:published_time"]
+        interview.pagemap?.metatags?.[0]?.['article:published_time']
     )
     .sort((a, b) => {
       const dateA = new Date(
-        a?.pagemap!.metatags[0]["article:published_time"]
+        a?.pagemap!.metatags[0]['article:published_time']
       ).getTime();
       const dateB = new Date(
-        b?.pagemap!.metatags[0]["article:published_time"]
+        b?.pagemap!.metatags[0]['article:published_time']
       ).getTime();
       return dateB - dateA;
     });
@@ -48,11 +48,11 @@ export default async function InterviewList({
             </Link>
 
             {interview.pagemap?.metatags?.[0]?.[
-              "article:published_time"
+              'article:published_time'
             ]?.trim() && (
               <p className="text-gray-600 mt-2">
                 {formatDate(
-                  interview.pagemap.metatags[0]["article:published_time"]
+                  interview.pagemap.metatags[0]['article:published_time']
                 )}
               </p>
             )}

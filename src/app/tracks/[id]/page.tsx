@@ -1,8 +1,8 @@
-import getTrackId from "@/features/tracks/hooks/getTrackId";
-import getTrackIdAlbum from "@/features/tracks/hooks/getTrackIdAlbum";
-import { getYoutubeTrackIdVideo } from "@/features/tracks/hooks/getYoutube";
-import getTrackIdInterview from "@/features/tracks/hooks/getTrackIdInterview";
-import Link from "next/link";
+import getTrackId from '@/features/tracks/hooks/getTrackId';
+import getTrackIdAlbum from '@/features/tracks/hooks/getTrackIdAlbum';
+import { getYoutubeTrackIdVideo } from '@/features/tracks/hooks/getYoutube';
+import { getTrackIdInterview } from '@/features/tracks/hooks/getTrackIdInterview';
+import Link from 'next/link';
 
 interface TrackPageProps {
   params: { id: string };
@@ -26,7 +26,7 @@ export default async function TrackPage({ params }: TrackPageProps) {
       <div>
         <div>곡 제목: {track?.name}</div>
         <div>
-          아티스트: {track?.artists.map((artist) => artist.name).join(", ")}
+          아티스트: {track?.artists.map((artist) => artist.name).join(', ')}
         </div>
       </div>
       <div>앨범 정보: {album?.name}</div>
@@ -64,7 +64,7 @@ export default async function TrackPage({ params }: TrackPageProps) {
           <Link href={interview.link} key={index}>
             <h3>{interview.title}</h3>
           </Link>
-        ))} 
+        ))}
       </div>
     </div>
   );
