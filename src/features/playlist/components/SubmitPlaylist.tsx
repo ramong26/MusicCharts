@@ -4,7 +4,7 @@ import { useState } from 'react';
 import PlaylistInterviewList from '@/features/playlist/components/PlaylistInterviewList';
 import TrackComponent from '@/features/playlist/components/TrackComponent';
 import SubmitInput from '@/shared/components/SubmitInput';
-import { useTrackList } from '@/shared/hooks/getTrackList';
+import { useTrackList, useAllTracks } from '@/shared/hooks/getTrackList';
 
 export default function SubmitPlaylist() {
   const [submitUrl, setSubmitUrl] = useState('');
@@ -26,8 +26,13 @@ export default function SubmitPlaylist() {
     setShowChart(true);
   };
 
-  const { data, isLoading, error } = useTrackList(playlistId, offset, limit);
-  const isValidData = Array.isArray(data) && data.length > 0;
+  const {
+    data: pageTracks,
+    isLoading,
+    error,
+  } = useTrackList(playlistId, offset, limit);
+  const { data: allTracks } = useAllTracks(playlistId);
+  const isValidData = Array.isArray(pageTracks) && pageTracks.length > 0;
 
   return (
     <div>
@@ -45,7 +50,7 @@ export default function SubmitPlaylist() {
           {isValidData ? (
             <>
               <TrackComponent
-                tracksList={data}
+                tracksList={pageTracks}
                 title="차트 제목"
                 page={page}
                 limit={limit}
@@ -66,7 +71,9 @@ export default function SubmitPlaylist() {
         </>
       )}
 
-      <PlaylistInterviewList trackData={data} />
+
+      <PlaylistInterviewList trackData={allTracks} />
+
     </div>
   );
 }

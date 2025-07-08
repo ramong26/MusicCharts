@@ -2,6 +2,7 @@ import getTrackId from '@/features/tracks/hooks/getTrackId';
 import getTrackIdAlbum from '@/features/tracks/hooks/getTrackIdAlbum';
 import { getYoutubeTrackIdVideo } from '@/features/tracks/hooks/getYoutube';
 import { searchInterviews } from '@/features/tracks/hooks/searchInterviews';
+import Image from 'next/image';
 import Link from 'next/link';
 
 interface TrackPageProps {
@@ -39,9 +40,16 @@ export default async function TrackPage({ params }: TrackPageProps) {
       </div>
       <div>앨범 발매일: {album?.release_date}</div>
       <div>앨범 총 트랙 수: {album?.total_tracks}</div>
-      <Link href={track.album.external_urls.spotify}>
-        <img src={album?.images[0]?.url} alt={album?.name} />
-      </Link>
+      {album?.images[0]?.url && (
+        <Link href={track.album.external_urls.spotify}>
+          <Image
+            src={album.images[0].url}
+            alt={album?.name || ''}
+            width={100}
+            height={100}
+          />
+        </Link>
+      )}
       <div>뮤직비디오</div>
       <div>
         {(videos ?? []).map((video) => (
