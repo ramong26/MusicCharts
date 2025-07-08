@@ -33,7 +33,7 @@ export default function SubmitPlaylist() {
   } = useTrackList(playlistId, offset, limit);
   const { data: allTracks } = useAllTracks(playlistId);
   const isValidData = Array.isArray(pageTracks) && pageTracks.length > 0;
-
+  console.log('pageTracks:', pageTracks);
   return (
     <div>
       <SubmitInput
