@@ -1,7 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { TrackItem } from "@/features/chart/types/playlist";
+import { TrackItem } from '@/shared/types/SpotifyTrack';
 
 export default function ChartTop5({ tracksList }: { tracksList: TrackItem[] }) {
   return (
@@ -19,7 +19,7 @@ export default function ChartTop5({ tracksList }: { tracksList: TrackItem[] }) {
             <Link key={track.track.id} href={`/tracks/${track.track.id}`}>
               <div
                 className={`flex flex-col items-center gap-[10px] cursor-pointer pr-4 ${
-                  index !== 4 ? "border-r-[1px] border-[#000000]" : ""
+                  index !== 4 ? 'border-r-[1px] border-[#000000]' : ''
                 }`}
               >
                 <Image
@@ -37,7 +37,7 @@ export default function ChartTop5({ tracksList }: { tracksList: TrackItem[] }) {
                   <div className="text-sm">
                     {track.track.artists
                       .map((artist) => artist.name)
-                      .join(", ")}
+                      .join(', ')}
                   </div>
                 </div>
               </div>

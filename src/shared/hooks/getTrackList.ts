@@ -1,5 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
+
 import getTopTrackPlaylist from '@/features/chart/hooks/getTopTrackPlaylist';
+import getAllTracks from '@/shared/hooks/getAllTracks';
+
+const ONE_HOUR = 1000 * 60 * 60;
 
 export async function getTrackList({
   playlistId,
@@ -21,13 +25,19 @@ export async function getTrackList({
 }
 // 사용법:   const tracksList = await getTrackList();
 
-const ONE_HOUR = 1000 * 60 * 60;
-
-export const useTrackList = (playlistId: string, offset = 0, limit = 10) => {
+export const useTrackList = (playlistId: string, offset = 0, limit = 50) => {
   return useQuery({
     queryKey: ['track-list', playlistId, offset, limit],
     queryFn: () => getTopTrackPlaylist({ playlistId, offset, limit }),
     enabled: !!playlistId,
     staleTime: ONE_HOUR,
+  });
+};
+
+export const useAllTracks = (playlistId?: string) => {
+  return useQuery({
+    queryKey: ['all-tracks', playlistId],
+    enabled: !!playlistId,
+    queryFn: () => getAllTracks(playlistId!),
   });
 };
