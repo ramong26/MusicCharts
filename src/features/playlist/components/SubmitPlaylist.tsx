@@ -26,7 +26,6 @@ export default function SubmitPlaylist() {
     setShowChart(true);
   };
 
-  // const { data, isLoading, error } = useTrackList(playlistId, offset, limit);
   const {
     data: pageTracks,
     isLoading,

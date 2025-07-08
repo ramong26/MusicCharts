@@ -1,8 +1,9 @@
 import getTopTrackPlaylist from '@/features/chart/hooks/getTopTrackPlaylist';
+import { TrackItem } from '@/shared/types/SpotifyTrack';
 
 export default async function getAllTracks(playlistId: string, limit = 50) {
   let offset = 0;
-  let allTracks: any[] = [];
+  let allTracks: TrackItem[] = [];
   let hasMore = true;
   while (hasMore) {
     const response = await getTopTrackPlaylist({ playlistId, offset, limit });
@@ -12,6 +13,6 @@ export default async function getAllTracks(playlistId: string, limit = 50) {
       allTracks = allTracks.concat(response);
       offset += limit;
     }
-    return allTracks;
   }
+  return allTracks;
 }

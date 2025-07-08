@@ -37,11 +37,7 @@ export const useTrackList = (playlistId: string, offset = 0, limit = 50) => {
 export const useAllTracks = (playlistId?: string) => {
   return useQuery({
     queryKey: ['all-tracks', playlistId],
-    queryFn: () => {
-      if (!playlistId) return Promise.resolve([]);
-      return getAllTracks(playlistId);
-    },
     enabled: !!playlistId,
-    staleTime: ONE_HOUR,
+    queryFn: () => getAllTracks(playlistId!),
   });
 };
