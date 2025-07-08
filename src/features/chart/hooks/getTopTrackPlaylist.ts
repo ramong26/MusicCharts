@@ -3,7 +3,7 @@ import { TrackItem } from '@/shared/types/SpotifyTrack';
 export default async function getPlaylistTracks({
   playlistId,
   offset = 0,
-  limit = 10,
+  limit = 50,
 }: {
   playlistId: string;
   offset?: number;
