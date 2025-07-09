@@ -1,10 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import PlaylistInterviewList from '@/features/playlist/components/PlaylistInterviewList';
-import TrackComponent from '@/features/playlist/components/TrackComponent';
+import dynamic from 'next/dynamic';
+
 import SubmitInput from '@/shared/components/SubmitInput';
 import { useTrackList, useAllTracks } from '@/shared/hooks/getTrackList';
+
+const TrackComponent = dynamic(
+  () => import('@/features/playlist/components/TrackComponent'),
+  { ssr: false }
+);
+const PlaylistInterviewList = dynamic(
+  () => import('@/features/playlist/components/PlaylistInterviewList'),
+  { ssr: false }
+);
 
 export default function SubmitPlaylist() {
   const [submitUrl, setSubmitUrl] = useState('');
@@ -32,8 +41,11 @@ export default function SubmitPlaylist() {
     error,
   } = useTrackList(playlistId, offset, limit);
   const { data: allTracks } = useAllTracks(playlistId);
+
   const isValidData = Array.isArray(pageTracks) && pageTracks.length > 0;
-  console.log('pageTracks:', pageTracks);
+
+  const isLastPage = allTracks ? offset + limit >= allTracks.length : true;
+
   return (
     <div>
       <SubmitInput
@@ -45,7 +57,7 @@ export default function SubmitPlaylist() {
 
       {showChart && (
         <>
-          {isLoading && <p>로딩 중...</p>}
+          {isLoading && <TrackComponent title="Top Tracks" isLoading={true} />}
           {error && <p>오류 발생: {error.message}</p>}
           {isValidData ? (
             <>
@@ -55,19 +67,25 @@ export default function SubmitPlaylist() {
                 page={page}
                 limit={limit}
               />
-              <div className="flex gap-4 mt-4">
-                <button
-                  onClick={() => setPage((p) => Math.max(0, p - 1))}
-                  disabled={page === 0}
-                >
-                  이전
-                </button>
-                <button onClick={() => setPage((p) => p + 1)}>다음</button>
-              </div>
             </>
           ) : (
-            !isLoading && !error && <p>불러올 수 있는 트랙이 없습니다.</p>
+            <></>
           )}
+          <div className="flex gap-4 mt-4">
+            <button
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+            >
+              이전
+            </button>
+
+            <button
+              onClick={() => setPage((p) => p + 1)}
+              disabled={!isValidData || isLastPage}
+            >
+              다음
+            </button>
+          </div>
         </>
       )}
 
