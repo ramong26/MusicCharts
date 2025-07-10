@@ -8,17 +8,16 @@ import { searchInterviews } from '@/features/tracks/hooks/searchInterviews';
 interface PlaylistInterviewListProps {
   trackData?: TrackItem[];
 }
-
+type SearchResult = Awaited<ReturnType<typeof searchInterviews>>;
+type ArtistInterviewMap = Record<string, SearchResult>;
 export default function PlaylistInterviewList({
   trackData,
 }: PlaylistInterviewListProps) {
-  const [artistInterviews, setArtistInterviews] = useState<
-    Record<string, string[]>
-  >({});
+  const [artistInterviews, setArtistInterviews] = useState<ArtistInterviewMap>(
+    {}
+  );
 
-  const [loadingArtists, setLoadingArtists] = useState<Set<string>>(new Set());
-
-  // 중복 아티스트 이름 제거하고 배열로 반환 useMemo로 데이터 재계산 최적화
+  // 중복 아티스트 이름 제거 후 정렬
   const artists = useMemo(() => {
     const set = new Set<string>();
     trackData?.forEach((track) => {
@@ -30,41 +29,32 @@ export default function PlaylistInterviewList({
     return Array.from(set).sort();
   }, [trackData]);
 
-  // 각 아티스트별로 개별 검색
+  // 아티스트 인터뷰 검색
   useEffect(() => {
     if (!artists.length) return;
 
     const fetchAll = async () => {
-      const newResults: Record<string, string[]> = {};
-      const nextLoading = new Set(artists);
-
-      setLoadingArtists(nextLoading);
-
-      const interviewPromises = artists.map((artist) => {
-        return searchInterviews(
+      const interviewPromises = artists.map((artist) =>
+        searchInterviews(
           `${artist} artist interview site:rollingstone.com OR site:billboard.com OR site:pitchfork.com OR site:complex.com`
         )
-          .then((res) => ({
-            artist,
-            links: res.map((r) => r.link).slice(0, 5),
-          }))
-          .catch((error) => {
-            console.error(`인터뷰 fetch 실패: ${artist}`, error);
-            return { artist, links: [] };
-          });
-      });
+      );
 
-      const results = await Promise.allSettled(interviewPromises);
+      const settledResults = await Promise.allSettled(interviewPromises);
 
-      results.forEach((result) => {
+      const map: Record<string, SearchResult> = {};
+
+      settledResults.forEach((result, idx) => {
+        const artist = artists[idx];
         if (result.status === 'fulfilled') {
-          const { artist, links } = result.value;
-          newResults[artist] = links;
+          map[artist] = result.value;
+        } else {
+          map[artist] = [];
+          console.warn(`인터뷰 검색 실패: ${artist}`, result.reason);
         }
       });
 
-      setArtistInterviews((prev) => ({ ...prev, ...newResults }));
-      setLoadingArtists(new Set());
+      setArtistInterviews(map);
     };
 
     fetchAll();
@@ -75,33 +65,42 @@ export default function PlaylistInterviewList({
   }
 
   return (
-    <div>
-      <h3 className="text-xl font-bold mb-6">아티스트 인터뷰 검색</h3>
-      <div className="space-y-6">
+    <div className="relative border-3 border-black p-5 mt-10 bg-white w-full ">
+      <h3 className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-2 border-2 border-black font-bold text-2xl whitespace-nowrap">
+        아티스트 인터뷰 검색 결과
+      </h3>
+
+      <div className="space-y-6 mt-10">
         {artists.map((artist) => (
-          <div key={artist} className="border-b pb-4">
-            <h4 className="text-lg font-semibold mb-3">{artist}</h4>
-            {loadingArtists.has(artist) ? (
-              <p className="text-gray-500">인터뷰를 검색 중입니다...</p>
-            ) : (
-              <ul className="list-disc list-inside space-y-2 ml-4">
-                {artistInterviews[artist]?.length === 0 && (
-                  <li className="text-gray-500">관련 인터뷰가 없습니다.</li>
-                )}
-                {artistInterviews[artist]?.map((link, index) => (
-                  <li key={link}>
+          <div
+            key={artist}
+            className="flex flex-col border-b border-black pb-4 last:border-none "
+          >
+            <h4 className="text-xl font-semibold mb-3 text-gray-900">
+              {artist}
+            </h4>
+            <ul className="text-gray-700 text-sm space-y-1 ">
+              {artistInterviews[artist] === undefined ? (
+                <li className="text-gray-400 italic animate-pulse">
+                  로딩 중...
+                </li>
+              ) : artistInterviews[artist].length > 0 ? (
+                artistInterviews[artist].slice(0, 5).map((result, i) => (
+                  <li key={i}>
                     <a
-                      href={link}
+                      href={result.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-blue-600 hover:underline"
+                      className="text-blue-600 underline hover:bg-gray-100 transition"
                     >
-                      인터뷰 {index + 1}
+                      {result.title}
                     </a>
                   </li>
-                ))}
-              </ul>
-            )}
+                ))
+              ) : (
+                <li className="text-gray-400 italic">검색 결과 없음</li>
+              )}
+            </ul>
           </div>
         ))}
       </div>
