@@ -9,13 +9,13 @@ interface PlaylistInterviewListProps {
   trackData?: TrackItem[];
 }
 type SearchResult = Awaited<ReturnType<typeof searchInterviews>>;
-
+type ArtistInterviewMap = Record<string, SearchResult>;
 export default function PlaylistInterviewList({
   trackData,
 }: PlaylistInterviewListProps) {
-  const [artistInterviews, setArtistInterviews] = useState<
-    Record<string, SearchResult>
-  >({});
+  const [artistInterviews, setArtistInterviews] = useState<ArtistInterviewMap>(
+    {}
+  );
 
   // 중복 아티스트 이름 제거 후 정렬
   const artists = useMemo(() => {
@@ -34,17 +34,24 @@ export default function PlaylistInterviewList({
     if (!artists.length) return;
 
     const fetchAll = async () => {
-      const results = await Promise.all(
-        artists.map((artist) =>
-          searchInterviews(
-            `${artist} artist interview site:rollingstone.com OR site:billboard.com OR site:pitchfork.com OR site:complex.com OR site:vogue.co.kr OR site:ize.co.kr OR site:esquirekorea.co.kr OR site:gqkorea.co.kr OR site:musicy.kr`
-          )
+      const interviewPromises = artists.map((artist) =>
+        searchInterviews(
+          `${artist} artist interview site:rollingstone.com OR site:billboard.com OR site:pitchfork.com OR site:complex.com`
         )
       );
 
+      const settledResults = await Promise.allSettled(interviewPromises);
+
       const map: Record<string, SearchResult> = {};
-      artists.forEach((artist, idx) => {
-        map[artist] = results[idx];
+
+      settledResults.forEach((result, idx) => {
+        const artist = artists[idx];
+        if (result.status === 'fulfilled') {
+          map[artist] = result.value;
+        } else {
+          map[artist] = [];
+          console.warn(`인터뷰 검색 실패: ${artist}`, result.reason);
+        }
       });
 
       setArtistInterviews(map);
@@ -73,7 +80,11 @@ export default function PlaylistInterviewList({
               {artist}
             </h4>
             <ul className="text-gray-700 text-sm space-y-1 ">
-              {artistInterviews[artist]?.length > 0 ? (
+              {artistInterviews[artist] === undefined ? (
+                <li className="text-gray-400 italic animate-pulse">
+                  로딩 중...
+                </li>
+              ) : artistInterviews[artist].length > 0 ? (
                 artistInterviews[artist].slice(0, 5).map((result, i) => (
                   <li key={i}>
                     <a

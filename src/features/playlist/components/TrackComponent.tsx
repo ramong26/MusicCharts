@@ -41,10 +41,7 @@ export default function TrackComponent({
   const renderTrackItems = () => {
     return tracksList?.map((item, index) => (
       <Link href={`/tracks/${item.track.id}`} key={item.track.id}>
-        <div
-          key={index}
-          className="flex items-center gap-4 mb-4 border-b-1 border-black pb-4 cursor-pointer hover:bg-gray-100 transition w-full h-[70px]"
-        >
+        <div className="flex items-center gap-4 mb-4 border-b-1 border-black pb-4 cursor-pointer hover:bg-gray-100 transition w-full h-[70px]">
           <div className="flex items-center gap-4">
             <div className="font-bold text-xl w-[30px]">
               {page * limit + index + 1}
