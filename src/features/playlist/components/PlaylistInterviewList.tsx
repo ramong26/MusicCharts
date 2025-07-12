@@ -33,10 +33,16 @@ export default function PlaylistInterviewList({
     if (!artists.length) return;
 
     const fetchInterviewsForAll = async () => {
+      const results = await Promise.all(
+        artists.map(async (artist) => ({
+          artist,
+          interviews: await getCombinedInterviews(artist),
+        }))
+      );
       const map: Record<string, CustomSearchResult[]> = {};
-      for (const artist of artists) {
-        map[artist] = await getCombinedInterviews(artist);
-      }
+      results.forEach(({ artist, interviews }) => {
+        map[artist] = interviews;
+      });
       setArtistInterviews(map);
     };
 

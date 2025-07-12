@@ -32,10 +32,10 @@ export interface Label {
   label_with_op: string;
 }
 
-export interface RSSInterviewResult {
-  title: string;
-  link: string;
-  source: string;
-  pubDate: string;
-  snippet: string;
-}
+// export interface RSSInterviewResult {
+//   title: string;
+//   link: string;
+//   source: string;
+//   pubDate: string;
+//   snippet: string;
+// }

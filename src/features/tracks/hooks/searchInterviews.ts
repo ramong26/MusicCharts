@@ -10,6 +10,7 @@ const INTERVIEW_SITES = [
   'site:billboard.com',
   'site:complex.com',
   'site:pitchfork.com',
+  'site: koreanmusicjournal.com',
 ];
 
 function getDateYearsAgo(years: number): string {
@@ -99,7 +100,7 @@ export async function searchInterviewsWithYouTube(
     const res = await fetch(
       `${BASE_URL}/api/google-api/youtube?q=${encodeURIComponent(
         who
-      )} interview`
+      )}  ${who} interview`
     );
 
     if (!res.ok) {
