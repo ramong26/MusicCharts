@@ -31,3 +31,11 @@ export interface Label {
   displayName: string;
   label_with_op: string;
 }
+
+// export interface RSSInterviewResult {
+//   title: string;
+//   link: string;
+//   source: string;
+//   pubDate: string;
+//   snippet: string;
+// }

@@ -1,15 +1,16 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-
 import { TrackItem } from '@/shared/types/SpotifyTrack';
-import { searchInterviews } from '@/features/tracks/hooks/searchInterviews';
+import { getCombinedInterviews } from '@/features/tracks/hooks/searchInterviews';
+import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 
 interface PlaylistInterviewListProps {
   trackData?: TrackItem[];
 }
-type SearchResult = Awaited<ReturnType<typeof searchInterviews>>;
-type ArtistInterviewMap = Record<string, SearchResult>;
+
+type ArtistInterviewMap = Record<string, CustomSearchResult[] | null>;
+
 export default function PlaylistInterviewList({
   trackData,
 }: PlaylistInterviewListProps) {
@@ -17,7 +18,6 @@ export default function PlaylistInterviewList({
     {}
   );
 
-  // 중복 아티스트 이름 제거 후 정렬
   const artists = useMemo(() => {
     const set = new Set<string>();
     trackData?.forEach((track) => {
@@ -29,37 +29,27 @@ export default function PlaylistInterviewList({
     return Array.from(set).sort();
   }, [trackData]);
 
-  // 아티스트 인터뷰 검색
   useEffect(() => {
     if (!artists.length) return;
 
-    const fetchAll = async () => {
-      const interviewPromises = artists.map((artist) =>
-        searchInterviews(
-          `${artist} artist interview site:rollingstone.com OR site:billboard.com OR site:pitchfork.com OR site:complex.com`
-        )
+    const fetchInterviewsForAll = async () => {
+      const results = await Promise.all(
+        artists.map(async (artist) => ({
+          artist,
+          interviews: await getCombinedInterviews(artist),
+        }))
       );
-
-      const settledResults = await Promise.allSettled(interviewPromises);
-
-      const map: Record<string, SearchResult> = {};
-
-      settledResults.forEach((result, idx) => {
-        const artist = artists[idx];
-        if (result.status === 'fulfilled') {
-          map[artist] = result.value;
-        } else {
-          map[artist] = [];
-          console.warn(`인터뷰 검색 실패: ${artist}`, result.reason);
-        }
+      const map: Record<string, CustomSearchResult[]> = {};
+      results.forEach(({ artist, interviews }) => {
+        map[artist] = interviews;
       });
-
       setArtistInterviews(map);
     };
 
-    fetchAll();
+    fetchInterviewsForAll();
   }, [artists]);
 
+  console.log('artistInterviews:', artistInterviews);
   if (!trackData || trackData.length === 0) {
     return <p>트랙 데이터를 불러오는 중이거나 없습니다.</p>;
   }
@@ -74,18 +64,19 @@ export default function PlaylistInterviewList({
         {artists.map((artist) => (
           <div
             key={artist}
-            className="flex flex-col border-b border-black pb-4 last:border-none "
+            className="flex flex-col border-b border-black pb-4 last:border-none"
           >
             <h4 className="text-xl font-semibold mb-3 text-gray-900">
               {artist}
             </h4>
-            <ul className="text-gray-700 text-sm space-y-1 ">
+            <ul className="text-gray-700 text-sm space-y-1">
               {artistInterviews[artist] === undefined ? (
                 <li className="text-gray-400 italic animate-pulse">
                   로딩 중...
                 </li>
-              ) : artistInterviews[artist].length > 0 ? (
-                artistInterviews[artist].slice(0, 5).map((result, i) => (
+              ) : artistInterviews[artist] &&
+                artistInterviews[artist]!.length > 0 ? (
+                artistInterviews[artist]!.slice(0, 5).map((result, i) => (
                   <li key={i}>
                     <a
                       href={result.link}
