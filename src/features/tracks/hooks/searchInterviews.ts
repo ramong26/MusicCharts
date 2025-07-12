@@ -60,7 +60,7 @@ export async function searchInterviews(
 // 사용법:  const interviews = await getTrackIdInterview(who);
 
 // Google OpenAI를 사용하여 인터뷰 검색
-export async function searchInterviewsWithGoogleGenAI(
+export async function searchInterviewsWithOpenAI(
   who: string
 ): Promise<CustomSearchResult[]> {
   try {
@@ -132,7 +132,7 @@ export async function getCombinedInterviews(
 ): Promise<CustomSearchResult[]> {
   const [googleResults, genAIResults] = await Promise.all([
     searchInterviews(who),
-    searchInterviewsWithGoogleGenAI(who),
+    searchInterviewsWithOpenAI(who),
   ]);
 
   const combinedMap = new Map<string, CustomSearchResult>();

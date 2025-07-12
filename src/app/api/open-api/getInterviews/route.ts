@@ -8,8 +8,12 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Query is required' }, { status: 400 });
     }
 
-    const openai = new OpenAI({ apiKey: process.env.OPEN_AI_API_KEY });
-
+    const apiKey = process.env.OPEN_AI_API_KEY;
+    if (!apiKey) {
+      console.error('OPEN_AI_API_KEY is not set in environment variables.');
+      throw new Error('Server is not configured to handle this request.');
+    }
+    const openai = new OpenAI({ apiKey });
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o',
       messages: [
