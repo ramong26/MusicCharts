@@ -2,8 +2,11 @@ import getTrackId from '@/features/tracks/hooks/getTrackId';
 import getTrackIdAlbum from '@/features/tracks/hooks/getTrackIdAlbum';
 import { getYoutubeTrackIdVideo } from '@/features/tracks/hooks/getYoutube';
 import { searchInterviews } from '@/features/tracks/hooks/searchInterviews';
-import Image from 'next/image';
-import Link from 'next/link';
+
+import HeaderMain from '@/shared/components/HeaderMain';
+import TrackDescription from '@/features/tracks/components/TrackDescription';
+import TrackList from '@/features/tracks/components/TrackList';
+import TrackComments from '@/features/tracks/components/TrackComments';
 
 interface TrackPageProps {
   params: { id: string };
@@ -13,7 +16,7 @@ export default async function TrackPage({ params }: TrackPageProps) {
   const trackId = params.id;
   // trackId로 트랙 정보 받아옴
   const track = await getTrackId(trackId);
-
+  console.log('track', track);
   // trackId로 앨범 정보 받아옴
   const album = await getTrackIdAlbum(track);
   // trackId로 유튜브 비디오 정보 받아옴
@@ -22,58 +25,13 @@ export default async function TrackPage({ params }: TrackPageProps) {
   const interviews = await searchInterviews(track.name);
 
   return (
-    <div>
-      <div>곡정보</div>
-      <div>
-        <div>곡 제목: {track?.name}</div>
-        <div>
-          아티스트: {track?.artists.map((artist) => artist.name).join(', ')}
-        </div>
-      </div>
-      <div>앨범 정보: {album?.name}</div>
-      <div>
-        {album?.tracks?.items.map((item) => (
-          <div key={item.id}>
-            <div>곡 제목: {item.name}</div>
-          </div>
-        ))}
-      </div>
-      <div>앨범 발매일: {album?.release_date}</div>
-      <div>앨범 총 트랙 수: {album?.total_tracks}</div>
-      {album?.images[0]?.url && (
-        <Link href={track.album.external_urls.spotify}>
-          <Image
-            src={album.images[0].url}
-            alt={album?.name || ''}
-            width={100}
-            height={100}
-          />
-        </Link>
-      )}
-      <div>뮤직비디오</div>
-      <div>
-        {(videos ?? []).map((video) => (
-          <div key={video.id.videoId}>
-            <h3>{video.snippet.title}</h3>
-            <iframe
-              width="1120"
-              height="630"
-              src={`https://www.youtube.com/embed/${video.id.videoId}`}
-              title={video.snippet.title}
-              frameBorder="0"
-              allowFullScreen
-            />
-          </div>
-        ))}
-      </div>
-      <div>인터뷰</div>
-      <div>
-        {(interviews ?? []).map((interview, index) => (
-          <Link href={interview.link} key={index}>
-            <h3>{interview.title}</h3>
-          </Link>
-        ))}
-      </div>
+    <div className="h-screen ">
+      <HeaderMain />
+      <main className="flex flex-col mt-[250px] gap-4 h-[617px] w-[1043px] mx-auto">
+        {track && <TrackDescription album={track.album} />}
+        <TrackList />
+        <TrackComments />
+      </main>
     </div>
   );
 }

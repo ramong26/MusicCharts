@@ -1,5 +1,5 @@
-import { YoutubeVideo } from "../types/youtube-video";
-import { connectToDB } from "@/lib/mongo";
+import { YoutubeVideo } from '@/features/tracks/types/youtube-video';
+import { connectToDB } from '@/lib/mongo';
 
 // 유튜브 뮤직비디오 가져오기
 export async function getYoutubeTrackIdVideo(
@@ -7,7 +7,7 @@ export async function getYoutubeTrackIdVideo(
 ): Promise<YoutubeVideo[]> {
   try {
     const db = await connectToDB();
-    const collection = db.collection("musicVideos");
+    const collection = db.collection('musicVideos');
 
     const cached = await collection.findOne({ trackName });
 
@@ -15,23 +15,21 @@ export async function getYoutubeTrackIdVideo(
       return cached.videos;
     }
 
-    const baseUrl = process.env.BASE_URL || "http://127.0.0.1:3000";
+    const baseUrl = process.env.BASE_URL || 'http://127.0.0.1:3000';
 
     const res = await fetch(
       `${baseUrl}/api/youtube-search?q=${encodeURIComponent(trackName)}`
     );
 
     if (!res.ok) {
-      throw new Error("유튜브 검색에 실패했습니다");
-      return [];
+      throw new Error('유튜브 검색에 실패했습니다');
     }
 
     const data = await res.json();
     const videos = data.items || [];
 
     if (videos.length === 0) {
-      throw new Error("비디오를 찾을 수 없습니다");
-      return [];
+      throw new Error('비디오를 찾을 수 없습니다');
     }
 
     await collection.updateOne(
@@ -47,7 +45,7 @@ export async function getYoutubeTrackIdVideo(
     );
     return videos;
   } catch (error) {
-    console.error("getYoutubeTrackIdVideo() 에러:", error);
+    console.error('getYoutubeTrackIdVideo() 에러:', error);
     return [];
   }
 }
@@ -55,7 +53,7 @@ export async function getYoutubeTrackIdVideo(
 // 유튜브 채널 가져오는 함수
 export async function getYoutubeChannelInfo(channelHandle: string) {
   const db = await connectToDB();
-  const collection = db.collection("playlistChannels");
+  const collection = db.collection('playlistChannels');
 
   const ONE_DAY = 24 * 60 * 60 * 1000;
   const now = Date.now();
@@ -73,7 +71,7 @@ export async function getYoutubeChannelInfo(channelHandle: string) {
   const data = await res.json();
 
   if (!data.items || data.items.length === 0) {
-    throw new Error("채널 정보를 찾을 수 없습니다");
+    throw new Error('채널 정보를 찾을 수 없습니다');
   }
 
   const channelData = { ...data.items[0], updatedAt: Date.now() };
