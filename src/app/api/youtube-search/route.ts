@@ -1,13 +1,12 @@
-// app/api/youtube-search/route.ts
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
-  const q = searchParams.get("q");
+  const q = searchParams.get('q');
 
   if (!q) {
     return NextResponse.json(
-      { error: "Query parameter q is required" },
+      { error: 'Query parameter q is required' },
       { status: 400 }
     );
   }
@@ -16,7 +15,7 @@ export async function GET(request: Request) {
     const apiKey = process.env.GOOGLE_API_KEY;
     if (!apiKey) {
       return NextResponse.json(
-        { error: "YouTube API key is missing" },
+        { error: 'YouTube API key is missing' },
         { status: 500 }
       );
     }
@@ -29,7 +28,7 @@ export async function GET(request: Request) {
 
     if (!response.ok) {
       return NextResponse.json(
-        { error: "YouTube API request failed" },
+        { error: 'YouTube API request failed' },
         { status: 500 }
       );
     }
@@ -38,7 +37,7 @@ export async function GET(request: Request) {
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to fetch data from YouTube API" },
+      { error: 'Failed to fetch data from YouTube API' },
       { status: 500 }
     );
   }

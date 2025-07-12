@@ -10,7 +10,7 @@ const INTERVIEW_SITES = [
   'site:billboard.com',
   'site:complex.com',
   'site:pitchfork.com',
-  'site: koreanmusicjournal.com',
+  'site:koreanmusicjournal.com',
 ];
 
 function getDateYearsAgo(years: number): string {

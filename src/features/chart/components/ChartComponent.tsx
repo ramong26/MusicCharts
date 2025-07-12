@@ -1,5 +1,7 @@
-import Image from "next/image";
-import { TrackItem } from "@/shared/types/SpotifyTrack";
+import Image from 'next/image';
+import Link from 'next/link';
+
+import { TrackItem } from '@/shared/types/SpotifyTrack';
 
 interface ChartComponentProps {
   tracksList: TrackItem[];
@@ -10,7 +12,7 @@ interface ChartComponentProps {
 export default function ChartComponent({
   tracksList,
   title,
-  className = "",
+  className = '',
 }: ChartComponentProps) {
   return (
     <div
@@ -20,8 +22,9 @@ export default function ChartComponent({
         {title}
       </h2>
       {tracksList.map((item, index) => (
-        <div
+        <Link
           key={index}
+          href={`/tracks/${item.track.id}`}
           className="flex items-center gap-4 mb-4 border-b-1 border-black pb-4 cursor-pointer hover:bg-gray-100 transition w-[450px] last:border-b-0 last:pb-0 last:mb-0"
         >
           <div className="flex items-center gap-4">
@@ -38,10 +41,10 @@ export default function ChartComponent({
               {item.track.name}
             </div>
             <div className=" max-w-md text-gray-600 break-words">
-              {item.track.artists.map((artist) => artist.name).join(", ")}
+              {item.track.artists.map((artist) => artist.name).join(', ')}
             </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   );
