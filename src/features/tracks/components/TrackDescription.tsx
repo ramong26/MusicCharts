@@ -15,7 +15,7 @@ export default function TrackDescription({ album }: { album: Album }) {
         <div>
           <div className="flex gap-2 items-center">
             <div>앨범이름</div>
-            <div className="flex items-center jutify-between">
+            <div className="flex items-center justify-between">
               <div>공유</div>
               <div>카카오톡공유</div>
             </div>
