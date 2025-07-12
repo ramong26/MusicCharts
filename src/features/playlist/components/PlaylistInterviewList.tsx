@@ -1,9 +1,8 @@
-// src/features/playlist/components/PlaylistInterviewList.tsx
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
 import { TrackItem } from '@/shared/types/SpotifyTrack';
-import { searchInterviewsWithGoogleGenAI } from '@/features/tracks/hooks/searchInterviews';
+import { getCombinedInterviews } from '@/features/tracks/hooks/searchInterviews';
 import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 
 interface PlaylistInterviewListProps {
@@ -33,24 +32,18 @@ export default function PlaylistInterviewList({
   useEffect(() => {
     if (!artists.length) return;
 
-    const fetchAll = async () => {
-      const interviewPromises = artists.map(async (artist) => {
-        const result = await searchInterviewsWithGoogleGenAI(artist);
-        return { artist, result };
-      });
-
-      const results = await Promise.all(interviewPromises);
-      const map: ArtistInterviewMap = {};
-      results.forEach(({ artist, result }) => {
-        map[artist] = result;
-      });
-
+    const fetchInterviewsForAll = async () => {
+      const map: Record<string, CustomSearchResult[]> = {};
+      for (const artist of artists) {
+        map[artist] = await getCombinedInterviews(artist);
+      }
       setArtistInterviews(map);
     };
 
-    fetchAll();
+    fetchInterviewsForAll();
   }, [artists]);
 
+  console.log('artistInterviews:', artistInterviews);
   if (!trackData || trackData.length === 0) {
     return <p>트랙 데이터를 불러오는 중이거나 없습니다.</p>;
   }
