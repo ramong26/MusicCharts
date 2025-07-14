@@ -14,12 +14,17 @@ export async function fetchWikiSummary(title: string): Promise<string> {
 }
 
 export async function getTopWikiTitle(query: string): Promise<string | null> {
-  const response = await fetch(
-    `https://en.wikipedia.org/w/api.php?origin=*&action=query&list=search&format=json&srsearch=${encodeURIComponent(
-      query
-    )}`
-  );
-  const data = await response.json();
-  const topResult = data.query?.search?.[0];
-  return topResult ? topResult.title : null;
+  try {
+    const response = await fetch(
+      `https://en.wikipedia.org/w/api.php?origin=*&action=query&list=search&format=json&srsearch=${encodeURIComponent(
+        query
+      )}`
+    );
+    const data = await response.json();
+    const topResult = data.query?.search?.[0];
+    return topResult ? topResult.title : null;
+  } catch (e) {
+    console.error('Error fetching top wiki title:', e);
+    return null;
+  }
 }

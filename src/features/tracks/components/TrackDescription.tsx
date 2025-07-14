@@ -17,7 +17,9 @@ export default function TrackDescription({ album }: { album: Album }) {
   const { translateText, loading: translating } = useTranslate();
   useEffect(() => {
     const fetchWikiInfo = async () => {
-      const searchQuery = `${album.name} ${album.artists[0].name} ${album.type}`;
+      const searchQuery = [album.name, album.artists[0].name, album.type]
+        .filter(Boolean)
+        .join(' ');
       const topTitle = await getTopWikiTitle(searchQuery);
 
       if (topTitle) {
