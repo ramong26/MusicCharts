@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
-import { M_PLUS_Rounded_1c } from "next/font/google";
+// import { M_PLUS_Rounded_1c } from "next/font/google";
 import "./globals.css";
 import QueryProvider from "./providers/QueryProvider";
 
-const mplus = M_PLUS_Rounded_1c({
-  variable: "--font-mplus",
-  subsets: ["latin"],
-  weight: ["100", "300", "400", "500", "700", "800", "900"],
-});
+// const mplus = M_PLUS_Rounded_1c({
+//   variable: "--font-mplus",
+//   subsets: ["latin"],
+//   weight: ["100", "300", "400", "500", "700", "800", "900"],
+// });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +21,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${mplus.variable} antialiased`}>
+      <body className="antialiased">
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
