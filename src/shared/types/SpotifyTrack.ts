@@ -15,6 +15,7 @@ export interface Album {
   external_urls: {
     spotify: string;
   };
+  artists: Artist[];
   id: string;
   images: Images[];
   name: string;
