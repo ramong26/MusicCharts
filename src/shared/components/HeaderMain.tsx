@@ -87,7 +87,7 @@ export default function HeaderMain() {
           <Link href="/charts">chart</Link>
           <Link href="/playlist">playlist</Link>
           <Link href="/channel">channel</Link>
-          <Link href="/interview">interview</Link>
+          <Link href="/foryou">for you</Link>
         </div>
         {isScroll && (
           <div className="flex items-center">

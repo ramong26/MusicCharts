@@ -16,7 +16,7 @@ export default async function TrackPage({ params }: TrackPageProps) {
   const trackId = params.id;
   // trackId로 트랙 정보 받아옴
   const track = await getTrackId(trackId);
-  console.log('track', track);
+
   // trackId로 앨범 정보 받아옴
   const album = await getTrackIdAlbum(track);
   // trackId로 유튜브 비디오 정보 받아옴
