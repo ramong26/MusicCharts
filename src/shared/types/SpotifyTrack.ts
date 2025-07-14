@@ -24,6 +24,8 @@ export interface Album {
   tracks: {
     items: TrackId[];
   };
+  description?: string;
+  wikipediaUrl?: string;
 }
 export interface Images {
   url: string;

@@ -13,7 +13,7 @@ interface TrackPageProps {
 }
 
 export default async function TrackPage({ params }: TrackPageProps) {
-  const trackId = params.id;
+  const { id: trackId } = await params;
   // trackId로 트랙 정보 받아옴
   const track = await getTrackId(trackId);
   console.log('track', track);
@@ -28,7 +28,7 @@ export default async function TrackPage({ params }: TrackPageProps) {
     <div className="h-screen ">
       <HeaderMain />
       <main className="flex flex-col mt-[250px] gap-4 h-[617px] w-[1043px] mx-auto">
-        {track && <TrackDescription album={track.album} />}
+        {track && <TrackDescription album={track.album} artists={track.artists} />}
         <TrackList />
         <TrackComments />
       </main>
