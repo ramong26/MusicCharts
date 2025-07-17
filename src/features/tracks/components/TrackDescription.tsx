@@ -14,7 +14,9 @@ export default function TrackDescription({ album }: { album: Album }) {
   // console.log('Album:', album);
 
   const [summary, setSummary] = useState('');
-  const { translateText, loading: translating } = useTranslate();
+  const [loading, setLoading] = useState(true);
+  const { translateText } = useTranslate();
+
   useEffect(() => {
     const fetchWikiInfo = async () => {
       const searchQuery = [album.name, album.artists[0].name, album.type]
@@ -25,15 +27,15 @@ export default function TrackDescription({ album }: { album: Album }) {
       if (topTitle) {
         const summaryText = await fetchWikiSummary(topTitle);
         const translatedSummary = await translateText(summaryText, 'ko');
-        console.log('Original Summary:', summaryText);
-        console.log('Translated Summary:', translatedSummary);
 
+        setLoading(false);
         setSummary(translatedSummary);
       } else {
         setSummary('해당 앨범에 대한 위키 문서를 찾을 수 없습니다.');
       }
     };
 
+    setLoading(true);
     fetchWikiInfo();
   }, [album.id, translateText]);
 
@@ -55,7 +57,7 @@ export default function TrackDescription({ album }: { album: Album }) {
               <div>카카오톡공유</div>
             </div>
           </div>
-          <div>{summary}</div>
+          <div>{loading ? '앨범 정보를 불러오는 중...' : summary}</div>
         </div>
       </div>
     </div>
