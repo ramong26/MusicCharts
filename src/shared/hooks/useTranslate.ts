@@ -1,5 +1,8 @@
+'use client';
+
 import { useState, useCallback } from 'react';
 
+// 클라이언트 전용
 export default function useTranslate() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
