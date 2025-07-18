@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 import { TrackItem } from '@/shared/types/SpotifyTrack';
 import Link from 'next/link';
 
@@ -31,7 +32,7 @@ export default function TrackComponent({
         <div className="flex items-center gap-4">
           <div className="w-[50px] h-[50px] bg-gray-300 "></div>
         </div>
-        <div className="flex flex-col overflow-hiddsen w-full">
+        <div className="flex flex-col overflow-hidden w-full">
           <div className="font-bold text-lg break-words w-full bg-gray-300 h-6"></div>
           <div className="max-w-md text-gray-600 break-words bg-gray-200 h-4 mt-2"></div>
         </div>
@@ -42,7 +43,7 @@ export default function TrackComponent({
   // 실제 트랙 아이템 렌더링
   const renderTrackItems = () => {
     return tracksList?.map((item, index) => (
-      <>
+      <div key={item.track.id}>
         {link ? (
           <Link href={`/tracks/${item.track.id}`}>
             <div className="flex items-center gap-4 mb-4 border-b-1 border-black pb-4 cursor-pointer hover:bg-gray-100 transition w-full h-[70px]">
@@ -68,10 +69,7 @@ export default function TrackComponent({
             </div>
           </Link>
         ) : (
-          <div
-            className="flex items-center gap-4 mb-4 border-b-1 border-black pb-4  transition w-full h-[70px]"
-            key={item.track.id}
-          >
+          <div className="flex items-center gap-4 mb-4 border-b-1 border-black pb-4  transition w-full h-[70px]">
             <div className="flex items-center gap-4">
               <div className="font-bold text-xl w-[30px]">
                 {page * limit + index + 1}
@@ -93,7 +91,7 @@ export default function TrackComponent({
             </div>
           </div>
         )}
-      </>
+      </div>
     ));
   };
 
