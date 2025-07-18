@@ -62,6 +62,7 @@ export default function SubmitPlaylist() {
           {isValidData ? (
             <>
               <TrackComponent
+                link={true}
                 tracksList={pageTracks}
                 title="차트 제목"
                 page={page}
