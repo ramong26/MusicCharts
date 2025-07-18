@@ -2,6 +2,7 @@ import Image from 'next/image';
 
 import { TrackItem } from '@/shared/types/SpotifyTrack';
 import Link from 'next/link';
+import React from 'react';
 
 interface TrackComponentProps {
   tracksList?: TrackItem[];
@@ -43,7 +44,7 @@ export default function TrackComponent({
   // 실제 트랙 아이템 렌더링
   const renderTrackItems = () => {
     return tracksList?.map((item, index) => (
-      <div key={item.track.id}>
+      <React.Fragment key={item.track.id}>
         {link ? (
           <Link href={`/tracks/${item.track.id}`}>
             <div className="flex items-center gap-4 mb-4 border-b-1 border-black pb-4 cursor-pointer hover:bg-gray-100 transition w-full h-[70px]">
@@ -91,7 +92,7 @@ export default function TrackComponent({
             </div>
           </div>
         )}
-      </div>
+      </React.Fragment>
     ));
   };
 
