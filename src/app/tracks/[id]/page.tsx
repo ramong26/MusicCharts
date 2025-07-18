@@ -28,9 +28,9 @@ export default async function TrackPage({ params }: TrackPageProps) {
     <div className="h-screen ">
       <HeaderMain />
       <main className="flex flex-col mt-[250px] gap-4 h-[617px] w-[1043px] mx-auto">
-        {track && <TrackDescription album={track.album} />}
-        <TrackList />
-        <TrackComments />
+        {album && <TrackDescription album={album} />}
+        {album && <TrackList album={album} />}
+        {track && <TrackComments />}
       </main>
     </div>
   );
