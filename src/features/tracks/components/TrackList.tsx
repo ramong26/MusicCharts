@@ -17,8 +17,6 @@ export default function TrackList({ album }: { album: Album }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-semibold">트랙 목록</h2>
-
       <TrackComments
         title={album.name}
         tracksList={tracksList}

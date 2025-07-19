@@ -24,13 +24,14 @@ export default async function TrackPage({ params }: TrackPageProps) {
   // // trackId로 인터뷰 정보 받아옴
   const interviews = await searchInterviews(track.name);
 
+  console.log(track, album);
   return (
     <div className="h-screen ">
       <HeaderMain />
       <main className="flex flex-col mt-[250px] gap-4 h-[617px] w-[1043px] mx-auto">
         {album && <TrackDescription album={album} />}
         {album && <TrackList album={album} />}
-        {track && <TrackComments />}
+        {track && <TrackComments trackId={track.id} />}
       </main>
     </div>
   );
