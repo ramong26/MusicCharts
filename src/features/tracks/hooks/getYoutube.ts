@@ -62,9 +62,9 @@ export async function getYoutubeChannelInfo(channelHandle: string) {
   const cachedChannel = await YoutubeChannel.findOne({ handle: channelHandle });
 
   const ONE_DAY = 24 * 60 * 60 * 1000;
-  const now = Date.now();
+  const now = new Date();
 
-  if (cachedChannel && now - cachedChannel.updatedAt < ONE_DAY) {
+  if (cachedChannel && now - cachedChannel.updatedAt.getTime() < ONE_DAY) {
     return cachedChannel.data;
   }
 

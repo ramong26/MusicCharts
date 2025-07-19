@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { connectToDB } from '@/lib/mongo/mongo';
+import connectToDB from '@/lib/mongo/mongo';
 import { Comment } from '@/lib/mongo/models/Comment';
 
 // 댓글 수정
@@ -14,7 +14,7 @@ export async function PATCH(request: Request) {
 
   const updatedComment = await Comment.findByIdAndUpdate(
     commentId,
-    { text, updatedAt: Date.now() },
+    { text, updatedAt: new Date() },
     { new: true }
   );
 
@@ -24,6 +24,9 @@ export async function PATCH(request: Request) {
 
   return NextResponse.json(updatedComment, {
     status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 }
 
@@ -47,6 +50,9 @@ export async function DELETE(request: Request) {
     { message: '댓글이 삭제되었습니다' },
     {
       status: 200,
+      headers: {
+        'Content-Type': 'application/json',
+      },
     }
   );
 }

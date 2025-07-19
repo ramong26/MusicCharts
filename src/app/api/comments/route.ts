@@ -13,6 +13,9 @@ export async function GET(request: Request) {
   const comments = await Comment.find({ trackId }).sort({ createdAt: -1 });
   return NextResponse.json(comments, {
     status: 200,
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 }
 
@@ -28,5 +31,8 @@ export async function POST(request: Request) {
   const newComment = await Comment.create({ userId, trackId, text });
   return NextResponse.json(newComment, {
     status: 201,
+    headers: {
+      'Content-Type': 'application/json',
+    },
   });
 }

@@ -12,17 +12,20 @@ export default function TrackComments({ trackId }: { trackId: string }) {
       console.error('댓글 내용이 비어있습니다');
       return;
     }
+    try {
+      await fetch('/api/comments', {
+        method: 'POST',
+        body: JSON.stringify({
+          userId: session.user.id,
+          trackId,
+          text: value.trim(),
+        }),
+      });
 
-    await fetch('/api/comments', {
-      method: 'POST',
-      body: JSON.stringify({
-        userId: session.user.id,
-        trackId,
-        text: submitComment,
-      }),
-    });
-
-    setSubmitComment('');
+      setSubmitComment('');
+    } catch (error) {
+      console.error('댓글 작성 중 오류 발생:', error);
+    }
   };
 
   return (
@@ -32,6 +35,7 @@ export default function TrackComments({ trackId }: { trackId: string }) {
         placeholder="댓글을 입력하세요"
         onChange={(e) => setSubmitComment(e.target.value)}
         onSubmit={handleSubmit}
+        value={submitComment}
       />
       <p>여기에 트랙에 대한 댓글이 표시됩니다.</p>
       {/* 여기에 트랙 댓글 관련 컴포넌트를 추가할 수 있습니다 */}
