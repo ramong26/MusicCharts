@@ -1,15 +1,15 @@
 import { YoutubeVideo } from '@/features/tracks/types/youtube-video';
-import { connectToDB } from '@/lib/mongo';
-
+import connectToDB from '@/lib/mongo/mongo';
+import { Youtube } from '@/lib/mongo/models/Youtube';
+import { YoutubeChannel } from '@/lib/mongo/models/YoutubeChannel';
 // 유튜브 뮤직비디오 가져오기
 export async function getYoutubeTrackIdVideo(
   trackName: string
 ): Promise<YoutubeVideo[]> {
   try {
-    const db = await connectToDB();
-    const collection = db.collection('musicVideos');
+    await connectToDB();
 
-    const cached = await collection.findOne({ trackName });
+    const cached = await Youtube.findOne({ trackName });
 
     if (cached) {
       return cached.videos;
@@ -32,18 +32,24 @@ export async function getYoutubeTrackIdVideo(
       throw new Error('비디오를 찾을 수 없습니다');
     }
 
-    await collection.updateOne(
+    const videosForDb = videos.map((item: any) => ({
+      videoId: item.id.videoId,
+      title: item.snippet.title,
+      thumbnailUrl: item.snippet.thumbnails.default.url,
+    }));
+
+    await Youtube.updateOne(
       { trackName },
       {
         $set: {
-          trackName,
-          videos,
-          updatedAt: Date.now(),
+          videos: videosForDb,
+          updatedAt: new Date(),
         },
       },
       { upsert: true }
     );
-    return videos;
+
+    return videosForDb;
   } catch (error) {
     console.error('getYoutubeTrackIdVideo() 에러:', error);
     return [];
@@ -52,12 +58,11 @@ export async function getYoutubeTrackIdVideo(
 
 // 유튜브 채널 가져오는 함수
 export async function getYoutubeChannelInfo(channelHandle: string) {
-  const db = await connectToDB();
-  const collection = db.collection('playlistChannels');
+  await connectToDB();
+  const cachedChannel = await YoutubeChannel.findOne({ handle: channelHandle });
 
   const ONE_DAY = 24 * 60 * 60 * 1000;
   const now = Date.now();
-  const cachedChannel = await collection.findOne({ handle: channelHandle });
 
   if (cachedChannel && now - cachedChannel.updatedAt < ONE_DAY) {
     return cachedChannel.data;
@@ -74,17 +79,18 @@ export async function getYoutubeChannelInfo(channelHandle: string) {
     throw new Error('채널 정보를 찾을 수 없습니다');
   }
 
-  const channelData = { ...data.items[0], updatedAt: Date.now() };
-  await collection.updateOne(
+  const channelData = { ...data.items[0], updatedAt: new Date() };
+
+  await YoutubeChannel.updateOne(
     { handle: channelHandle },
     {
       $set: {
-        handle: channelHandle,
         data: channelData,
-        updatedAt: channelData.updatedAt,
+        updatedAt: new Date(),
       },
     },
     { upsert: true }
   );
+
   return channelData;
 }
