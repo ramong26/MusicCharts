@@ -15,10 +15,14 @@ export default function CommentList({ trackId }: { trackId: string }) {
 
   useEffect(() => {
     const fetchComments = async () => {
-      const response = await fetch(`/api/comments?trackId=${trackId}`);
-      if (response.ok) {
-        const data = await response.json();
-        setComments(data);
+      try {
+        const response = await fetch(`/api/comments?trackId=${trackId}`);
+        if (response.ok) {
+          const data = await response.json();
+          setComments(data);
+        }
+      } catch (error) {
+        console.error('Error fetching comments:', error);
       }
     };
     fetchComments();

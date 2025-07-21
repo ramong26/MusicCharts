@@ -15,7 +15,7 @@ export const checkLoginStatus = async (): Promise<{
     const data = await response.json();
     return {
       isLoggedIn: true,
-      accessToken: data.access_token,
+      accessToken: data.jwt,
     };
   } catch (error) {
     console.error('Error checking login status:', error);

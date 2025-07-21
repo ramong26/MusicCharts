@@ -89,7 +89,7 @@ export async function GET(request: NextRequest) {
       {
         spotifyId: profileData.id,
         displayName: profileData.display_name || 'No Name',
-        email: profileData.email || 'noemail@example.com',
+        email: profileData.email || `${profileData.id}@example.com`,
         profileImageUrl: profileData.images?.[0]?.url || '',
         lastLogin: new Date(),
         accessToken,
@@ -97,11 +97,21 @@ export async function GET(request: NextRequest) {
       },
       { upsert: true, new: true }
     );
-    console.log('user:', user);
+
     const payload = {
       userId: user._id.toString(),
     };
-    const jwtToken = jwt.sign(payload, process.env.JWT_SECRET!, {
+    const jwtSecret = process.env.JWT_SECRET;
+
+    if (!jwtSecret) {
+      console.error('JWT_SECRET is not defined');
+      return NextResponse.json(
+        { error: 'JWT secret missing' },
+        { status: 500 }
+      );
+    }
+
+    const jwtToken = jwt.sign(payload, jwtSecret, {
       expiresIn: '1h',
     });
 

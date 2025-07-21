@@ -29,7 +29,8 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+    const jwtSecret = process.env.JWT_SECRET;
+    const decoded = jwt.verify(token, jwtSecret!) as {
       userId: string;
     };
     const userId = decoded.userId;
@@ -42,6 +43,7 @@ export async function POST(request: NextRequest) {
     const newComment = await Comment.create({ userId, trackId, text });
     return NextResponse.json(newComment, { status: 201 });
   } catch (error) {
+    console.error('에러 발생 jwt 토큰이 없습니다:', error);
     return new Response('Invalid JWT token', { status: 401 });
   }
 }
