@@ -9,7 +9,6 @@ export async function GET(req: NextRequest) {
       { status: 401 }
     );
   }
-  console.log('Access Token:', token);
   try {
     const res = await fetch('https://api.spotify.com/v1/me', {
       headers: {
@@ -29,6 +28,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({
       name: data.display_name || '사용자',
       imageUrl: data.images?.[0]?.url || undefined,
+      id: data.id || undefined,
     });
   } catch (error) {
     const err = error as Error;
