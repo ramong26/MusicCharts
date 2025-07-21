@@ -1,4 +1,5 @@
 import { NextResponse, NextRequest } from 'next/server';
+import jwt from 'jsonwebtoken';
 import connectToDB from '@/lib/mongo/mongo';
 import { Comment } from '@/lib/mongo/models/Comment';
 
@@ -22,42 +23,27 @@ export async function GET(request: Request) {
 export async function POST(request: NextRequest) {
   await connectToDB();
 
-  const tokenObj = request.cookies.get('access_token');
-  const token = tokenObj?.value;
+  const token = request.cookies.get('jwt')?.value;
   if (!token) {
-    return new Response('Access token not provided', { status: 401 });
+    return new Response('JWT not provided', { status: 401 });
   }
 
-  const profileRes = await fetch('https://api.spotify.com/v1/me', {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  });
-  if (!profileRes.ok) {
-    return new Response('Failed to fetch Spotify profile', {
-      status: profileRes.status,
-    });
+  try {
+    const jwtSecret = process.env.JWT_SECRET;
+    const decoded = jwt.verify(token, jwtSecret!) as {
+      userId: string;
+    };
+    const userId = decoded.userId;
+
+    const { trackId, text } = await request.json();
+    if (!trackId || !text) {
+      return new Response('트랙 ID와 댓글 내용이 필요합니다', { status: 400 });
+    }
+
+    const newComment = await Comment.create({ userId, trackId, text });
+    return NextResponse.json(newComment, { status: 201 });
+  } catch (error) {
+    console.error('에러 발생 jwt 토큰이 없습니다:', error);
+    return new Response('Invalid JWT token', { status: 401 });
   }
-  const profileData = await profileRes.json();
-  const userId = profileData.id;
-  const body = await request.json();
-
-  const { trackId, text } = body;
-
-  if (!userId || !trackId || !text) {
-    return new Response('필수 필드가 누락되었습니다', { status: 400 });
-  }
-
-  const newComment = await Comment.create({
-    userId,
-    trackId,
-    text,
-  });
-
-  return NextResponse.json(newComment, {
-    status: 201,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
 }

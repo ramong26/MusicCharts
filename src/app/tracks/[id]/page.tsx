@@ -24,7 +24,6 @@ export default async function TrackPage({ params }: TrackPageProps) {
   // // trackId로 인터뷰 정보 받아옴
   const interviews = await searchInterviews(track.name);
 
-  console.log(track, album);
   return (
     <div className="h-screen ">
       <HeaderMain />

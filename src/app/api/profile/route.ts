@@ -1,37 +1,36 @@
+import jwt from 'jsonwebtoken';
+import connectToDB from '@/lib/mongo/mongo';
+import { UserModel } from '@/lib/mongo/models/UserModel';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
-  const tokenObj = req.cookies.get('access_token');
-  const token = tokenObj?.value;
+  // JWT 쿠키 가져오기
+  const token = req.cookies.get('jwt')?.value;
   if (!token) {
-    return NextResponse.json(
-      { error: 'Access token not provided' },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: 'JWT not found' }, { status: 401 });
   }
-  try {
-    const res = await fetch('https://api.spotify.com/v1/me', {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
 
-    if (!res.ok) {
-      return NextResponse.json(
-        { error: 'Failed to fetch Spotify profile' },
-        { status: res.status }
-      );
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as {
+      userId: string;
+    };
+
+    await connectToDB();
+
+    const user = await UserModel.findById(decoded.userId);
+    if (!user) {
+      return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    const data = await res.json();
-
     return NextResponse.json({
-      name: data.display_name || '사용자',
-      imageUrl: data.images?.[0]?.url || undefined,
-      id: data.id || undefined,
+      name: user.displayName,
+      imageUrl: user.profileImageUrl || null,
+      id: user._id.toString(),
     });
   } catch (error) {
-    const err = error as Error;
-    return NextResponse.json({ error: err.message }, { status: 500 });
+    return NextResponse.json(
+      { error: 'Invalid or expired token' },
+      { status: 401 }
+    );
   }
 }
