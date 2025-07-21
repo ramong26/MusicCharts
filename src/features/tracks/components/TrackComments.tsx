@@ -1,6 +1,10 @@
 'use client';
 import { useState } from 'react';
+
 import SubmitInput from '@/shared/components/SubmitInput';
+import CommentList from './CommentList';
+
+import { checkLoginStatus } from '@/shared/hooks/checkLoginStatus';
 
 export default function TrackComments({ trackId }: { trackId: string }) {
   const [submitComment, setSubmitComment] = useState('');
@@ -11,6 +15,11 @@ export default function TrackComments({ trackId }: { trackId: string }) {
       return;
     }
     try {
+      const { isLoggedIn } = await checkLoginStatus();
+      if (!isLoggedIn) {
+        console.error('로그인 상태가 아닙니다');
+        return;
+      }
       await fetch('/api/comments', {
         method: 'POST',
         credentials: 'include',
@@ -39,7 +48,7 @@ export default function TrackComments({ trackId }: { trackId: string }) {
         value={submitComment}
       />
       <p>여기에 트랙에 대한 댓글이 표시됩니다.</p>
-      {/* 여기에 트랙 댓글 관련 컴포넌트를 추가할 수 있습니다 */}
+      <CommentList trackId={trackId} />
     </div>
   );
 }
