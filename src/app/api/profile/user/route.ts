@@ -9,8 +9,9 @@ export async function GET(req: NextRequest) {
       { status: 401 }
     );
   }
+
   try {
-    const res = await fetch('https://api.spotify.com/v1/me', {
+    const res = await fetch('https://api.spotify.com/v1/users', {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -18,7 +19,7 @@ export async function GET(req: NextRequest) {
 
     if (!res.ok) {
       return NextResponse.json(
-        { error: 'Failed to fetch Spotify profile' },
+        { error: 'Failed to fetch Spotify user' },
         { status: res.status }
       );
     }

@@ -5,8 +5,6 @@ import SubmitInput from '@/shared/components/SubmitInput';
 export default function TrackComments({ trackId }: { trackId: string }) {
   const [submitComment, setSubmitComment] = useState('');
 
-  const session = { user: { id: 'user123' } }; // 예시로 세션 사용자 ID 설정
-
   const handleSubmit = async (value: string) => {
     if (!value.trim()) {
       console.error('댓글 내용이 비어있습니다');
@@ -15,8 +13,11 @@ export default function TrackComments({ trackId }: { trackId: string }) {
     try {
       await fetch('/api/comments', {
         method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-          userId: session.user.id,
           trackId,
           text: value.trim(),
         }),
