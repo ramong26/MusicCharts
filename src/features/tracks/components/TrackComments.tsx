@@ -1,12 +1,14 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import SubmitInput from '@/shared/components/SubmitInput';
-import CommentList from './CommentList';
+import CommentList from '@/features/tracks/components/CommentList';
+import { Comment } from '@/shared/types/Comment';
 
 import { checkLoginStatus } from '@/shared/hooks/checkLoginStatus';
 
 export default function TrackComments({ trackId }: { trackId: string }) {
+  const [comments, setComments] = useState<Comment[]>([]);
   const [submitComment, setSubmitComment] = useState('');
 
   const handleSubmit = async (value: string) => {
@@ -14,6 +16,21 @@ export default function TrackComments({ trackId }: { trackId: string }) {
       console.error('댓글 내용이 비어있습니다');
       return;
     }
+    const tempId = 'temp-' + Date.now();
+    const tempComment: Comment = {
+      _id: tempId,
+      trackId,
+      text: value,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+      userId: {
+        _id: 'temp-user',
+        displayName: '내 닉네임',
+        profileImageUrl: '',
+      },
+    };
+    setComments((prev) => [...prev, tempComment]);
+    setSubmitComment('');
     try {
       const { isLoggedIn } = await checkLoginStatus();
       if (!isLoggedIn) {
@@ -32,12 +49,26 @@ export default function TrackComments({ trackId }: { trackId: string }) {
         }),
       });
 
-      setSubmitComment('');
-    } catch (error) {
-      console.error('댓글 작성 중 오류 발생:', error);
+      setComments((prev) =>
+        prev.map((c) => (c._id === tempId ? tempComment : c))
+      );
+    } catch (err) {
+      console.error('댓글 등록 실패:', err);
     }
   };
-
+  useEffect(() => {
+    (async () => {
+      try {
+        const res = await fetch(`/api/comments?trackId=${trackId}`);
+        if (res.ok) {
+          const data = await res.json();
+          setComments(data);
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    })();
+  }, [trackId]);
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-xl font-semibold">트랙 댓글</h2>
@@ -47,8 +78,8 @@ export default function TrackComments({ trackId }: { trackId: string }) {
         onSubmit={handleSubmit}
         value={submitComment}
       />
-      <p>여기에 트랙에 대한 댓글이 표시됩니다.</p>
-      <CommentList trackId={trackId} />
+
+      <CommentList comments={comments} />
     </div>
   );
 }

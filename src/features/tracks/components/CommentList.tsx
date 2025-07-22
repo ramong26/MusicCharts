@@ -1,43 +1,39 @@
-'use client';
-import { useState, useEffect } from 'react';
+import Image from 'next/image';
+import { Comment } from '@/shared/types/Comment';
 
-interface Comment {
-  _id: string;
-  userId: string;
-  trackId: string;
-  text: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export default function CommentList({ trackId }: { trackId: string }) {
-  const [comments, setComments] = useState<Comment[]>([]);
-
-  useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await fetch(`/api/comments?trackId=${trackId}`);
-        if (response.ok) {
-          const data = await response.json();
-          setComments(data);
-        }
-      } catch (error) {
-        console.error('Error fetching comments:', error);
-      }
-    };
-    fetchComments();
-  }, [trackId]);
-  console.log('Comments fetched:', comments);
+export default function CommentList({ comments }: { comments: Comment[] }) {
   return (
     <div className="mt-4">
-      <h3 className="text-lg font-semibold">댓글 목록</h3>
-      <ul className="list-disc pl-5">
+      <h3 className="text-lg font-semibold mb-4">댓글 목록</h3>
+      <ul className="border-2 p-3 mb-2 ">
         {comments.map((comment) => (
-          <li key={comment._id} className="mb-2">
-            <p className="text-sm">{comment.text}</p>
-            <span className="text-xs text-gray-500">
-              작성자: {comment.userId}
-            </span>
+          <li key={comment._id} className="border-b border-gray-200 py-2">
+            <div className="flex items-center gap-2">
+              <Image
+                width={32}
+                height={32}
+                src={comment.userId.profileImageUrl || '/default-avatar.png'}
+                alt={comment.userId.displayName}
+                className="w-8 h-8 rounded-full"
+              />
+              <span className="font-semibold">
+                {comment.userId.displayName}
+              </span>
+            </div>
+            <p className="mt-1">{comment.text}</p>
+            <div className="text-gray-500 mt-1 flex items-center justify-between">
+              <span className="text-sm text-gray-500">
+                {new Date(comment.createdAt).toLocaleString()}
+              </span>
+              <div>
+                <button className="text-sm text-gray-500 ml-2 cursor-pointer">
+                  수정
+                </button>
+                <button className="text-sm text-red-500 ml-2 cursor-pointer">
+                  삭제
+                </button>
+              </div>
+            </div>
           </li>
         ))}
       </ul>
