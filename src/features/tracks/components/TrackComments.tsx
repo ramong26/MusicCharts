@@ -88,7 +88,7 @@ export default function TrackComments({ trackId }: { trackId: string }) {
         value={submitComment}
       />
 
-      <CommentList comments={comments} />
+      <CommentList comments={comments} setComments={setComments} />
     </div>
   );
 }

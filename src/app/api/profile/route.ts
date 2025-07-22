@@ -23,8 +23,8 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json({
-      name: user.displayName,
-      imageUrl: user.profileImageUrl || null,
+      displayName: user.displayName,
+      profileImageUrl: user.profileImageUrl || null,
       id: user._id.toString(),
     });
   } catch (error) {

@@ -1,58 +1,114 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
+import jwt from 'jsonwebtoken';
+import mongoose from 'mongoose';
+
 import connectToDB from '@/lib/mongo/mongo';
 import { Comment } from '@/lib/mongo/models/Comment';
 
 // 댓글 수정
-export async function PATCH(request: Request) {
+export async function PUT(request: NextRequest) {
   await connectToDB();
-  const body = await request.json();
-  const { commentId, text } = body;
 
-  if (!commentId || !text) {
-    return new Response('필수 필드가 누락되었습니다', { status: 400 });
+  const token = request.cookies.get('jwt')?.value;
+  if (!token) {
+    return new Response('JWT not provided', { status: 401 });
   }
 
-  const updatedComment = await Comment.findByIdAndUpdate(
-    commentId,
-    { text, updatedAt: new Date() },
-    { new: true }
-  );
+  try {
+    const jwtSecret = process.env.JWT_SECRET;
+    const decoded = jwt.verify(token, jwtSecret!) as { userId: string };
+    const userId = decoded.userId;
 
-  if (!updatedComment) {
-    return new Response('댓글을 찾을 수 없습니다', { status: 404 });
+    const { text } = await request.json();
+    const url = new URL(request.url);
+    const pathname = url.pathname;
+    const parts = pathname.split('/');
+    const commentId = parts[parts.length - 1];
+
+    if (!commentId) {
+      return new Response('댓글 ID가 필요합니다', { status: 400 });
+    }
+
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return new Response('댓글을 찾을 수 없습니다', { status: 404 });
+    }
+
+    if (comment.userId.toString() !== userId) {
+      return new Response('댓글을 수정할 권한이 없습니다', { status: 403 });
+    }
+
+    const editedComment = await Comment.findByIdAndUpdate(
+      commentId,
+      {
+        text,
+        updatedAt: new Date(),
+      },
+      { new: true }
+    );
+    if (!editedComment) {
+      return new Response('댓글 수정 실패', { status: 500 });
+    }
+
+    return NextResponse.json(editedComment, {
+      status: 200,
+      headers: { 'Content-Type': 'application/json' },
+    });
+  } catch (error) {
+    console.error('에러 발생 jwt 토큰이 없습니다:', error);
+    return new Response('Invalid JWT token', { status: 401 });
   }
-
-  return NextResponse.json(updatedComment, {
-    status: 200,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
 }
 
 // 댓글 삭제
-export async function DELETE(request: Request) {
+export async function DELETE(request: NextRequest) {
   await connectToDB();
-  const body = await request.json();
-  const { commentId } = body;
 
-  if (!commentId) {
-    return new Response('댓글 ID가 필요합니다', { status: 400 });
+  const token = request.cookies.get('jwt')?.value;
+  if (!token) {
+    return new Response('JWT not provided', { status: 401 });
   }
 
-  const deletedComment = await Comment.findByIdAndDelete(commentId);
+  console.log('JWT token:', token);
+  try {
+    const jwtSecret = process.env.JWT_SECRET;
+    const decoded = jwt.verify(token, jwtSecret!) as { userId: string };
+    const userId = decoded.userId;
 
-  if (!deletedComment) {
-    return new Response('댓글을 찾을 수 없습니다', { status: 404 });
-  }
+    const url = new URL(request.url);
+    const pathname = url.pathname;
+    const parts = pathname.split('/');
+    const commentId = parts[parts.length - 1];
 
-  return NextResponse.json(
-    { message: '댓글이 삭제되었습니다' },
-    {
-      status: 200,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+    if (!commentId) {
+      return new Response('댓글 ID가 필요합니다', { status: 400 });
     }
-  );
+
+    const comment = await Comment.findById(commentId);
+    if (!comment) {
+      return new Response('댓글을 찾을 수 없습니다', { status: 404 });
+    }
+
+    if (comment.userId.toString() !== userId) {
+      return new Response('댓글을 삭제할 권한이 없습니다', { status: 403 });
+    }
+
+    const deletedComment = await Comment.findByIdAndDelete(commentId);
+    if (!deletedComment) {
+      return new Response('댓글 삭제 실패', { status: 500 });
+    }
+
+    return NextResponse.json(
+      { message: '댓글이 삭제되었습니다' },
+      {
+        status: 200,
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+  } catch (error) {
+    console.error('에러 발생 jwt 토큰이 없습니다:', error);
+    return new Response('Invalid JWT token', { status: 401 });
+  }
 }
