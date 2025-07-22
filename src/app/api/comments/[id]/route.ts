@@ -31,6 +31,7 @@ export async function PUT(request: NextRequest) {
     if (!mongoose.Types.ObjectId.isValid(commentId)) {
       return new Response('Invalid comment ID', { status: 400 });
     }
+
     if (!commentId) {
       return new Response('댓글 ID가 필요합니다', { status: 400 });
     }
