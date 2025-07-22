@@ -11,6 +11,7 @@ export default function TrackComments({ trackId }: { trackId: string }) {
   const [comments, setComments] = useState<Comment[]>([]);
   const [submitComment, setSubmitComment] = useState('');
 
+  // 댓글 제출 핸들러
   const handleSubmit = async (value: string) => {
     if (!value.trim()) {
       console.error('댓글 내용이 비어있습니다');
@@ -25,19 +26,21 @@ export default function TrackComments({ trackId }: { trackId: string }) {
       updatedAt: new Date().toISOString(),
       userId: {
         _id: 'temp-user',
-        displayName: '내 닉네임',
+        displayName: 'Anonymous',
         profileImageUrl: '',
       },
     };
     setComments((prev) => [...prev, tempComment]);
     setSubmitComment('');
+
     try {
       const { isLoggedIn } = await checkLoginStatus();
       if (!isLoggedIn) {
         console.error('로그인 상태가 아닙니다');
+        setComments((prev) => prev.filter((c) => c._id !== tempId));
         return;
       }
-      await fetch('/api/comments', {
+      const response = await fetch('/api/comments', {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -48,14 +51,20 @@ export default function TrackComments({ trackId }: { trackId: string }) {
           text: value.trim(),
         }),
       });
+      if (!response.ok) throw new Error('댓글 저장 실패');
+
+      const savedComment: Comment = await response.json();
 
       setComments((prev) =>
-        prev.map((c) => (c._id === tempId ? tempComment : c))
+        prev.map((c) => (c._id === tempId ? savedComment : c))
       );
     } catch (err) {
       console.error('댓글 등록 실패:', err);
+      setComments((prev) => prev.filter((c) => c._id !== tempId));
     }
   };
+
+  // 컴포넌트 마운트 시 댓글 목록 가져오기
   useEffect(() => {
     (async () => {
       try {
