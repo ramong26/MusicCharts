@@ -53,7 +53,10 @@ export async function POST(request: NextRequest) {
       text,
     });
 
-    return NextResponse.json(newComment, { status: 201 });
+    return NextResponse.json(newComment, {
+      status: 201,
+      headers: { 'Content-Type': 'application/json' },
+    });
   } catch (error) {
     console.error('에러 발생 jwt 토큰이 없습니다:', error);
     return new Response('Invalid JWT token', { status: 401 });

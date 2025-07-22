@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
+import { NextRequest, NextResponse } from 'next/server';
+
 import connectToDB from '@/lib/mongo/mongo';
 import { UserModel } from '@/lib/mongo/models/UserModel';
-import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   // JWT 쿠키 가져오기
@@ -23,8 +24,8 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json({
-      name: user.displayName,
-      imageUrl: user.profileImageUrl || null,
+      displayName: user.displayName,
+      profileImageUrl: user.profileImageUrl || null,
       id: user._id.toString(),
     });
   } catch (error) {
