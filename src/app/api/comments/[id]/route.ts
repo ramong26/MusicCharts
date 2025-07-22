@@ -16,6 +16,9 @@ export async function PUT(request: NextRequest) {
 
   try {
     const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      throw new Error('JWT secret is not defined');
+    }
     const decoded = jwt.verify(token, jwtSecret!) as { userId: string };
     const userId = decoded.userId;
 
@@ -25,6 +28,9 @@ export async function PUT(request: NextRequest) {
     const parts = pathname.split('/');
     const commentId = parts[parts.length - 1];
 
+    if (!mongoose.Types.ObjectId.isValid(commentId)) {
+      return new Response('Invalid comment ID', { status: 400 });
+    }
     if (!commentId) {
       return new Response('댓글 ID가 필요합니다', { status: 400 });
     }
@@ -69,9 +75,11 @@ export async function DELETE(request: NextRequest) {
     return new Response('JWT not provided', { status: 401 });
   }
 
-  console.log('JWT token:', token);
   try {
     const jwtSecret = process.env.JWT_SECRET;
+    if (!jwtSecret) {
+      throw new Error('JWT secret is not defined');
+    }
     const decoded = jwt.verify(token, jwtSecret!) as { userId: string };
     const userId = decoded.userId;
 

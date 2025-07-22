@@ -37,7 +37,10 @@ export default function HeaderMain() {
       .then((data) => {
         setProfile(data);
         setIsLogin(true);
-        setUser(data);
+        setUser({
+          ...data,
+          _id: data.id,
+        });
       })
       .catch(() => {
         setProfile(null);
@@ -53,7 +56,7 @@ export default function HeaderMain() {
 
     window.location.href = '/';
   };
-
+  console.log('HeaderMain user:', user);
   return (
     <header className="w-full bg-[rgba(18,18,18)] backdrop-blur-md text-amber-50 flex items-center justify-between flex-col transition-all duration-300 shadow-lg fixed top-0 left-0 right-0 z-999">
       {/* 상단: 로고 및 로그인 상태 */}

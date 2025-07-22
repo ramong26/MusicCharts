@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
+import { NextRequest, NextResponse } from 'next/server';
+
 import connectToDB from '@/lib/mongo/mongo';
 import { UserModel } from '@/lib/mongo/models/UserModel';
-import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
   // JWT 쿠키 가져오기

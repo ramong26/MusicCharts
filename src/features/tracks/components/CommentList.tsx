@@ -60,6 +60,7 @@ export default function CommentList({
           if (c._id === commentId) {
             return {
               ...c,
+              // 여기에 수정된 text를 넣어야 합니다.
               text: '수정된 댓글 내용',
               updatedAt: new Date().toISOString(),
             };
@@ -98,20 +99,22 @@ export default function CommentList({
               <span className="text-sm text-gray-500">
                 {new Date(comment.createdAt).toLocaleString()}
               </span>
-              <div>
-                <button
-                  className="text-sm text-gray-500 ml-2 cursor-pointer"
-                  onClick={() => handleEdit(comment._id)}
-                >
-                  수정
-                </button>
-                <button
-                  className="text-sm text-red-500 ml-2 cursor-pointer"
-                  onClick={() => handleDelete(comment._id)}
-                >
-                  삭제
-                </button>
-              </div>
+              {user && user._id === comment.userId._id ? (
+                <div>
+                  <button
+                    className="text-sm text-gray-500 ml-2 cursor-pointer"
+                    onClick={() => handleEdit(comment._id)}
+                  >
+                    수정
+                  </button>
+                  <button
+                    className="text-sm text-red-500 ml-2 cursor-pointer"
+                    onClick={() => handleDelete(comment._id)}
+                  >
+                    삭제
+                  </button>
+                </div>
+              ) : null}
             </div>
           </li>
         ))}
