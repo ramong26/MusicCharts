@@ -5,11 +5,10 @@ import HeaderMain from '@/shared/components/HeaderMain';
 import ArtistProfile from '@/features/tracks/interview/components/ArtistProfile';
 import ArtistInterview from '@/features/tracks/interview/components/ArtistInterview';
 
-export default async function InterviewPage({
-  params,
-}: {
+interface InterviewPageProps {
   params: { id: string };
-}) {
+}
+export default async function InterviewPage({ params }: InterviewPageProps) {
   const trackId = params.id;
   const track = await getTrackId(trackId);
   const artistId = track.artists[0]?.id;
