@@ -1,3 +1,4 @@
+import { ReactElement } from 'react';
 import getTrackId from '@/features/tracks/hooks/getTrackId';
 import getArtist from '@/features/tracks/hooks/getArtist';
 
@@ -8,7 +9,9 @@ import ArtistInterview from '@/features/tracks/interview/components/ArtistInterv
 interface InterviewPageProps {
   params: { id: string };
 }
-export default async function InterviewPage({ params }: InterviewPageProps) {
+export default async function InterviewPage({
+  params,
+}: InterviewPageProps): Promise<ReactElement> {
   const trackId = params.id;
   const track = await getTrackId(trackId);
   const artistId = track.artists[0]?.id;
