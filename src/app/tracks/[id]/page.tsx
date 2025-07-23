@@ -1,7 +1,7 @@
 import getTrackId from '@/features/tracks/hooks/getTrackId';
 import getTrackIdAlbum from '@/features/tracks/hooks/getTrackIdAlbum';
-import { getYoutubeTrackIdVideo } from '@/features/tracks/hooks/getYoutube';
-import { searchInterviews } from '@/features/tracks/hooks/searchInterviews';
+// import { getYoutubeTrackIdVideo } from '@/features/tracks/hooks/getYoutube';
+// import { searchInterviews } from '@/features/tracks/hooks/searchInterviews';
 
 import HeaderMain from '@/shared/components/HeaderMain';
 import TrackDescription from '@/features/tracks/components/TrackDescription';
@@ -20,9 +20,9 @@ export default async function TrackPage({ params }: TrackPageProps) {
   // trackId로 앨범 정보 받아옴
   const album = await getTrackIdAlbum(track);
   // trackId로 유튜브 비디오 정보 받아옴
-  const videos = await getYoutubeTrackIdVideo(track.name);
-  // // trackId로 인터뷰 정보 받아옴
-  const interviews = await searchInterviews(track.name);
+  // const videos = await getYoutubeTrackIdVideo(track.name);
+  // // // trackId로 인터뷰 정보 받아옴
+  // const interviews = await searchInterviews(track.name);
 
   return (
     <div className="h-screen ">

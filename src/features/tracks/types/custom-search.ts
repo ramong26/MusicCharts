@@ -10,7 +10,7 @@ export interface CustomSearchResult {
   formattedUrl: string;
   htmlFormattedUrl: string;
   pagemap?: {
-    [key: string]: any;
+    [key: string]: unknown[];
   };
   mime?: string;
   fileFormat?: string;

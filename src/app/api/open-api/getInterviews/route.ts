@@ -45,7 +45,7 @@ Only include real existing links. Do not make up data.`,
     try {
       parsed = JSON.parse(content);
     } catch (e) {
-      console.error('JSON 파싱 실패:', content);
+      console.error('JSON 파싱 실패:', e);
     }
 
     return NextResponse.json({ result: parsed });

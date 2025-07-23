@@ -1,5 +1,6 @@
 import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 import { formatDate } from '@/lib/utils/date';
+import { YouTubeItem } from '@/shared/types/Youtube';
 const BASE_URL =
   typeof window === 'undefined'
     ? process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
@@ -115,11 +116,11 @@ export async function searchInterviewsWithYouTube(
     }
 
     const data = await res.json();
-    return data.items.map((item: any) => ({
-      title: item.title,
-      link: `https://www.youtube.com/watch?v=${item.videoId}`,
-      thumbnail: item.thumbnail,
-      publishedAt: item.publishedAt,
+    return data.items.map((item: YouTubeItem) => ({
+      title: item.snippet.title,
+      link: `https://www.youtube.com/watch?v=${item.id.videoId}`,
+      thumbnail: item.snippet.thumbnails.high.url,
+      publishedAt: item.snippet.publishedAt,
     }));
   } catch (error) {
     console.error('searchInterviewsWithYouTube() 에러:', error);

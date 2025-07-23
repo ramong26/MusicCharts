@@ -1,5 +1,5 @@
 export const runtime = 'nodejs';
-
+import { YouTubeItem } from '@/shared/types/Youtube';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
 
     const data = await response.json();
 
-    const videos = data.items.map((video: any) => ({
+    const videos = data.items.map((video: YouTubeItem) => ({
       videoId: video.id.videoId,
       title: video.snippet.title,
       thumbnail: video.snippet.thumbnails.high.url,

@@ -9,6 +9,7 @@ export async function fetchWikiSummary(title: string): Promise<string> {
     const data = await response.json();
     return data.extract || 'No summary available';
   } catch (e) {
+    console.error('Error fetching wiki summary:', e);
     return 'No summary available';
   }
 }

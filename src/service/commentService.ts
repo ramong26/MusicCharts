@@ -41,6 +41,7 @@ const postComments = async (
     const savedComment: Comment = await response.json();
     return savedComment;
   } catch (err) {
+    console.error('댓글 등록 실패:', err);
     throw new Error('로그인 상태가 아닙니다');
   }
 };
@@ -68,6 +69,7 @@ const getComments = async (
       return data;
     }
   } catch (err) {
+    console.error('댓글 목록 조회 실패:', err);
     throw new Error('댓글 목록 조회 실패');
   }
 };
@@ -101,6 +103,7 @@ const putComments = async (
     const updatedComment: Comment = await res.json();
     return updatedComment;
   } catch (err) {
+    console.error('댓글 수정 실패:', err);
     throw new Error('댓글 수정 실패');
   }
 };
@@ -134,6 +137,7 @@ const deleteComments = async (
     const deleteData = await res.json();
     return deleteData;
   } catch (err) {
+    console.error('댓글 삭제 실패:', err);
     throw new Error('댓글 삭제 실패');
   }
 };
