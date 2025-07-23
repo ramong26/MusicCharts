@@ -5,7 +5,7 @@ import ArtistProfileWiki from '@/features/tracks/interview/components/ArtistProf
 import { Artist } from '@/shared/types/SpotifyTrack';
 
 export default function ArtistProfile({ artist }: { artist: Artist | null }) {
-  console.log('ArtistProfile component rendered with artist:', artist);
+  const artistName = artist?.name || 'Unknown Artist';
   return (
     <div className="flex flex-row items-center justify-center ">
       <div>
@@ -22,7 +22,7 @@ export default function ArtistProfile({ artist }: { artist: Artist | null }) {
         />
         <h1 className="text-2xl font-bold mb-4">{artist?.name}</h1>
       </div>
-      <ArtistProfileWiki />
+      <ArtistProfileWiki artistName={artistName} />
     </div>
   );
 }

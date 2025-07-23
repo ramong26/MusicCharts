@@ -26,8 +26,9 @@ export default function useTranslate() {
 
         const data = await res.json();
         return data.summary || '';
-      } catch (e: any) {
-        setError(e.message || 'Unknown error');
+      } catch (e) {
+        const error = e as Error;
+        setError(error.message);
         return '';
       } finally {
         setLoading(false);

@@ -16,7 +16,7 @@ export default function HeaderMain() {
   const [isLogin, setIsLogin] = useState(false);
   const [profile, setProfile] = useState<SpotifyProfile | null>(null);
 
-  const { user, setUser } = useUserStore();
+  const { setUser } = useUserStore();
 
   // 스크롤 이벤트 핸들러
   useEffect(() => {

@@ -1,4 +1,5 @@
 export default function ArtistInterview({ trackId }: { trackId: string }) {
+  console.log('ArtistInterview component rendered with trackId:', trackId);
   return (
     <div className="flex flex-col items-center justify-center">
       <h1 className="text-2xl font-bold mb-4">아티스트 인터뷰</h1>

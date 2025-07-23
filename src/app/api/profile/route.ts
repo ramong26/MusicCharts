@@ -29,6 +29,7 @@ export async function GET(req: NextRequest) {
       id: user._id.toString(),
     });
   } catch (error) {
+    console.error('JWT verification failed:', error);
     return NextResponse.json(
       { error: 'Invalid or expired token' },
       { status: 401 }
