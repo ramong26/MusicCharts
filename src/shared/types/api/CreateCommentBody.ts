@@ -1,4 +1,3 @@
-import { Comment } from '@/shared/types/Comment';
 export interface CreateCommentBody {
   trackId: number | string;
   text: string;

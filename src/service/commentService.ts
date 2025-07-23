@@ -41,7 +41,7 @@ const postComments = async (
     const savedComment: Comment = await response.json();
     return savedComment;
   } catch (err) {
-    console.error('댓글 등록 실패:', err);
+    throw new Error('로그인 상태가 아닙니다');
   }
 };
 
@@ -49,7 +49,7 @@ const postComments = async (
 const getComments = async (
   trackId: number | string,
   nextCursorId?: number
-): Promise<Comment | undefined> => {
+): Promise<{ comments: Comment[]; nextCursorId?: number } | undefined> => {
   try {
     let url = `${BASE_URL}/api/comments?trackId=${trackId}`;
     if (nextCursorId) {
@@ -65,11 +65,10 @@ const getComments = async (
 
     if (res.ok) {
       const data = await res.json();
-      console.log('댓글 목록 조회 성공:', data);
       return data;
     }
   } catch (err) {
-    console.error(err);
+    throw new Error('댓글 목록 조회 실패');
   }
 };
 
@@ -102,7 +101,7 @@ const putComments = async (
     const updatedComment: Comment = await res.json();
     return updatedComment;
   } catch (err) {
-    console.error(err);
+    throw new Error('댓글 수정 실패');
   }
 };
 
@@ -128,7 +127,6 @@ const deleteComments = async (
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
-      body: JSON.stringify({ commentId }),
     });
 
     if (!res.ok) throw new Error('삭제 실패');
@@ -136,7 +134,7 @@ const deleteComments = async (
     const deleteData = await res.json();
     return deleteData;
   } catch (err) {
-    console.error(err);
+    throw new Error('댓글 삭제 실패');
   }
 };
 

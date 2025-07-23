@@ -45,9 +45,9 @@ export default function CommentList({
         <p>댓글이 없습니다.</p>
       ) : (
         <ul className="border-2 p-3 mb-2 space-y-4">
-          {comments.map((comment, index) => (
+          {comments.map((comment) => (
             <CommentItem
-              key={index}
+              key={comment._id}
               comment={comment}
               onDelete={handleDelete}
               onEdit={handleEdit}

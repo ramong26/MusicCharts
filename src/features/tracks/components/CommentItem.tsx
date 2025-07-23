@@ -33,14 +33,19 @@ export default function CommentItem({ comment, onDelete, onEdit }: Props) {
           width={32}
           height={32}
           src={
-            comment?.userId?.profileImageUrl ||
-            user?.profileImageUrl ||
-            '/default-profile.png'
+            typeof comment.userId === 'object' &&
+            comment.userId?.profileImageUrl
+              ? comment.userId.profileImageUrl
+              : user?.profileImageUrl || '/default-profile.png'
           }
           alt="사용자 프로필 이미지"
           className="w-8 h-8 rounded-full"
         />
-        <span className="font-semibold">{comment?.userId?.displayName}</span>
+        <span className="font-semibold">
+          {typeof comment.userId === 'string'
+            ? undefined
+            : comment?.userId?.displayName}
+        </span>
       </div>
 
       {!isEditing ? (
