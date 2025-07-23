@@ -3,8 +3,9 @@ import { useState, useEffect } from 'react';
 
 import SubmitInput from '@/shared/components/SubmitInput';
 import CommentList from '@/features/tracks/components/CommentList';
-import { Comment } from '@/shared/types/Comment';
 
+import { commentsService } from '@/service/commentService';
+import { Comment } from '@/shared/types/Comment';
 import { checkLoginStatus } from '@/shared/hooks/checkLoginStatus';
 
 export default function TrackComments({ trackId }: { trackId: string }) {
@@ -40,20 +41,14 @@ export default function TrackComments({ trackId }: { trackId: string }) {
         setComments((prev) => prev.filter((c) => c._id !== tempId));
         return;
       }
-      const response = await fetch('/api/comments', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          trackId,
-          text: value.trim(),
-        }),
+      const res = await commentsService.postComments({
+        trackId,
+        text: value.trim(),
       });
-      if (!response.ok) throw new Error('댓글 저장 실패');
 
-      const savedComment: Comment = await response.json();
+      if (!res) throw new Error('댓글 저장 실패');
+
+      const savedComment: Comment = res as Comment;
 
       setComments((prev) =>
         prev.map((c) => (c._id === tempId ? savedComment : c))
@@ -64,17 +59,18 @@ export default function TrackComments({ trackId }: { trackId: string }) {
     }
   };
 
-  // 컴포넌트 마운트 시 댓글 목록 가져오기
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`/api/comments?trackId=${trackId}`);
-        if (res.ok) {
-          const data = await res.json();
-          setComments(data);
+        const res = await commentsService.getComments(trackId);
+
+        if (res && Array.isArray(res)) {
+          setComments(res);
+        } else {
+          setComments([]);
         }
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error('댓글 목록 조회 실패:', error);
       }
     })();
   }, [trackId]);

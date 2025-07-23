@@ -49,7 +49,6 @@ export default function PlaylistInterviewList({
     fetchInterviewsForAll();
   }, [artists]);
 
-  console.log('artistInterviews:', artistInterviews);
   if (!trackData || trackData.length === 0) {
     return <p>트랙 데이터를 불러오는 중이거나 없습니다.</p>;
   }
