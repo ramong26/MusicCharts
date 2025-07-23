@@ -24,21 +24,31 @@ export async function getArtistInfo(artistName: string) {
     entity?.claims?.P27?.[0]?.mainsnak?.datavalue?.value?.id;
   const birthDate = entity?.claims?.P569?.[0]?.mainsnak?.datavalue?.value;
 
-  const fetchLabel = async (id: string) => {
-    const res = await fetch(
-      `https://www.wikidata.org/wiki/Special:EntityData/${id}.json`
-    );
-    const json = await res.json();
-    return (
-      json.entities?.[id]?.labels?.ko?.value ||
-      json.entities?.[id]?.labels?.en?.value
-    );
+  const fetchLabels = async (ids: string[]) => {
+    const cachedLabels: Record<string, string> = {};
+    const uncachedIds = ids.filter((id) => !cachedLabels[id]);
+    if (uncachedIds.length > 0) {
+      const responses = await Promise.all(
+        uncachedIds.map((id) =>
+          fetch(`https://www.wikidata.org/wiki/Special:EntityData/${id}.json`)
+        )
+      );
+      const jsonResponses = await Promise.all(
+        responses.map((res) => res.json())
+      );
+      jsonResponses.forEach((json, index) => {
+        const id = uncachedIds[index];
+        cachedLabels[id] =
+          json.entities?.[id]?.labels?.ko?.value ||
+          json.entities?.[id]?.labels?.en?.value ||
+          undefined;
+      });
+    }
+    return ids.map((id) => cachedLabels[id]);
   };
-
-  const gender = genderId ? await fetchLabel(genderId) : undefined;
-  const nationality = nationalityId
-    ? await fetchLabel(nationalityId)
-    : undefined;
+  const [gender, nationality] = await fetchLabels(
+    [genderId, nationalityId].filter((id) => id !== undefined)
+  );
 
   return {
     artistName,
