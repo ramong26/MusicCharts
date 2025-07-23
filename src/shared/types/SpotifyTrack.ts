@@ -9,7 +9,15 @@ export interface Track {
   id: string;
 }
 export interface Artist {
+  id: string;
   name: string;
+  images: Images[];
+  followers: {
+    total: number;
+  };
+  external_urls: {
+    spotify: string;
+  };
 }
 export interface Album {
   external_urls: {
@@ -28,6 +36,8 @@ export interface Album {
 }
 export interface Images {
   url: string;
+  height: number;
+  width: number;
 }
 
 export interface TrackId {
