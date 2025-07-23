@@ -1,10 +1,9 @@
-import Image from "next/image";
+import Image from 'next/image';
 
-import Miniplayer from "@/features/chart/components/Miniplayer";
-import InterviewList from "@/features/homepage/components/InterviewList";
+import InterviewList from '@/features/homepage/components/InterviewList';
 
-import { getYoutubeTrackIdVideo } from "@/features/tracks/hooks/getYoutube";
-import { TrackItem } from "@/shared/types/SpotifyTrack";
+import { getYoutubeTrackIdVideo } from '@/features/tracks/hooks/getYoutube';
+import { TrackItem } from '@/shared/types/SpotifyTrack';
 
 export default async function ChartTop({
   tracksList,

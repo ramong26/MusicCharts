@@ -1,30 +1,30 @@
-"use client";
-import Image from "next/image";
-import { useEffect, useState } from "react";
-import { FaPlay, FaPause } from "react-icons/fa";
+'use client';
+import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { FaPlay, FaPause } from 'react-icons/fa';
 
-import { Track } from "@/shared/types/SpotifyTrack";
+import { Track } from '@/shared/types/SpotifyTrack';
 
 export default function Miniplayer({ track }: { track: Track }) {
   const [paused, setPaused] = useState(true);
   const [currentTrack, setCurrentTrack] = useState(track);
-  const [player, setPlayer] = useState<any>(null);
+  const [player, setPlayer] = useState<Spotify.Player | null>(null);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      alert("스포티파이 프리미엄 계정이 필요합니다.");
+      alert('스포티파이 프리미엄 계정이 필요합니다.');
       return;
     }
 
-    const script = document.createElement("script");
-    script.src = "https://sdk.scdn.co/spotify-player.js";
+    const script = document.createElement('script');
+    script.src = 'https://sdk.scdn.co/spotify-player.js';
     script.async = true; // 비동기 로딩
     document.body.appendChild(script);
 
     window.onSpotifyWebPlaybackSDKReady = () => {
       const player = new Spotify.Player({
-        name: "Web Playback SDK",
+        name: 'Web Playback SDK',
         getOAuthToken: (cb) => cb(token),
         volume: 0.5,
       });
@@ -34,10 +34,10 @@ export default function Miniplayer({ track }: { track: Track }) {
         fetch(
           `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
           {
-            method: "PUT",
+            method: 'PUT',
             headers: {
               Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
+              'Content-Type': 'application/json',
             },
             body: JSON.stringify({
               uris: [`spotify:track:${track.id}`],
@@ -52,15 +52,15 @@ export default function Miniplayer({ track }: { track: Track }) {
         setPaused(state.paused);
       };
 
-      player.addListener("ready", onReady);
-      player.addListener("player_state_changed", onPlayerStateChanged);
+      player.addListener('ready', onReady);
+      player.addListener('player_state_changed', onPlayerStateChanged);
 
       player.connect();
 
       // 클린업 함수
       return () => {
-        player.removeListener("ready", onReady);
-        player.removeListener("player_state_changed", onPlayerStateChanged);
+        player.removeListener('ready', onReady);
+        player.removeListener('player_state_changed', onPlayerStateChanged);
         player.disconnect();
       };
     };
@@ -74,9 +74,9 @@ export default function Miniplayer({ track }: { track: Track }) {
   // 트랙과 플레이어가 변경될 때마다 플레이어에 트랙을 설정
   useEffect(() => {
     if (!player) return;
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
     if (!token) {
-      alert("스포티파이 프리미엄 계정이 필요합니다.");
+      alert('스포티파이 프리미엄 계정이 필요합니다.');
       return;
     }
 
@@ -84,10 +84,10 @@ export default function Miniplayer({ track }: { track: Track }) {
       fetch(
         `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
         {
-          method: "PUT",
+          method: 'PUT',
           headers: {
             Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
           body: JSON.stringify({
             uris: [`spotify:track:${track.id}`],
@@ -96,11 +96,11 @@ export default function Miniplayer({ track }: { track: Track }) {
       ).catch(console.error);
     };
 
-    player.addListener("ready", onReady);
+    player.addListener('ready', onReady);
 
     // 클린업 함수
     return () => {
-      player.removeListener("ready", onReady);
+      player.removeListener('ready', onReady);
     };
   }, [track, player]);
   return (
@@ -123,7 +123,7 @@ export default function Miniplayer({ track }: { track: Track }) {
 
       <div className="flex items-center space-x-4">
         <button
-          onClick={() => player.togglePlay()}
+          onClick={() => player?.togglePlay()}
           className="text-white bg-green-500 p-2 rounded-full hover:bg-green-600"
         >
           {paused ? <FaPlay /> : <FaPause />}
