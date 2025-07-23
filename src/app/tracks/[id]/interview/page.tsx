@@ -5,11 +5,7 @@ import HeaderMain from '@/shared/components/HeaderMain';
 import ArtistProfile from '@/features/tracks/interview/components/ArtistProfile';
 import ArtistInterview from '@/features/tracks/interview/components/ArtistInterview';
 import { use } from 'react';
-export default async function InterviewPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+export default function InterviewPage({ params }: { params: { id: string } }) {
   const track = use(getTrackId(params.id));
   const artistId = track.artists[0]?.id;
   if (!artistId) {
@@ -18,7 +14,7 @@ export default async function InterviewPage({
     );
   }
 
-  const artist = await getArtist(artistId);
+  const artist = use(getArtist(artistId));
 
   return (
     <div className="h-screen ">
@@ -26,7 +22,7 @@ export default async function InterviewPage({
       <main className="flex mt-[188px] gap-4 h-[617px] w-[1043px] mx-auto">
         <div className="flex flex-col gap-10 w-full">
           <ArtistProfile artist={artist} />
-          <ArtistInterview trackId={trackId} />
+          <ArtistInterview trackId={params.id} />
         </div>
       </main>
     </div>
