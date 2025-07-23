@@ -46,7 +46,7 @@ export default function Miniplayer({ track }: { track: Track }) {
         ).catch(console.error);
       };
 
-      const onPlayerStateChanged = (state: any) => {
+      const onPlayerStateChanged = (state: Spotify.PlaybackState | null) => {
         if (!state) return;
         setCurrentTrack(state.track_window.current_track as unknown as Track);
         setPaused(state.paused);
