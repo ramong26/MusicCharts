@@ -1,8 +1,6 @@
 import { Album } from '@/shared/types/SpotifyTrack';
 import TrackComments from '@/features/playlist/components/TrackComponent';
 export default function TrackList({ album }: { album: Album }) {
-  console.log('TrackList component rendered with album:', album);
-
   if (!album) {
     return <div>앨범 정보가 없습니다.</div>;
   }

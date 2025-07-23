@@ -1,5 +1,5 @@
 // 날짜 연도 월 일 출력 함수
-export const formatDate = (isoDate: Date): string => {
+export const formatDate = (isoDate: string | Date): string => {
   const date = new Date(isoDate);
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
