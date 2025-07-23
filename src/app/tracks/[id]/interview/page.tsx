@@ -1,19 +1,16 @@
-import { ReactElement } from 'react';
 import getTrackId from '@/features/tracks/hooks/getTrackId';
 import getArtist from '@/features/tracks/hooks/getArtist';
 
 import HeaderMain from '@/shared/components/HeaderMain';
 import ArtistProfile from '@/features/tracks/interview/components/ArtistProfile';
 import ArtistInterview from '@/features/tracks/interview/components/ArtistInterview';
-
-interface InterviewPageProps {
-  params: { id: string };
-}
+import { use } from 'react';
 export default async function InterviewPage({
   params,
-}: InterviewPageProps): Promise<ReactElement> {
-  const trackId = params.id;
-  const track = await getTrackId(trackId);
+}: {
+  params: { id: string };
+}) {
+  const track = use(getTrackId(params.id));
   const artistId = track.artists[0]?.id;
   if (!artistId) {
     return (
