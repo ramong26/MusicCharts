@@ -1,3 +1,4 @@
+import React from 'react';
 export default function WikiRow({ label, value }: { label: string; value: React.ReactNode }) {
   return (
     <tr className="even:bg-neutral-50 hover:bg-neutral-100 transition-colors cursor-default align-top">
