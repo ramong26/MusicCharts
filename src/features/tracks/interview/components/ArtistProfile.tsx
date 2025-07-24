@@ -1,10 +1,11 @@
+'use client';
 import Image from 'next/image';
 
 import ArtistProfileWiki from '@/features/tracks/interview/components/ArtistProfileWiki';
 import { Artist } from '@/shared/types/SpotifyTrack';
 
 export default function ArtistProfile({ artist }: { artist: Artist | null }) {
-  const artistName = artist?.name || 'Unknown Artist';
+  const artistName = artist?.name;
 
   return (
     <div className="flex flex-col items-center justify-center bg-[#f5f4f3] p-8 rounded-lg shadow-md font-serif text-gray-900 select-none">

@@ -1,5 +1,6 @@
+import { ArtistWiki } from '@/features/tracks/types/WikiArtist';
 // 위키피디아 데이터베이스에서 아티스트 정보를 가져오는 함수
-export async function getArtistInfo(artistName: string) {
+export default async function getArtistInfo(artistName: string): Promise<ArtistWiki> {
   const searchRes = await fetch(
     `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(
       artistName

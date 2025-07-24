@@ -1,10 +1,10 @@
-import { Track } from "@/shared/types/SpotifyTrack";
+import { Track } from '@/shared/types/SpotifyTrack';
 
 export default async function getTrackId(trackId?: string): Promise<Track> {
-  const baseUrl = "http://127.0.0.1:3000";
+  const baseUrl = 'http://127.0.0.1:3000';
 
-  const tokenRes = await fetch(`${baseUrl}/api/spotify-token`, {
-    cache: "no-store",
+  const tokenRes = await fetch(`${baseUrl}/api/spotify/spotify-token`, {
+    cache: 'no-store',
   });
   const { access_token } = await tokenRes.json();
 
@@ -12,11 +12,11 @@ export default async function getTrackId(trackId?: string): Promise<Track> {
     headers: {
       Authorization: `Bearer ${access_token}`,
     },
-    cache: "no-store",
+    cache: 'no-store',
   });
 
   if (!trackRes.ok) {
-    throw new Error("Failed to fetch data");
+    throw new Error('Failed to fetch data');
   }
 
   const data = await trackRes.json();
