@@ -1,28 +1,23 @@
 import { Track, Album } from '@/shared/types/SpotifyTrack';
 
-export default async function getTrackIdAlbum(
-  track: Track | null
-): Promise<Album | null> {
+export default async function getTrackIdAlbum(track: Track | null): Promise<Album | null> {
   if (!track?.album?.id) return null;
 
   const baseUrl = 'http://127.0.0.1:3000';
 
   // 토큰 가져오기
-  const tokenRes = await fetch(`${baseUrl}/api/spotify-token`, {
+  const tokenRes = await fetch(`${baseUrl}/api/spotify/spotify-token`, {
     cache: 'no-store',
   });
   const { access_token } = await tokenRes.json();
 
   // 스포티파이 API 호출
-  const topTrackRes = await fetch(
-    `https://api.spotify.com/v1/albums/${track.album.id}`,
-    {
-      headers: {
-        Authorization: `Bearer ${access_token}`,
-      },
-      cache: 'no-store',
-    }
-  );
+  const topTrackRes = await fetch(`https://api.spotify.com/v1/albums/${track.album.id}`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+    cache: 'no-store',
+  });
 
   // 에러 처리
   if (!topTrackRes.ok) {

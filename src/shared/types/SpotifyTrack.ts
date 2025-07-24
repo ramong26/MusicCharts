@@ -10,7 +10,7 @@ export interface Track {
 }
 export interface Artist {
   id: string;
-  name: string;
+  name: string | undefined;
   images: Images[];
   followers: {
     total: number;
