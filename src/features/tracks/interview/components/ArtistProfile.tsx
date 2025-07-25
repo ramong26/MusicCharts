@@ -1,4 +1,4 @@
-'use client';
+
 import Image from 'next/image';
 
 import ArtistProfileWiki from '@/features/tracks/interview/components/ArtistProfileWiki';
@@ -16,6 +16,7 @@ export default function ArtistProfile({ artist }: { artist: Artist | null }) {
             alt={artist?.name || 'Artist Profile'}
             width={300}
             height={300}
+            priority
             className="object-cover"
           />
         </div>

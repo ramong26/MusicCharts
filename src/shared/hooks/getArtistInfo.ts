@@ -50,11 +50,14 @@ export default async function getArtistInfo(artistName: string): Promise<ArtistW
     return ids.map((id) => cachedLabels[id]);
   };
 
-  const [gender] = await fetchLabels([genderId]);
-  const [nationality] = await fetchLabels([nationalityId]);
-  const genres = await fetchLabels(genreIds);
-  const labels = await fetchLabels(labelIds);
-  const awards = await fetchLabels(awardIds);
+  const [[gender], [nationality], genres, labels, awards] = await Promise.all([
+    fetchLabels([genderId]),
+    fetchLabels([nationalityId]),
+    fetchLabels(genreIds),
+    fetchLabels(labelIds),
+    fetchLabels(awardIds),
+  ]);
+
 
   return {
     artistName,
