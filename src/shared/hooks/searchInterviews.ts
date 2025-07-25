@@ -2,9 +2,7 @@ import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 import { formatDate } from '@/lib/utils/date';
 import { YouTubeItem } from '@/shared/types/Youtube';
 const BASE_URL =
-  typeof window === 'undefined'
-    ? process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'
-    : '';
+  typeof window === 'undefined' ? process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000' : '';
 
 const INTERVIEW_SITES = [
   'site:rollingstone.com',
@@ -21,9 +19,7 @@ function getDateYearsAgo(years: number): string {
 }
 
 // 검색어로 인터뷰를 검색하는 함수
-export async function searchInterviews(
-  who: string
-): Promise<CustomSearchResult[]> {
+export async function searchInterviews(who: string): Promise<CustomSearchResult[]> {
   const afterDate = getDateYearsAgo(4);
   const query = `${who} ("official interview" OR "interview with") (${INTERVIEW_SITES.join(
     ' OR '
@@ -36,12 +32,7 @@ export async function searchInterviews(
 
     if (!res.ok) {
       const errorText = await res.text();
-      console.error(
-        'API Route 호출 실패:',
-        res.status,
-        res.statusText,
-        errorText
-      );
+      console.error('API Route 호출 실패:', res.status, res.statusText, errorText);
       throw new Error('Failed to fetch interview search results');
     }
 
@@ -62,9 +53,7 @@ export async function searchInterviews(
 // 사용법:  const interviews = await getTrackIdInterview(who);
 
 // Google OpenAI를 사용하여 인터뷰 검색
-export async function searchInterviewsWithOpenAI(
-  who: string
-): Promise<CustomSearchResult[]> {
+export async function searchInterviewsWithOpenAI(who: string): Promise<CustomSearchResult[]> {
   try {
     const res = await fetch('/api/open-api/getInterviews', {
       method: 'POST',
@@ -76,12 +65,7 @@ export async function searchInterviewsWithOpenAI(
 
     if (!res.ok) {
       const errorText = await res.text();
-      console.error(
-        'Google GenAI API 호출 실패:',
-        res.status,
-        res.statusText,
-        errorText
-      );
+      console.error('Google GenAI API 호출 실패:', res.status, res.statusText, errorText);
       return [];
     }
 
@@ -94,24 +78,15 @@ export async function searchInterviewsWithOpenAI(
 }
 
 // 유튜브 인터뷰 검색
-export async function searchInterviewsWithYouTube(
-  who: string
-): Promise<CustomSearchResult[]> {
+export async function searchInterviewsWithYouTube(who: string): Promise<CustomSearchResult[]> {
   try {
     const res = await fetch(
-      `${BASE_URL}/api/google-api/youtube?q=${encodeURIComponent(
-        who
-      )}  ${who} interview`
+      `${BASE_URL}/api/google-api/youtube?q=${encodeURIComponent(who)}  ${who} interview`
     );
 
     if (!res.ok) {
       const errorText = await res.text();
-      console.error(
-        'YouTube API 호출 실패:',
-        res.status,
-        res.statusText,
-        errorText
-      );
+      console.error('YouTube API 호출 실패:', res.status, res.statusText, errorText);
       return [];
     }
 
@@ -130,7 +105,9 @@ export async function searchInterviewsWithYouTube(
 
 // 아티스트별 인터뷰 검색 결과를 통합하여 반환하는 함수
 export async function getCombinedInterviews(
-  who: string
+  who: string,
+  offset = 0,
+  limit = 5
 ): Promise<CustomSearchResult[]> {
   const [googleResults, genAIResults] = await Promise.all([
     searchInterviews(who),
@@ -144,16 +121,15 @@ export async function getCombinedInterviews(
     }
   });
 
-  let combinedResults = Array.from(combinedMap.values()).slice(0, 5);
+  const combinedResults = Array.from(combinedMap.values());
+  let paginatedResults = combinedResults.slice(offset, offset + limit);
 
-  if (combinedResults.length < 5) {
-    const needed = 5 - combinedResults.length;
+  if (paginatedResults.length < limit) {
+    const needed = limit - paginatedResults.length;
     const youtubeResults = await searchInterviewsWithYouTube(who);
-
     const filteredYT = youtubeResults.filter((yt) => !combinedMap.has(yt.link));
-
-    combinedResults = combinedResults.concat(filteredYT.slice(0, needed));
+    paginatedResults = paginatedResults.concat(filteredYT.slice(0, needed));
   }
 
-  return combinedResults;
+  return paginatedResults;
 }

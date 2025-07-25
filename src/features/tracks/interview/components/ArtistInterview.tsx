@@ -1,9 +1,44 @@
-export default function ArtistInterview({ trackId }: { trackId: string }) {
-  console.log('ArtistInterview component rendered with trackId:', trackId);
+'use client';
+import { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+
+import ArtistInterviewComponent from '@/features/tracks/interview/components/ArtistInterviewComponent';
+
+import { Artist } from '@/shared/types/SpotifyTrack';
+import { getCombinedInterviews } from '@/shared/hooks/searchInterviews';
+
+export default function ArtistInterview({ artist }: { artist: Artist }) {
+  const queryClient = useQueryClient();
+
+  const [offset, setOffset] = useState<number>(0);
+  const limit = 5;
+
+  const { data: interviews = [], isLoading } = useQuery({
+    queryKey: ['artistInterviews', artist.name, offset],
+    queryFn: () => getCombinedInterviews(artist.name, offset, limit),
+    placeholderData: (prevData) => prevData,
+  });
+
+  useEffect(() => {
+    queryClient.prefetchQuery({
+      queryKey: ['artistInterviews', artist.name, offset + limit],
+      queryFn: () => getCombinedInterviews(artist.name, offset + limit, limit),
+    });
+  }, [artist, offset, queryClient]);
+
   return (
-    <div className="flex flex-col items-center justify-center">
-      <h1 className="text-2xl font-bold mb-4">아티스트 인터뷰</h1>
-      <p className="text-lg">이 페이지는 아티스트의 인터뷰 콘텐츠를 표시합니다.</p>
-    </div>
+    <>
+      {isLoading && <p>Loading...</p>}
+      {interviews.map((interview) => (
+        <ArtistInterviewComponent key={interview.link} artistInterview={interview} />
+      ))}
+      <button
+        disabled={offset === 0}
+        onClick={() => setOffset((prev) => Math.max(prev - limit, 0))}
+      >
+        이전
+      </button>
+      <button onClick={() => setOffset((prev) => prev + limit)}>다음</button>
+    </>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { TrackItem } from '@/shared/types/SpotifyTrack';
-import { getCombinedInterviews } from '@/features/tracks/hooks/searchInterviews';
+import { getCombinedInterviews } from '@/shared/hooks/searchInterviews';
 import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 
 interface PlaylistInterviewListProps {
@@ -36,7 +36,7 @@ export default function PlaylistInterviewList({
       const results = await Promise.all(
         artists.map(async (artist) => ({
           artist,
-          interviews: await getCombinedInterviews(artist),
+          interviews: await getCombinedInterviews(artist, 0, 5),
         }))
       );
       const map: Record<string, CustomSearchResult[]> = {};

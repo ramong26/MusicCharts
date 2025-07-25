@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-import { searchInterviews } from '@/features/tracks/hooks/searchInterviews';
+import { searchInterviews } from '@/shared/hooks/searchInterviews';
 
 import { formatDate } from '@/lib/utils/date';
 
