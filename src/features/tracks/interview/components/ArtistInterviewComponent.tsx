@@ -18,7 +18,7 @@ export default function ArtistInterviewComponent({artistInterview}: { artistInte
   const [interviewPageName, setInterviewPageName] = useState<string | null>(null);
 
   const interviewLogo = artistInterview?.displayLink
-const publishedTime = artistInterview?.pagemap?.metatags?.[0]?.['article:published_time'];
+  const publishedTime = artistInterview?.pagemap?.metatags?.[0]?.['article:published_time'];
 
     useEffect(() => {
     if (interviewLogo === "www.rollingstone.com") {
@@ -39,8 +39,9 @@ const publishedTime = artistInterview?.pagemap?.metatags?.[0]?.['article:publish
     }
   }, [interviewLogo]);
 
+  
   return (
-    <div className="flex items-center justify-center h-[150px] gap-4 mb-4 p-4 bg-white rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+    <div  className="flex items-center justify-center h-[150px] gap-4 mb-4 p-4 bg-white rounded-lg shadow-md ">
       <div className="flex items-center flex-col justify-center text-center gap-2 w-[90px] h-[90px]">
         <Image
           src={interviewPageLogo || '/default-logo.png'}
@@ -53,7 +54,7 @@ const publishedTime = artistInterview?.pagemap?.metatags?.[0]?.['article:publish
       </div>
       <div className="flex-1">{artistInterview?.snippet}</div>
       <div className="flex flex-col items-center">
-        <Link href={artistInterview?.link || '#'} className="text-blue-500 hover:underline">인터뷰 전문 보기</Link>
+        <Link href={artistInterview?.link || '#'} className="text-blue-500 hover:underline">인터뷰 전문 보기 </Link>
         <div>
           {publishedTime ? (
             <span className="text-gray-500 text-sm">{formatDate(publishedTime)}</span>

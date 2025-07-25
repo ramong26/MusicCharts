@@ -36,7 +36,7 @@ export default function PlaylistInterviewList({
       const results = await Promise.all(
         artists.map(async (artist) => ({
           artist,
-          interviews: await getCombinedInterviews(artist),
+          interviews: await getCombinedInterviews(artist, 0, 5),
         }))
       );
       const map: Record<string, CustomSearchResult[]> = {};

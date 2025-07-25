@@ -1,19 +1,45 @@
-import ArtistInterviewComponent from '@/features/tracks/interview/components/ArtistInterviewComponent'
+'use client';
+import { useEffect, useState } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
-import { Artist } from "@/shared/types/SpotifyTrack";
+import ArtistInterviewComponent from '@/features/tracks/interview/components/ArtistInterviewComponent';
 
-import {getCombinedInterviews} from '@/shared/hooks/searchInterviews';
-export default async function ArtistInterview({ artist }: { artist: Artist | null }) {
+import { Artist } from '@/shared/types/SpotifyTrack';
+import { getCombinedInterviews } from '@/shared/hooks/searchInterviews';
 
-  const artistInterview = await getCombinedInterviews(artist?.name || '');
+export default function ArtistInterview({ artist }: { artist: Artist }) {
+  const queryClient = useQueryClient();
 
-  console.log('Artist interview data:', artistInterview);
+  const [offset, setOffset] = useState<number>(0);
+  const limit = 5;
+
+  const { data: interviews = [], isLoading } = useQuery({
+    queryKey: ['artistInterviews', artist?.name, offset],
+    queryFn: () => getCombinedInterviews(artist?.name || '', offset, limit),
+    placeholderData: (prevData) => prevData,
+  });
+
+  useEffect(() => {
+    if (!artist?.name) return;
+    queryClient.prefetchQuery({
+      queryKey: ['artistInterviews', artist.name, offset + limit],
+      queryFn: () => getCombinedInterviews(artist.name, offset + limit, limit),
+    });
+  }, [artist, offset, queryClient]);
+
   return (
-    <div className="flex flex-col items-center justify-center">
-      <h1 className="text-2xl font-bold mb-4">해당 아티스트 관련 인터뷰</h1>
-      {artistInterview.length>0 && artistInterview.map ((interview) => (
+    <>
+      {isLoading && <p>Loading...</p>}
+      {interviews.map((interview) => (
         <ArtistInterviewComponent key={interview.link} artistInterview={interview} />
       ))}
-    </div>
+      <button
+        disabled={offset === 0}
+        onClick={() => setOffset((prev) => Math.max(prev - limit, 0))}
+      >
+        이전
+      </button>
+      <button onClick={() => setOffset((prev) => prev + limit)}>다음</button>
+    </>
   );
 }
