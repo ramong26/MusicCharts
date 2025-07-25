@@ -104,35 +104,6 @@ export async function searchInterviewsWithYouTube(who: string): Promise<CustomSe
 }
 
 // 아티스트별 인터뷰 검색 결과를 통합하여 반환하는 함수
-// export async function getCombinedInterviews(
-//   who: string
-// ): Promise<CustomSearchResult[]> {
-//   const [googleResults, genAIResults] = await Promise.all([
-//     searchInterviews(who),
-//     searchInterviewsWithOpenAI(who),
-//   ]);
-
-//   const combinedMap = new Map<string, CustomSearchResult>();
-//   [...googleResults, ...genAIResults].forEach((item) => {
-//     if (!combinedMap.has(item.link)) {
-//       combinedMap.set(item.link, item);
-//     }
-//   });
-
-//   let combinedResults = Array.from(combinedMap.values()).slice(0, 5);
-
-//   if (combinedResults.length < 5) {
-//     const needed = 5 - combinedResults.length;
-//     const youtubeResults = await searchInterviewsWithYouTube(who);
-
-//     const filteredYT = youtubeResults.filter((yt) => !combinedMap.has(yt.link));
-
-//     combinedResults = combinedResults.concat(filteredYT.slice(0, needed));
-//   }
-
-//   return combinedResults;
-// }
-
 export async function getCombinedInterviews(
   who: string,
   offset = 0,

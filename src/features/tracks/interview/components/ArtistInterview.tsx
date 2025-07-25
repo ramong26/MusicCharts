@@ -14,13 +14,12 @@ export default function ArtistInterview({ artist }: { artist: Artist }) {
   const limit = 5;
 
   const { data: interviews = [], isLoading } = useQuery({
-    queryKey: ['artistInterviews', artist?.name, offset],
-    queryFn: () => getCombinedInterviews(artist?.name || '', offset, limit),
+    queryKey: ['artistInterviews', artist.name, offset],
+    queryFn: () => getCombinedInterviews(artist.name, offset, limit),
     placeholderData: (prevData) => prevData,
   });
 
   useEffect(() => {
-    if (!artist?.name) return;
     queryClient.prefetchQuery({
       queryKey: ['artistInterviews', artist.name, offset + limit],
       queryFn: () => getCombinedInterviews(artist.name, offset + limit, limit),
