@@ -28,8 +28,7 @@ export default function ArtistProfileWiki({ artistName }: Props) {
       </h2>
 
       {isLoading && (
-        <div className="text-center text-gray-900 animate-pulse">아티스트 정보를 가져오고 있습니다. 잠시만 기다려주세요...</div>
-      )}
+    <div className="text-center text-gray-900 animate-pulse" role="status" aria-live="polite">아티스트 정보를 가져오고 있습니다. 잠시만 기다려주세요...</div>      )}
 
       {error && (
         <div className="text-center text-red-500">아티스트 정보를 불러오는 데 실패했습니다.</div>

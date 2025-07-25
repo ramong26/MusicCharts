@@ -5,7 +5,7 @@ import { ReactNode, useState } from "react";
 
 export default function QueryProvider({ children }: { children: ReactNode }) {
   const [client] = useState(() => new QueryClient());
-  const [Devtools, setDevtools] = useState<React.ReactNode>(null);
+  const [devtools, setDevtools] = useState<React.ReactNode>(null);
 
   // 토큰 처리
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function QueryProvider({ children }: { children: ReactNode }) {
   return (
     <QueryClientProvider client={client}>
       {children}
-      {Devtools}
+      {devtools}
     </QueryClientProvider>
   );
 }
