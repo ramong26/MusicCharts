@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { TrackItem } from '@/shared/types/SpotifyTrack';
-import { getCombinedInterviews } from '@/features/tracks/hooks/searchInterviews';
+import { getCombinedInterviews } from '@/shared/hooks/searchInterviews';
 import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 
 interface PlaylistInterviewListProps {

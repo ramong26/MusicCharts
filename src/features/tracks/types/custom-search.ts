@@ -10,7 +10,17 @@ export interface CustomSearchResult {
   formattedUrl: string;
   htmlFormattedUrl: string;
   pagemap?: {
-    [key: string]: unknown[];
+   cse_image?: {
+      src: string;
+
+  };
+    metatags?: {
+      'article:published_time'?: string | Date;
+      'og:image'?: string;
+      'og:title'?: string;
+      'og:description'?: string;
+      'og:url'?: string;
+    }[];
   };
   mime?: string;
   fileFormat?: string;
@@ -24,6 +34,8 @@ export interface CustomSearchResult {
     thumbnailWidth: number;
   };
   labels?: Label[];
+  createdAt?: string; 
+
 }
 
 export interface Label {

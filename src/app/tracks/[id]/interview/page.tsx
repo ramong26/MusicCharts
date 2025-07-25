@@ -26,7 +26,7 @@ export default async function InterviewPage({ params }: InterviewPageProps) {
       <main className="flex mt-[188px] gap-4 h-[617px] w-[1043px] mx-auto">
         <div className="flex flex-col gap-10 w-full">
           <ArtistProfile artist={artist} />
-          <ArtistInterview trackId={trackId} />
+          <ArtistInterview artist={artist} />
         </div>
       </main>
     </div>
