@@ -55,7 +55,7 @@ export async function searchInterviews(who: string): Promise<CustomSearchResult[
 // Google OpenAI를 사용하여 인터뷰 검색
 export async function searchInterviewsWithOpenAI(who: string): Promise<CustomSearchResult[]> {
   try {
-    const res = await fetch('/api/open-api/getInterviews', {
+    const res = await fetch('/api/gemini-api/getInterviews', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -108,7 +108,10 @@ export async function getCombinedInterviews(
   who: string,
   offset = 0,
   limit = 5
-): Promise<CustomSearchResult[]> {
+): Promise<{
+  results: CustomSearchResult[];
+  totalCount: number;
+}> {
   const [googleResults, genAIResults] = await Promise.all([
     searchInterviews(who),
     searchInterviewsWithOpenAI(who),
@@ -124,12 +127,22 @@ export async function getCombinedInterviews(
   const combinedResults = Array.from(combinedMap.values());
   let paginatedResults = combinedResults.slice(offset, offset + limit);
 
+  let totalCount = combinedResults.length;
+
   if (paginatedResults.length < limit) {
     const needed = limit - paginatedResults.length;
     const youtubeResults = await searchInterviewsWithYouTube(who);
     const filteredYT = youtubeResults.filter((yt) => !combinedMap.has(yt.link));
-    paginatedResults = paginatedResults.concat(filteredYT.slice(0, needed));
+    const ytToAdd = filteredYT.slice(0, needed);
+
+    paginatedResults = paginatedResults.concat(ytToAdd);
+
+    // totalCount에 유튜브 개수도 추가
+    totalCount += ytToAdd.length;
   }
 
-  return paginatedResults;
+  return {
+    results: paginatedResults,
+    totalCount,
+  };
 }

@@ -10,10 +10,9 @@ export interface CustomSearchResult {
   formattedUrl: string;
   htmlFormattedUrl: string;
   pagemap?: {
-   cse_image?: {
+    cse_image?: {
       src: string;
-
-  };
+    };
     metatags?: {
       'article:published_time'?: string | Date;
       'og:image'?: string;
@@ -34,8 +33,12 @@ export interface CustomSearchResult {
     thumbnailWidth: number;
   };
   labels?: Label[];
-  createdAt?: string; 
+  createdAt?: string;
+}
 
+export interface CombinedInterviewsResult {
+  results: CustomSearchResult[];
+  totalCount: number;
 }
 
 export interface Label {
