@@ -3,9 +3,7 @@ import connectToDB from '@/lib/mongo/mongo';
 import { YoutubeChannel } from '@/lib/mongo/models/YoutubeChannel';
 import { Youtube } from '@/lib/mongo/models/Youtube';
 // 유튜브 뮤직비디오 가져오기
-export async function getYoutubeTrackIdVideo(
-  trackName: string
-): Promise<YoutubeVideo[]> {
+export async function getYoutubeTrackIdVideo(trackName: string): Promise<YoutubeVideo[]> {
   try {
     await connectToDB();
 
@@ -15,11 +13,10 @@ export async function getYoutubeTrackIdVideo(
       return cached.videos;
     }
 
-    const baseUrl = process.env.BASE_URL || 'http://127.0.0.1:3000';
+    const baseUrl =
+      process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
 
-    const res = await fetch(
-      `${baseUrl}/api/youtube-search?q=${encodeURIComponent(trackName)}`
-    );
+    const res = await fetch(`${baseUrl}/api/youtube-search?q=${encodeURIComponent(trackName)}`);
 
     if (!res.ok) {
       throw new Error('유튜브 검색에 실패했습니다');

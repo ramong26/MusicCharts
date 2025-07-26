@@ -3,7 +3,8 @@ import { Track, Album } from '@/shared/types/SpotifyTrack';
 export default async function getTrackIdAlbum(track: Track | null): Promise<Album | null> {
   if (!track?.album?.id) return null;
 
-  const baseUrl = 'http://127.0.0.1:3000';
+  const baseUrl =
+    process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
 
   // 토큰 가져오기
   const tokenRes = await fetch(`${baseUrl}/api/spotify/spotify-token`, {

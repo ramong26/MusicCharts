@@ -9,16 +9,14 @@ export async function GET(request: NextRequest) {
   const code = searchParams.get('code');
 
   if (!code) {
-    return NextResponse.json(
-      { error: 'Authorization code not found' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Authorization code not found' }, { status: 400 });
   }
 
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
   const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
-  const baseUrl = process.env.BASE_URL || 'http://127.0.0.1:3000';
+  const baseUrl =
+    process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
 
   if (!clientId || !clientSecret || !redirectUri) {
     console.error('Missing Spotify environment variables');
@@ -35,9 +33,7 @@ export async function GET(request: NextRequest) {
     redirect_uri: redirectUri,
   });
 
-  const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString(
-    'base64'
-  );
+  const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
   try {
     // 토큰 요청
@@ -53,10 +49,7 @@ export async function GET(request: NextRequest) {
     if (!tokenRes.ok) {
       const errorData = await tokenRes.json();
       console.error('Token request failed:', errorData);
-      return NextResponse.json(
-        { error: errorData },
-        { status: tokenRes.status }
-      );
+      return NextResponse.json({ error: errorData }, { status: tokenRes.status });
     }
 
     const tokenData = await tokenRes.json();
@@ -72,10 +65,7 @@ export async function GET(request: NextRequest) {
     if (!profileRes.ok) {
       const errorProfile = await profileRes.json();
       console.error('Profile request failed:', errorProfile);
-      return NextResponse.json(
-        { error: errorProfile },
-        { status: profileRes.status }
-      );
+      return NextResponse.json({ error: errorProfile }, { status: profileRes.status });
     }
 
     const profileData = await profileRes.json();
@@ -105,10 +95,7 @@ export async function GET(request: NextRequest) {
 
     if (!jwtSecret) {
       console.error('JWT_SECRET is not defined');
-      return NextResponse.json(
-        { error: 'JWT secret missing' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'JWT secret missing' }, { status: 500 });
     }
 
     const jwtToken = jwt.sign(payload, jwtSecret, {

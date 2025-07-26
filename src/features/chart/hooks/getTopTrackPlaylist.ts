@@ -9,7 +9,8 @@ export default async function getPlaylistTracks({
   offset?: number;
   limit?: number;
 }): Promise<TrackItem[]> {
-  const baseUrl = 'http://127.0.0.1:3000';
+  const baseUrl =
+    process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
 
   const tokenRes = await fetch(`${baseUrl}/api/spotify/spotify-token`, {
     cache: 'no-store',
