@@ -11,12 +11,8 @@ interface PlaylistInterviewListProps {
 
 type ArtistInterviewMap = Record<string, CustomSearchResult[] | null>;
 
-export default function PlaylistInterviewList({
-  trackData,
-}: PlaylistInterviewListProps) {
-  const [artistInterviews, setArtistInterviews] = useState<ArtistInterviewMap>(
-    {}
-  );
+export default function PlaylistInterviewList({ trackData }: PlaylistInterviewListProps) {
+  const [artistInterviews, setArtistInterviews] = useState<ArtistInterviewMap>({});
 
   const artists = useMemo(() => {
     const set = new Set<string>();
@@ -41,7 +37,7 @@ export default function PlaylistInterviewList({
       );
       const map: Record<string, CustomSearchResult[]> = {};
       results.forEach(({ artist, interviews }) => {
-        map[artist] = interviews;
+        map[artist] = interviews.results;
       });
       setArtistInterviews(map);
     };
@@ -61,20 +57,12 @@ export default function PlaylistInterviewList({
 
       <div className="space-y-6 mt-10">
         {artists.map((artist) => (
-          <div
-            key={artist}
-            className="flex flex-col border-b border-black pb-4 last:border-none"
-          >
-            <h4 className="text-xl font-semibold mb-3 text-gray-900">
-              {artist}
-            </h4>
+          <div key={artist} className="flex flex-col border-b border-black pb-4 last:border-none">
+            <h4 className="text-xl font-semibold mb-3 text-gray-900">{artist}</h4>
             <ul className="text-gray-700 text-sm space-y-1">
               {artistInterviews[artist] === undefined ? (
-                <li className="text-gray-400 italic animate-pulse">
-                  로딩 중...
-                </li>
-              ) : artistInterviews[artist] &&
-                artistInterviews[artist]!.length > 0 ? (
+                <li className="text-gray-400 italic animate-pulse">로딩 중...</li>
+              ) : artistInterviews[artist] && artistInterviews[artist]!.length > 0 ? (
                 artistInterviews[artist]!.slice(0, 5).map((result, i) => (
                   <li key={i}>
                     <a

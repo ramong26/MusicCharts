@@ -53,9 +53,9 @@ export async function searchInterviews(who: string): Promise<CustomSearchResult[
 // 사용법:  const interviews = await getTrackIdInterview(who);
 
 // Google OpenAI를 사용하여 인터뷰 검색
-export async function searchInterviewsWithOpenAI(who: string): Promise<CustomSearchResult[]> {
+export async function searchInterviewsWithGeminiAI(who: string): Promise<CustomSearchResult[]> {
   try {
-    const res = await fetch('/api/open-api/getInterviews', {
+    const res = await fetch('/api/gemini-api/getInterviews', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -108,28 +108,30 @@ export async function getCombinedInterviews(
   who: string,
   offset = 0,
   limit = 5
-): Promise<CustomSearchResult[]> {
-  const [googleResults, genAIResults] = await Promise.all([
+): Promise<{
+  results: CustomSearchResult[];
+  totalCount: number;
+}> {
+  const [googleResults, genAIResults, youtubeResults] = await Promise.all([
     searchInterviews(who),
-    searchInterviewsWithOpenAI(who),
+    searchInterviewsWithGeminiAI(who),
+    searchInterviewsWithYouTube(who),
   ]);
 
   const combinedMap = new Map<string, CustomSearchResult>();
-  [...googleResults, ...genAIResults].forEach((item) => {
+  [...googleResults, ...genAIResults, ...youtubeResults].forEach((item) => {
     if (!combinedMap.has(item.link)) {
       combinedMap.set(item.link, item);
     }
   });
 
   const combinedResults = Array.from(combinedMap.values());
-  let paginatedResults = combinedResults.slice(offset, offset + limit);
+  const totalCount = combinedResults.length;
 
-  if (paginatedResults.length < limit) {
-    const needed = limit - paginatedResults.length;
-    const youtubeResults = await searchInterviewsWithYouTube(who);
-    const filteredYT = youtubeResults.filter((yt) => !combinedMap.has(yt.link));
-    paginatedResults = paginatedResults.concat(filteredYT.slice(0, needed));
-  }
+  const paginatedResults = combinedResults.slice(offset, offset + limit);
 
-  return paginatedResults;
+  return {
+    results: paginatedResults,
+    totalCount,
+  };
 }
