@@ -8,12 +8,14 @@ import TrackDescription from '@/features/tracks/components/TrackDescription';
 import TrackList from '@/features/tracks/components/TrackList';
 import TrackComments from '@/features/tracks/components/TrackComments';
 
-export default async function TrackPage({
-  params,
-}: {
-  params: { id: string };
-}) {
-  const trackId = params.id;
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function TrackPage({ params }: PageProps) {
+  const { id } = await params;
+
+  const trackId = id;
   // trackId로 트랙 정보 받아옴
   const track = await getTrackId(trackId);
 
