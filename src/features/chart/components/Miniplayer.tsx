@@ -31,19 +31,16 @@ export default function Miniplayer({ track }: { track: Track }) {
       setPlayer(player);
 
       const onReady = ({ device_id }: { device_id: string }) => {
-        fetch(
-          `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
-          {
-            method: 'PUT',
-            headers: {
-              Authorization: `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              uris: [`spotify:track:${track.id}`],
-            }),
-          }
-        ).catch(console.error);
+        fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            uris: [`spotify:track:${track.id}`],
+          }),
+        }).catch(console.error);
       };
 
       const onPlayerStateChanged = (state: Spotify.PlaybackState | null) => {
@@ -69,7 +66,7 @@ export default function Miniplayer({ track }: { track: Track }) {
     return () => {
       document.body.removeChild(script);
     };
-  }, []);
+  }, [track.id]);
 
   // 트랙과 플레이어가 변경될 때마다 플레이어에 트랙을 설정
   useEffect(() => {
@@ -81,19 +78,16 @@ export default function Miniplayer({ track }: { track: Track }) {
     }
 
     const onReady = ({ device_id }: { device_id: string }) => {
-      fetch(
-        `https://api.spotify.com/v1/me/player/play?device_id=${device_id}`,
-        {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            uris: [`spotify:track:${track.id}`],
-          }),
-        }
-      ).catch(console.error);
+      fetch(`https://api.spotify.com/v1/me/player/play?device_id=${device_id}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          uris: [`spotify:track:${track.id}`],
+        }),
+      }).catch(console.error);
     };
 
     player.addListener('ready', onReady);
@@ -115,9 +109,7 @@ export default function Miniplayer({ track }: { track: Track }) {
         />
         <div>
           <h3 className="text-lg font-semibold">{currentTrack?.name}</h3>
-          <p className="text-sm text-gray-400">
-            {currentTrack?.artists[0]?.name}
-          </p>
+          <p className="text-sm text-gray-400">{currentTrack?.artists[0]?.name}</p>
         </div>
       </div>
 

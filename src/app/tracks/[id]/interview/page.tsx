@@ -6,11 +6,11 @@ import ArtistProfile from '@/features/tracks/interview/components/ArtistProfile'
 import ArtistInterview from '@/features/tracks/interview/components/ArtistInterview';
 
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 export default async function InterviewPage({ params }: PageProps) {
-  const { id } = await params;
+  const { id } = params;
   const trackId = String(id);
   const track = await getTrackId(trackId);
   const artistId = track.artists[0]?.id;
