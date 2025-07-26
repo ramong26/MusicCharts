@@ -5,10 +5,14 @@ import HeaderMain from '@/shared/components/HeaderMain';
 import ArtistProfile from '@/features/tracks/interview/components/ArtistProfile';
 import ArtistInterview from '@/features/tracks/interview/components/ArtistInterview';
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export default async function InterviewPage({ params }: any) {
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default async function InterviewPage({ params }: PageProps) {
   const { id } = await params;
-  const trackId = String(id);
+  const trackId = id;
+
   const track = await getTrackId(trackId);
   const artistId = track.artists[0]?.id;
 

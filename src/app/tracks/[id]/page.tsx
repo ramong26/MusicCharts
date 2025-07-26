@@ -14,7 +14,6 @@ interface PageProps {
 
 export default async function TrackPage({ params }: PageProps) {
   const { id } = await params;
-
   const trackId = id;
   // trackId로 트랙 정보 받아옴
   const track = await getTrackId(trackId);
