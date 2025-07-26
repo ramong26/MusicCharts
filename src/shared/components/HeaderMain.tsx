@@ -26,7 +26,7 @@ export default function HeaderMain() {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [setUser]);
+  }, []);
 
   // 로그인 및 프로필 확인
   useEffect(() => {
@@ -47,7 +47,7 @@ export default function HeaderMain() {
         setProfile(null);
         setIsLogin(false);
       });
-  }, []);
+  }, [setUser]);
 
   // 로그아웃 핸들러
   const handleLogout = async () => {
