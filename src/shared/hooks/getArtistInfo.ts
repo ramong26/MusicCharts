@@ -1,37 +1,52 @@
 import { ArtistWiki } from '@/features/tracks/types/WikiArtist';
+import { WikidataSearchResponse, WikidataEntityData } from '@/shared/types/Wikidata';
+
 // 위키피디아 데이터베이스에서 아티스트 정보를 가져오는 함수
 export default async function getArtistInfo(artistName: string): Promise<ArtistWiki> {
+  // 1. 아티스트 검색
   const searchRes = await fetch(
     `https://www.wikidata.org/w/api.php?action=wbsearchentities&search=${encodeURIComponent(
       artistName
     )}&language=en&format=json&origin=*`
   );
-
-  const searchData = await searchRes.json();
+  const searchData: WikidataSearchResponse = await searchRes.json();
   const getId = searchData.search?.[0]?.id;
 
   if (!getId) {
     throw new Error('Artist not found');
   }
 
+  // 2. 아티스트 상세 정보 가져오기
   const detailRes = await fetch(`https://www.wikidata.org/wiki/Special:EntityData/${getId}.json`);
-  const detailData = await detailRes.json();
+  const detailData: WikidataEntityData = await detailRes.json();
   const entity = detailData.entities?.[getId];
+  if (!entity) {
+    throw new Error('Entity data not found');
+  }
 
-  // 아티스트의 기본 정보 추출
+  // 3. ID 추출 (string | undefined 배열 포함)
   const genderId = entity?.claims?.P21?.[0]?.mainsnak?.datavalue?.value?.id;
   const nationalityId = entity?.claims?.P27?.[0]?.mainsnak?.datavalue?.value?.id;
-  const birthDate = entity?.claims?.P569?.[0]?.mainsnak?.datavalue?.value;
-  const genreIds =
-    entity?.claims?.P136?.map((c: any) => c?.mainsnak?.datavalue?.value?.id).filter(Boolean) || [];
-  const labelIds =
-    entity?.claims?.P1448?.map((c: any) => c?.mainsnak?.datavalue?.value?.id).filter(Boolean) || [];
-  const awardIds =
-    entity?.claims?.P166?.map((c: any) => c?.mainsnak?.datavalue?.value?.id).filter(Boolean) || [];
+  const birthDate = entity?.claims?.P569?.[0]?.mainsnak?.datavalue?.value as
+    | { time: string }
+    | undefined;
 
-  const fetchLabels = async (ids: string[]) => {
+  const genreIds = (entity?.claims?.P136 ?? [])
+    .map((c) => c?.mainsnak?.datavalue?.value?.id)
+    .filter((id): id is string => !!id);
+
+  const labelIds = (entity?.claims?.P1448 ?? [])
+    .map((c) => c?.mainsnak?.datavalue?.value?.id)
+    .filter((id): id is string => !!id);
+
+  const awardIds = (entity?.claims?.P166 ?? [])
+    .map((c) => c?.mainsnak?.datavalue?.value?.id)
+    .filter((id): id is string => !!id);
+
+  // 4. 레이블명(문자열) 가져오기 함수 (ko 우선, 없으면 en)
+  const fetchLabels = async (ids: string[]): Promise<string[]> => {
     const cachedLabels: Record<string, string> = {};
-    const uncachedIds = ids.filter((id) => !cachedLabels[id]);
+    const uncachedIds = ids.filter((id) => !(id in cachedLabels));
     if (uncachedIds.length > 0) {
       const responses = await Promise.all(
         uncachedIds.map((id) =>
@@ -39,39 +54,37 @@ export default async function getArtistInfo(artistName: string): Promise<ArtistW
         )
       );
       const jsonResponses = await Promise.all(responses.map((res) => res.json()));
+
       jsonResponses.forEach((json, index) => {
         const id = uncachedIds[index];
-        cachedLabels[id] =
-          json.entities?.[id]?.labels?.ko?.value ||
-          json.entities?.[id]?.labels?.en?.value ||
-          undefined;
+        const label =
+          json.entities?.[id]?.labels?.ko?.value ?? json.entities?.[id]?.labels?.en?.value ?? '';
+        cachedLabels[id] = label;
       });
     }
-    return ids.map((id) => cachedLabels[id]);
+    return ids.map((id) => cachedLabels[id] || '');
   };
 
-   const results = await Promise.all([
-    fetchLabels([genderId]),
-    fetchLabels([nationalityId]),
+  // 5. 모든 레이블 가져오기
+  const [genderArr, nationalityArr, genres, labels, awards] = await Promise.all([
+    fetchLabels(genderId ? [genderId] : []),
+    fetchLabels(nationalityId ? [nationalityId] : []),
     fetchLabels(genreIds),
     fetchLabels(labelIds),
     fetchLabels(awardIds),
   ]);
-  const gender = results[0][0];
-  const nationality = results[1][0];
-  const genres = results[2];
-  const labels = results[3];
-  const awards = results[4];
 
-
+  // 6. 결과 객체 반환
   return {
     artistName,
-    gender,
-    nationality,
+    gender: genderArr[0] || '',
+    nationality: nationalityArr[0] || '',
     birthDate,
-    genres,
-    labels,
-    awards,
+    genres: genres.filter(Boolean),
+    labels: labels.filter(Boolean),
+    awards: awards.filter(Boolean),
   };
 }
-// 사용법 await getArtistInfo('Beyoncé');
+
+// 사용법
+// const result = await getArtistInfo('Beyoncé');
