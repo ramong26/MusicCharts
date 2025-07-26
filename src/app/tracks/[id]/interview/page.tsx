@@ -1,3 +1,5 @@
+/// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
 import getTrackId from '@/features/tracks/hooks/getTrackId';
 import getArtist from '@/features/tracks/hooks/getArtist';
 
