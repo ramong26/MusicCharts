@@ -2,10 +2,7 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 
-import {
-  getTopWikiTitle,
-  fetchWikiSummary,
-} from '@/features/tracks/hooks/fetchWikiSummary';
+import { getTopWikiTitle, fetchWikiSummary } from '@/features/tracks/hooks/fetchWikiSummary';
 import useTranslate from '@/shared/hooks/useTranslate';
 
 import { Album } from '@/shared/types/SpotifyTrack';
@@ -17,9 +14,7 @@ export default function TrackDescription({ album }: { album: Album }) {
 
   useEffect(() => {
     const fetchWikiInfo = async () => {
-      const searchQuery = [album.name, album.artists[0].name, album.type]
-        .filter(Boolean)
-        .join(' ');
+      const searchQuery = [album.name, album.artists[0].name, album.type].filter(Boolean).join(' ');
       const topTitle = await getTopWikiTitle(searchQuery);
 
       if (topTitle) {
@@ -35,17 +30,12 @@ export default function TrackDescription({ album }: { album: Album }) {
 
     setLoading(true);
     fetchWikiInfo();
-  }, [album.id, translateText]);
+  }, [album.id, translateText, album.name, album.artists, album.type]);
 
   return (
     <div>
       <div className="flex gap-10">
-        <Image
-          src={album.images[0].url}
-          alt={album.name}
-          width={400}
-          height={400}
-        />
+        <Image src={album.images[0].url} alt={album.name} width={400} height={400} />
         <div>
           <div className="flex gap-2 items-center">
             <div className="font-bold text-xl">{album.name}</div>

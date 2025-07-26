@@ -3,7 +3,7 @@ export interface ArtistWiki {
   gender?: string;
   nationality?: string;
   birthDate?: { time: string };
-  genres?: string[];
-  labels?: string[];
-  awards?: string[];
+  genres?: (string | undefined)[];
+  labels?: (string | undefined)[];
+  awards?: (string | undefined)[];
 }

@@ -26,7 +26,7 @@ export default function HeaderMain() {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [setUser]);
 
   // 로그인 및 프로필 확인
   useEffect(() => {
