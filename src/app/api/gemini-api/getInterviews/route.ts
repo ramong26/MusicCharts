@@ -8,14 +8,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Query is required' }, { status: 400 });
     }
 
-    const apiKey = new GoogleGenAI({
-      apiKey: process.env.GOOGLE_API_KEY,
-    });
-
-    if (!apiKey) {
-      console.error('Gemini_AI_API_KEY is not set in environment variables.');
+    const googleApiKey = process.env.GOOGLE_API_KEY;
+    if (!googleApiKey) {
+      console.error('GOOGLE_API_KEY is not set in environment variables.');
       throw new Error('Server is not configured to handle this request.');
     }
+    const genAI = new GoogleGenAI({
+      apiKey: googleApiKey,
+    });
 
     const prompt = `
 Search the internet and provide a list of 3 to 5 recent interviews of the artist "${query}".
@@ -29,17 +29,30 @@ Return the data in clean JSON format as an array like:
   ...
 ]
 Only include real existing links. Do not make up data.`;
-    const response = await apiKey.models.generateContent({
+    const response = await genAI.models.generateContent({
       model: 'gemini-2.5-flash',
-      contents: prompt,
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
         thinkingConfig: {
           thinkingBudget: 0,
         },
       },
     });
+
     const resultText = response.text ?? '';
-    return NextResponse.json({ result: resultText.trim() });
+    let parsedResult = [];
+    try {
+      const jsonString = resultText
+        .trim()
+        .replace(/^```json\s*/, '')
+        .replace(/```$/, '');
+      if (jsonString) {
+        parsedResult = JSON.parse(jsonString);
+      }
+    } catch (e) {
+      console.error('Failed to parse JSON from Gemini response:', e, 'Raw response:', resultText);
+    }
+    return NextResponse.json({ result: parsedResult });
   } catch (error) {
     const err = error as Error;
     return NextResponse.json(

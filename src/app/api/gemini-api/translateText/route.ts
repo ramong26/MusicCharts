@@ -7,19 +7,20 @@ export async function POST(request: Request) {
       return new Response('텍스트와 언어가 있어야 합니다', { status: 400 });
     }
 
-    const apiKey = new GoogleGenAI({
-      apiKey: process.env.GOOGLE_API_KEY,
-    });
-
-    if (!apiKey) {
-      return new Response('API key is missing', { status: 500 });
+    const googleApiKey = process.env.GOOGLE_API_KEY;
+    if (!googleApiKey) {
+      console.error('GOOGLE_API_KEY is not set in environment variables.');
+      throw new Error('API key is missing');
     }
+    const genAI = new GoogleGenAI({
+      apiKey: googleApiKey,
+    });
 
     const prompt = `Translate the following text to ${targetLang}:\n\n${text}`;
 
-    const response = await apiKey.models.generateContent({
+    const response = await genAI.models.generateContent({
       model: 'gemini-2.5-flash',
-      contents: prompt,
+      contents: [{ role: 'user', parts: [{ text: prompt }] }],
       config: {
         thinkingConfig: {
           thinkingBudget: 0,
