@@ -78,7 +78,6 @@ export async function searchInterviewsWithGeminiAI(who: string): Promise<CustomS
       snippet: item?.snippet?.description,
       displayLink: 'www.youtube.com',
     }));
-    // return Array.isArray(data.result) ? data.result : [];
   } catch (error) {
     console.error('searchInterviewsWithGoogleGenAI() 에러:', error);
     return [];
@@ -99,7 +98,6 @@ export async function searchInterviewsWithYouTube(who: string): Promise<CustomSe
     }
 
     const data = await res.json();
-    console.log('YouTube API 응답:', data);
     return data.items.map((item: YouTubeItem) => ({
       title: item?.snippet?.title,
       link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,

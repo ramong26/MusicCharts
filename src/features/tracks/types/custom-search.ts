@@ -7,17 +7,19 @@ export interface CustomSearchResult {
   htmlTitle: string;
   link: string;
   displayLink: string;
-  snippet: {
-    videoId?: string;
-    title?: string;
-    description?: string;
-    thumbnails?: {
-      high?: {
-        url: string;
+  snippet:
+    | string
+    | {
+        videoId?: string;
+        title?: string;
+        description?: string;
+        thumbnails?: {
+          high?: {
+            url: string;
+          };
+        };
+        publishedAt?: string;
       };
-    };
-    publishedAt?: string;
-  };
   htmlSnippet: string;
   cacheId?: string;
   formattedUrl: string;

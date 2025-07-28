@@ -21,9 +21,16 @@ export default function ArtistInterviewComponent({
   const [interviewPageName, setInterviewPageName] = useState<string | null>(null);
 
   const interviewLogo = artistInterview?.displayLink;
-  const publishedTime =
-    artistInterview?.pagemap?.metatags?.[0]?.['article:published_time'] ||
-    artistInterview?.snippet?.publishedAt;
+  let publishedTime;
+  if (typeof artistInterview?.snippet !== 'string') {
+    publishedTime =
+      artistInterview?.pagemap?.metatags?.[0]?.['article:published_time'] ||
+      artistInterview?.snippet?.publishedAt;
+  } else {
+    publishedTime =
+      artistInterview?.pagemap?.metatags?.[0]?.['article:published_time'] ||
+      artistInterview?.snippet;
+  }
 
   useEffect(() => {
     switch (interviewLogo) {
@@ -53,7 +60,7 @@ export default function ArtistInterviewComponent({
   }
   return (
     <div className="flex items-center justify-center h-[150px] gap-4 mb-4 p-4 bg-white rounded-lg shadow-md ">
-      <div className="flex items-center flex-col justify-cent er text-center gap-2 w-[90px] h-[90px]">
+      <div className="flex items-center flex-col justify-center text-center gap-2 w-[90px] h-[90px]">
         <Image
           src={interviewPageLogo || '/default-logo.png'}
           alt="Artist Interview Logo"

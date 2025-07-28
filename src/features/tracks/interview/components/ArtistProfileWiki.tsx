@@ -30,7 +30,7 @@ export default function ArtistProfileWiki({ artistName }: Props) {
       {error && (
         <div className="text-center text-red-500">아티스트 정보를 불러오는 데 실패했습니다.</div>
       )}
-      <div className="min-h-[1000px]">
+      <>
         {(isLoading || artistInfo) && (
           <table className="w-full table-auto border-collapse border border-gray-300 rounded-md">
             <tbody>
@@ -57,7 +57,7 @@ export default function ArtistProfileWiki({ artistName }: Props) {
             </tbody>
           </table>
         )}
-      </div>
+      </>
     </div>
   );
 }
