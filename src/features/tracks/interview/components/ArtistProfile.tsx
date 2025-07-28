@@ -1,4 +1,3 @@
-
 import Image from 'next/image';
 
 import ArtistProfileWiki from '@/features/tracks/interview/components/ArtistProfileWiki';

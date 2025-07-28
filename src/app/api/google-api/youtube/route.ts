@@ -1,4 +1,3 @@
-export const runtime = 'nodejs';
 import { YouTubeItem } from '@/shared/types/Youtube';
 import { NextRequest, NextResponse } from 'next/server';
 
@@ -7,10 +6,7 @@ export async function GET(req: NextRequest) {
   const query = searchParams.get('q');
 
   if (!query) {
-    return NextResponse.json(
-      { error: '검색어가 필요합니다.' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: '검색어가 필요합니다.' }, { status: 400 });
   }
 
   try {
@@ -36,19 +32,16 @@ export async function GET(req: NextRequest) {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('YouTube API fetch 실패:', response.status, errorText);
-      return NextResponse.json(
-        { error: 'YouTube fetch 실패' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'YouTube fetch 실패' }, { status: 500 });
     }
 
     const data = await response.json();
 
     const videos = data.items.map((video: YouTubeItem) => ({
-      videoId: video.id.videoId,
-      title: video.snippet.title,
-      thumbnail: video.snippet.thumbnails.high.url,
-      publishedAt: video.snippet.publishedAt,
+      videoId: video?.id?.videoId,
+      title: video?.snippet?.title,
+      thumbnail: video?.snippet?.thumbnails?.high?.url,
+      publishedAt: video?.snippet?.publishedAt,
     }));
 
     return NextResponse.json({ items: videos });

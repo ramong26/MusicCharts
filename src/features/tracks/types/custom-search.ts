@@ -1,10 +1,25 @@
 export interface CustomSearchResult {
+  id?: {
+    videoId?: string;
+  };
   kind: string;
   title: string;
   htmlTitle: string;
   link: string;
   displayLink: string;
-  snippet: string;
+  snippet:
+    | string
+    | {
+        videoId?: string;
+        title?: string;
+        description?: string;
+        thumbnails?: {
+          high?: {
+            url: string;
+          };
+        };
+        publishedAt?: string;
+      };
   htmlSnippet: string;
   cacheId?: string;
   formattedUrl: string;

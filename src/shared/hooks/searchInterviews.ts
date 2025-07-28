@@ -52,7 +52,7 @@ export async function searchInterviews(who: string): Promise<CustomSearchResult[
 
 // 사용법:  const interviews = await getTrackIdInterview(who);
 
-// Google OpenAI를 사용하여 인터뷰 검색
+// Google GeminiAi 사용하여 인터뷰 검색
 export async function searchInterviewsWithGeminiAI(who: string): Promise<CustomSearchResult[]> {
   try {
     const res = await fetch('/api/gemini-api/getInterviews', {
@@ -70,7 +70,14 @@ export async function searchInterviewsWithGeminiAI(who: string): Promise<CustomS
     }
 
     const data = await res.json();
-    return Array.isArray(data.result) ? data.result : [];
+    return data.items.map((item: YouTubeItem) => ({
+      title: item?.snippet?.title,
+      link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
+      thumbnail: item?.snippet?.thumbnails?.high?.url,
+      publishedAt: item?.snippet?.publishedAt,
+      snippet: item?.snippet?.description,
+      displayLink: 'www.youtube.com',
+    }));
   } catch (error) {
     console.error('searchInterviewsWithGoogleGenAI() 에러:', error);
     return [];
@@ -92,10 +99,12 @@ export async function searchInterviewsWithYouTube(who: string): Promise<CustomSe
 
     const data = await res.json();
     return data.items.map((item: YouTubeItem) => ({
-      title: item.snippet.title,
-      link: `https://www.youtube.com/watch?v=${item.id.videoId}`,
-      thumbnail: item.snippet.thumbnails.high.url,
-      publishedAt: item.snippet.publishedAt,
+      title: item?.snippet?.title,
+      link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
+      thumbnail: item?.snippet?.thumbnails?.high?.url,
+      publishedAt: item?.snippet?.publishedAt,
+      snippet: item?.snippet?.description,
+      displayLink: 'www.youtube.com',
     }));
   } catch (error) {
     console.error('searchInterviewsWithYouTube() 에러:', error);
