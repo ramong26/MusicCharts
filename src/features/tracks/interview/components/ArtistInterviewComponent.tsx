@@ -21,7 +21,9 @@ export default function ArtistInterviewComponent({
   const [interviewPageName, setInterviewPageName] = useState<string | null>(null);
 
   const interviewLogo = artistInterview?.displayLink;
-  const publishedTime = artistInterview?.pagemap?.metatags?.[0]?.['article:published_time'];
+  const publishedTime =
+    artistInterview?.pagemap?.metatags?.[0]?.['article:published_time'] ||
+    artistInterview?.snippet?.publishedAt;
 
   useEffect(() => {
     switch (interviewLogo) {
@@ -46,20 +48,22 @@ export default function ArtistInterviewComponent({
         setInterviewPageName(null);
     }
   }, [interviewLogo]);
-
+  if (!artistInterview) {
+    return <div className="text-center mt-10">인터뷰 정보를 찾을 수 없습니다.</div>;
+  }
   return (
     <div className="flex items-center justify-center h-[150px] gap-4 mb-4 p-4 bg-white rounded-lg shadow-md ">
-      <div className="flex items-center flex-col justify-center text-center gap-2 w-[90px] h-[90px]">
+      <div className="flex items-center flex-col justify-cent er text-center gap-2 w-[90px] h-[90px]">
         <Image
           src={interviewPageLogo || '/default-logo.png'}
           alt="Artist Interview Logo"
           width={60}
           height={60}
-          className="rounded-full object-cover"
+          className="rounded-full object-cover w-[60px] h-[60px]"
         />
-        <div>{interviewPageName}</div>
+        <div className="w-[130px]">{interviewPageName}</div>
       </div>
-      <div className="flex-1">{artistInterview?.snippet}</div>
+      <p className="flex-1 text-center text-lg font-semibold">{artistInterview?.title}</p>
       <div className="flex flex-col items-center">
         <Link href={artistInterview?.link || '#'} className="text-blue-500 hover:underline">
           인터뷰 전문 보기{' '}

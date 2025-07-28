@@ -25,7 +25,7 @@ export default function ArtistInterview({ artist }: { artist: Artist }) {
   const totalPages = useMemo(() => {
     return Math.ceil(totalCount / limit);
   }, [totalCount]);
-
+  // console.log('ArtistInterview 컴포넌트:', interviews, totalCount, totalPages);
   // 페이지네이션을 위한 useEffect
   useEffect(() => {
     queryClient.prefetchQuery({
@@ -34,31 +34,62 @@ export default function ArtistInterview({ artist }: { artist: Artist }) {
     });
   }, [artist, offset, queryClient]);
 
+  const isNextState = offset + limit >= totalCount;
+  const isPrevState = offset === 0;
   return (
-    <>
-      {isLoading && <p>Loading...</p>}
+    <div className="mb-10">
+      {isLoading && (
+        <>
+          {Array.from({ length: 5 }).map((_, index) => (
+            <div key={index}>
+              <div className="flex items-center justify-center h-[150px] gap-4 mb-4 p-4 bg-white rounded-lg shadow-md animate-pulse">
+                {/* 로고 + 사이트 이름 */}
+                <div className="flex flex-col items-center justify-center w-[90px] h-[90px] gap-2">
+                  <div className="w-[60px] h-[60px] bg-gray-300 rounded-full" />
+                  <div className="w-16 h-4 bg-gray-300 rounded" />
+                </div>
+
+                {/* 인터뷰 내용 부분 */}
+                <div className="flex-1 space-y-2">
+                  <div className="w-full h-4 bg-gray-300 rounded" />
+                  <div className="w-[90%] h-4 bg-gray-300 rounded" />
+                  <div className="w-[80%] h-4 bg-gray-300 rounded" />
+                </div>
+
+                {/* 링크 + 날짜 */}
+                <div className="flex flex-col items-center gap-2">
+                  <div className="w-24 h-4 bg-gray-300 rounded" />
+                  <div className="w-20 h-3 bg-gray-200 rounded" />
+                </div>
+              </div>
+            </div>
+          ))}
+        </>
+      )}
+
       {interviews.map((interview) => (
         <ArtistInterviewComponent key={interview.link} artistInterview={interview} />
       ))}
-      <button
-        disabled={offset === 0}
-        onClick={() => setOffset((prev) => Math.max(prev - limit, 0))}
-        className="cursor-pointer"
-      >
-        이전
-      </button>
 
-      <button
-        disabled={offset + limit >= totalCount}
-        onClick={() => setOffset((prev) => prev + limit)}
-        className="cursor-pointer"
-      >
-        다음
-      </button>
-
-      <p className="text-center mt-4">
-        {offset / limit + 1} / {totalPages} 페이지, 총 {totalCount}개의 인터뷰
-      </p>
-    </>
+      <div className="flex justify-center gap-8 mt-4 text-lg text-gray-600 min-w-[1000px]">
+        <button
+          disabled={isPrevState}
+          onClick={() => setOffset((prev) => Math.max(prev - limit, 0))}
+          className={` ${isPrevState ? 'opacity-50' : 'cursor-pointer'}`}
+        >
+          이전
+        </button>
+        <p className="text-center">
+          {offset / limit + 1} / {totalPages} 페이지, 총 {totalCount}개의 인터뷰
+        </p>
+        <button
+          disabled={isNextState}
+          onClick={() => setOffset((prev) => prev + limit)}
+          className={` ${isNextState ? 'opacity-50' : 'cursor-pointer'}`}
+        >
+          다음
+        </button>
+      </div>
+    </div>
   );
 }

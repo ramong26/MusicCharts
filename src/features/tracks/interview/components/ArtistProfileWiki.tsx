@@ -27,38 +27,37 @@ export default function ArtistProfileWiki({ artistName }: Props) {
         Artist Wiki
       </h2>
 
-      {isLoading && (
-    <div className="text-center text-gray-900 animate-pulse" role="status" aria-live="polite">아티스트 정보를 가져오고 있습니다. 잠시만 기다려주세요...</div>      )}
-
       {error && (
         <div className="text-center text-red-500">아티스트 정보를 불러오는 데 실패했습니다.</div>
       )}
-
-      {!isLoading && !error && artistInfo && (
-        <table className="w-full table-auto border-collapse border border-gray-300 rounded-md">
-          <tbody>
-            <WikiRow label="본명" value={artistInfo.artistName} />
-            <WikiRow label="생년월일" value={artistInfo.birthDate?.time} />
-            <WikiRow label="성별" value={artistInfo.gender} />
-            <WikiRow label="국적" value={artistInfo.nationality} />
-            <WikiRow label="장르" value={artistInfo.genres?.join(', ')} />
-            <WikiRow
-              label="수상내역"
-              value={
-                artistInfo.awards && artistInfo.awards.length > 0 ? (
-                  <ul className="list-disc list-inside space-y-1">
-                    {artistInfo.awards.map((award, idx) => (
-                      <li key={idx}>{award}</li>
-                    ))}
-                  </ul>
-                ) : (
-                  '정보 없음'
-                )
-              }
-            />
-          </tbody>
-        </table>
-      )}
+      <div className="min-h-[1000px]">
+        {(isLoading || artistInfo) && (
+          <table className="w-full table-auto border-collapse border border-gray-300 rounded-md">
+            <tbody>
+              <WikiRow label="본명" value={artistInfo?.artistName} isLoading={isLoading} />
+              <WikiRow label="생년월일" value={artistInfo?.birthDate?.time} isLoading={isLoading} />
+              <WikiRow label="성별" value={artistInfo?.gender} isLoading={isLoading} />
+              <WikiRow label="국적" value={artistInfo?.nationality} isLoading={isLoading} />
+              <WikiRow label="장르" value={artistInfo?.genres?.join(', ')} isLoading={isLoading} />
+              <WikiRow
+                label="수상내역"
+                value={
+                  artistInfo?.awards && artistInfo.awards.length > 0 ? (
+                    <ul className="list-disc list-inside space-y-1">
+                      {artistInfo.awards.map((award, idx) => (
+                        <li key={idx}>{award}</li>
+                      ))}
+                    </ul>
+                  ) : (
+                    '정보 없음'
+                  )
+                }
+                isLoading={isLoading}
+              />
+            </tbody>
+          </table>
+        )}
+      </div>
     </div>
   );
 }
