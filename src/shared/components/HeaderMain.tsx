@@ -1,4 +1,3 @@
-/// eslint-disable-next-line react-hooks/exhaustive-deps
 'use client';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -30,7 +29,14 @@ export default function HeaderMain() {
 
   // 로그인 및 프로필 확인
   useEffect(() => {
-    fetch('/api/profile', { credentials: 'include', cache: 'no-store' })
+    fetch('/api/profile', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      cache: 'no-store',
+    })
       .then((res) => {
         if (!res.ok) throw new Error('로그인 안 됨');
         return res.json();
@@ -109,8 +115,8 @@ export default function HeaderMain() {
             ) : (
               profile && (
                 <div className="cursor-pointer">
-                  <Link href="/profile" className="text-sm font-semibold">
-                    환영합니다, {profile.name}님!
+                  <Link href="/" className="text-sm font-semibold">
+                    환영합니다, {profile?.name}님!
                   </Link>
                   <button onClick={handleLogout}>로그아웃</button>
                 </div>

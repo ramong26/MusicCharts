@@ -1,8 +1,9 @@
-export const runtime = 'nodejs'; // 몽고로 인해 nodejs 런타임 사용
 import { NextRequest, NextResponse } from 'next/server';
 import connectToDB from '@/lib/mongo/mongo';
 import { UserModel } from '@/lib/mongo/models/UserModel';
 import jwt from 'jsonwebtoken';
+
+export const runtime = 'nodejs'; // 몽고로 인해 nodejs 런타임 사용
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -107,7 +108,7 @@ export async function GET(request: NextRequest) {
 
     response.cookies.set('jwt', jwtToken, {
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: 'none',
       path: '/',
       secure: process.env.NODE_ENV === 'production',
       maxAge: tokenData.expires_in ?? 3600,
