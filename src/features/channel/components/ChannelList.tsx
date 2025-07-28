@@ -26,7 +26,7 @@ export default async function ChannelList({ title }: { title: string }) {
       res.status === 'fulfilled' ? { data: res.value, handle: channelHandles[idx] } : null
     )
     .filter(Boolean) as { data: YouTubeChannel; handle: string }[];
-  console.log('channelInfos:', channelInfos);
+
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl font-bold">{title}</h2>
