@@ -12,22 +12,22 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const query = `?seed_genres=${genre}&limit=${limit}`;
-
-    const res = await fetch(`https://api.spotify.com/v1/recommendations${query}`, {
+    const params = new URLSearchParams({ seed_genres: genre, limit });
+    const res = await fetch(`https://api.spotify.com/v1/recommendations?${params}`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
 
     if (!res.ok) {
-      throw new Error('Failed to fetch recommendations');
+      const errorData = await res.json();
+      throw new Error(`Failed to fetch recommendations: ${errorData.error.message}`);
     }
 
     const data = await res.json();
     return NextResponse.json(data);
   } catch (err) {
-    const e = err as Error;
-    return NextResponse.json({ error: e.message }, { status: 500 });
+    const message = err instanceof Error ? err.message : String(err);
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

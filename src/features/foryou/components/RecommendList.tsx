@@ -1,4 +1,4 @@
-export default function RecommandList() {
+export default function RecommendList() {
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl font-bold">Recommended for You</h2>
