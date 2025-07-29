@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
+
+import { getBaseUrl, getRedirectUri } from '@/lib/utils/baseUrl';
 import connectToDB from '@/lib/mongo/mongo';
 import { UserModel } from '@/lib/mongo/models/UserModel';
-import jwt from 'jsonwebtoken';
 
 export const runtime = 'nodejs'; // 몽고로 인해 nodejs 런타임 사용
 
@@ -15,13 +17,9 @@ export async function GET(request: NextRequest) {
 
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-  const redirectUri =
-    process.env.NODE_ENV === 'production'
-      ? process.env.SPOTIFY_REDIRECT_URI_PROD
-      : process.env.SPOTIFY_REDIRECT_URI_DEV;
+  const redirectUri = getRedirectUri();
 
-  const baseUrl =
-    process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://127.0.0.1:3000';
+  const baseUrl = getBaseUrl();
 
   if (!baseUrl) {
     console.error('BASE_URL is not defined');

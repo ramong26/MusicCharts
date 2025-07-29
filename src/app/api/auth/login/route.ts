@@ -1,11 +1,10 @@
 import { NextResponse } from 'next/server';
 
+import { getRedirectUri } from '@/lib/utils/baseUrl';
+
 export async function GET() {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
-  const redirectUri =
-    process.env.NODE_ENV === 'production'
-      ? process.env.SPOTIFY_REDIRECT_URI_PROD
-      : process.env.SPOTIFY_REDIRECT_URI_DEV;
+  const redirectUri = getRedirectUri();
 
   const scope = [
     'user-read-private',

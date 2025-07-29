@@ -31,9 +31,6 @@ export default function HeaderMain() {
   useEffect(() => {
     fetch('/api/profile', {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-      },
       credentials: 'include',
       cache: 'no-store',
     })
@@ -115,7 +112,7 @@ export default function HeaderMain() {
             ) : (
               profile && (
                 <div className="cursor-pointer">
-                  <Link href="/" className="text-sm font-semibold">
+                  <Link href="/profile" className="text-sm font-semibold">
                     환영합니다, {profile?.displayName}님!
                   </Link>
                   <button onClick={handleLogout}>로그아웃</button>
