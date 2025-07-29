@@ -13,18 +13,25 @@ export default function ArtistInterview({ artist }: { artist: Artist }) {
   const [offset, setOffset] = useState<number>(0);
   const limit = 5;
 
-  const { data: interviews = [], isLoading } = useQuery({
+  // fetch 아티스트 인터뷰
+  const { data, isLoading } = useQuery({
     queryKey: ['artistInterviews', artist.name, offset],
     queryFn: () => getCombinedInterviews(artist.name, offset, limit),
     placeholderData: (prevData) => prevData,
   });
 
+  const interviews = data?.results ?? [];
+  const totalCount = data?.totalCount ?? 0;
+
+  // 다음 페이지를 미리 가져오기 프리페치
   useEffect(() => {
-    queryClient.prefetchQuery({
-      queryKey: ['artistInterviews', artist.name, offset + limit],
-      queryFn: () => getCombinedInterviews(artist.name, offset + limit, limit),
-    });
-  }, [artist, offset, queryClient]);
+    if (offset + limit < totalCount) {
+      queryClient.prefetchQuery({
+        queryKey: ['artistInterviews', artist.name, offset + limit],
+        queryFn: () => getCombinedInterviews(artist.name, offset + limit, limit),
+      });
+    }
+  }, [artist, offset, queryClient, totalCount]);
 
   return (
     <>
@@ -38,7 +45,12 @@ export default function ArtistInterview({ artist }: { artist: Artist }) {
       >
         이전
       </button>
-      <button onClick={() => setOffset((prev) => prev + limit)}>다음</button>
+      <button
+        disabled={offset + limit >= totalCount}
+        onClick={() => setOffset((prev) => prev + limit)}
+      >
+        다음
+      </button>
     </>
   );
 }
