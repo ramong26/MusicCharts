@@ -6,7 +6,7 @@ export default function Foryou() {
   return (
     <div className="h-screen ">
       <HeaderMain />
-      <main className="flex flex-col mt-[188px] gap-4 h-screen w-[1043px] mx-auto">
+      <main className="flex flex-col mt-[193px] gap-4 h-screen w-[1043px] mx-auto">
         <TodayMusic />
         <RecommandList />
       </main>

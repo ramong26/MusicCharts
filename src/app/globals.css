@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 :root {
   --background: #ffffff;
@@ -22,6 +22,25 @@
 body {
   background: var(--color-white);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: sans-serif, Arial, Helvetica;
   color: black;
+}
+
+/*커스텀 컬러*/
+@layer utilities {
+  .bg-beige-light {
+    background-color: #ede3ce;
+  }
+
+  .hover\:bg-beige-medium:hover {
+    background-color: #d8cbb5;
+  }
+
+  .bg-beige-dark {
+    background-color: #c2b59a;
+  }
+
+  .text-beige-dark {
+    color: #c2b59a;
+  }
 }
