@@ -1,4 +1,4 @@
-import { Album } from '@/shared/types/SpotifyTrack';
+import { Album } from '@/shared/types/spotifyTrack';
 import TrackComments from '@/features/playlist/components/TrackComponent';
 export default function TrackList({ album }: { album: Album }) {
   if (!album) {
@@ -15,11 +15,7 @@ export default function TrackList({ album }: { album: Album }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <TrackComments
-        title={album.name}
-        tracksList={tracksList}
-        className="h-auto"
-      />
+      <TrackComments title={album.name} tracksList={tracksList} className="h-auto" />
     </div>
   );
 }

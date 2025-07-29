@@ -22,7 +22,7 @@
 body {
   background: var(--color-white);
   color: var(--foreground);
-  font-family: sans-serif, Arial, Helvetica;
+  font-family: var(--font-myeongjo), serif;
   color: black;
 }
 
@@ -31,16 +31,41 @@ body {
   .bg-beige-light {
     background-color: #ede3ce;
   }
-
   .hover\:bg-beige-medium:hover {
     background-color: #d8cbb5;
   }
-
   .bg-beige-dark {
     background-color: #c2b59a;
   }
 
+  .text-beige-light {
+    color: #ede3ce;
+  }
+  .text-beige-medium {
+    color: #d8cbb5;
+  }
   .text-beige-dark {
     color: #c2b59a;
+  }
+  .text-beige-deep-dark {
+    color: #a89f8d;
+  }
+
+  .text-gray-light {
+    color: #f5f5f5;
+  }
+  .text-gray-medium {
+    color: #cccccc;
+  }
+  .text-gray-dark {
+    color: #333333;
+  }
+
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
   }
 }

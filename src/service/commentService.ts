@@ -1,19 +1,12 @@
-import type {
-  CreateCommentBody,
-  UpdateCommentBody,
-} from '@/shared/types/api/CreateCommentBody';
-import type { Comment } from '@/shared/types/Comment';
+import type { CreateCommentBody, UpdateCommentBody } from '@/shared/types/api/CreateCommentBody';
+import type { Comment } from '@/shared/types/comment';
 import { checkLoginStatus } from '@/shared/hooks/checkLoginStatus';
 
 const isServer = typeof window === 'undefined';
-const BASE_URL = isServer
-  ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'
-  : '';
+const BASE_URL = isServer ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000' : '';
 
 // POST: 댓글 생성
-const postComments = async (
-  body: CreateCommentBody
-): Promise<Comment | undefined> => {
+const postComments = async (body: CreateCommentBody): Promise<Comment | undefined> => {
   const { isLoggedIn, accessToken } = await checkLoginStatus();
   const { trackId } = body;
   if (!accessToken) {
@@ -24,18 +17,15 @@ const postComments = async (
       console.error('로그인 상태가 아닙니다');
       return;
     }
-    const response = await fetch(
-      `${BASE_URL}/api/comments?trackId=${trackId}`,
-      {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${accessToken}`,
-        },
-        body: JSON.stringify(body),
-      }
-    );
+    const response = await fetch(`${BASE_URL}/api/comments?trackId=${trackId}`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${accessToken}`,
+      },
+      body: JSON.stringify(body),
+    });
     if (!response.ok) throw new Error('댓글 저장 실패');
 
     const savedComment: Comment = await response.json();
@@ -109,9 +99,7 @@ const putComments = async (
 };
 
 // DELETE: 댓글 삭제
-const deleteComments = async (
-  commentId: number | string
-): Promise<void | undefined> => {
+const deleteComments = async (commentId: number | string): Promise<void | undefined> => {
   const { isLoggedIn, accessToken } = await checkLoginStatus();
 
   if (!accessToken) {

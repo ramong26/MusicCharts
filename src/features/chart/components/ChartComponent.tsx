@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { TrackItem } from '@/shared/types/SpotifyTrack';
+import { TrackItem } from '@/shared/types/spotifyTrack';
 
 interface ChartComponentProps {
   tracksList: TrackItem[];
@@ -9,15 +9,9 @@ interface ChartComponentProps {
   className?: string;
 }
 
-export default function ChartComponent({
-  tracksList,
-  title,
-  className = '',
-}: ChartComponentProps) {
+export default function ChartComponent({ tracksList, title, className = '' }: ChartComponentProps) {
   return (
-    <div
-      className={`relative border-3 border-black p-5 mt-10  bg-white w-full ${className}`}
-    >
+    <div className={`relative border-3 border-black p-5 mt-10  bg-white w-full ${className}`}>
       <h2 className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-2 border-2 border-black font-bold text-2xl">
         {title}
       </h2>
@@ -37,9 +31,7 @@ export default function ChartComponent({
             />
           </div>
           <div className="flex flex-col overflow-hidden w-[300px] ">
-            <div className="font-bold text-xl break-words max-w-xs">
-              {item.track.name}
-            </div>
+            <div className="font-bold text-xl break-words max-w-xs">{item.track.name}</div>
             <div className=" max-w-md text-gray-600 break-words">
               {item.track.artists.map((artist) => artist.name).join(', ')}
             </div>

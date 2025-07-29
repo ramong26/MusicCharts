@@ -6,7 +6,7 @@ import SubmitInput from '@/shared/components/SubmitInput';
 import CommentList from '@/features/tracks/components/CommentList';
 
 import { commentsService } from '@/service/commentService';
-import { Comment } from '@/shared/types/Comment';
+import { Comment } from '@/shared/types/comment';
 import { checkLoginStatus } from '@/shared/hooks/checkLoginStatus';
 
 export default function TrackComments({ trackId }: { trackId: string }) {
@@ -51,9 +51,7 @@ export default function TrackComments({ trackId }: { trackId: string }) {
 
       const savedComment: Comment = res as Comment;
 
-      setComments((prev) =>
-        prev.map((c) => (c._id === tempId ? savedComment : c))
-      );
+      setComments((prev) => prev.map((c) => (c._id === tempId ? savedComment : c)));
     } catch (err) {
       console.error('댓글 등록 실패:', err);
       setComments((prev) => prev.filter((c) => c._id !== tempId));
@@ -80,10 +78,7 @@ export default function TrackComments({ trackId }: { trackId: string }) {
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-xl font-semibold">트랙 댓글</h2>
-      <Link
-        href={`/tracks/${trackId}/interview`}
-        className="text-blue-500 hover:underline"
-      >
+      <Link href={`/tracks/${trackId}/interview`} className="text-blue-500 hover:underline">
         인터뷰 페이지로 이동
       </Link>
       <SubmitInput
