@@ -25,7 +25,7 @@ export default function ArtistInterview({ artist }: { artist: Artist }) {
   const totalPages = useMemo(() => {
     return Math.ceil(totalCount / limit);
   }, [totalCount]);
-  // console.log('ArtistInterview 컴포넌트:', interviews, totalCount, totalPages);
+
   // 페이지네이션을 위한 useEffect
   useEffect(() => {
     queryClient.prefetchQuery({

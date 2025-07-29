@@ -14,7 +14,7 @@ export async function getYoutubeTrackIdVideo(trackName: string): Promise<Youtube
     }
 
     const baseUrl =
-      process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
+      process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://127.0.0.1:3000';
 
     const res = await fetch(`${baseUrl}/api/youtube-search?q=${encodeURIComponent(trackName)}`);
 

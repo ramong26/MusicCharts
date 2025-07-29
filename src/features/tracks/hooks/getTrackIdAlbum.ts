@@ -4,7 +4,7 @@ export default async function getTrackIdAlbum(track: Track | null): Promise<Albu
   if (!track?.album?.id) return null;
 
   const baseUrl =
-    process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
+    process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://127.0.0.1:3000';
 
   // 토큰 가져오기
   const tokenRes = await fetch(`${baseUrl}/api/spotify/spotify-token`, {

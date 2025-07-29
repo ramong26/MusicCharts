@@ -2,7 +2,10 @@ import { NextResponse } from 'next/server';
 
 export async function GET() {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
-  const redirectUri = process.env.SPOTIFY_REDIRECT_URI || 'http://127.0.0.1:3000/api/auth/callback';
+  const redirectUri =
+    process.env.NODE_ENV === 'production'
+      ? process.env.SPOTIFY_REDIRECT_URI_PROD
+      : process.env.SPOTIFY_REDIRECT_URI_DEV;
 
   const scope = [
     'user-read-private',

@@ -15,9 +15,18 @@ export async function GET(request: NextRequest) {
 
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-  const redirectUri = process.env.SPOTIFY_REDIRECT_URI || 'http://127.0.0.1:3000/api/auth/callback';
+  const redirectUri =
+    process.env.NODE_ENV === 'production'
+      ? process.env.SPOTIFY_REDIRECT_URI_PROD
+      : process.env.SPOTIFY_REDIRECT_URI_DEV;
+
   const baseUrl =
-    process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
+    process.env.NODE_ENV === 'production' ? process.env.BASE_URL : 'http://127.0.0.1:3000';
+
+  if (!baseUrl) {
+    console.error('BASE_URL is not defined');
+    return NextResponse.json({ error: 'BASE_URL missing' }, { status: 500 });
+  }
 
   if (!clientId || !clientSecret || !redirectUri) {
     console.error('Missing Spotify environment variables');
@@ -102,15 +111,14 @@ export async function GET(request: NextRequest) {
     const jwtToken = jwt.sign(payload, jwtSecret, {
       expiresIn: '1h',
     });
-
     // 리다이렉트 응답 생성 및 쿠키 설정
     const response = NextResponse.redirect(baseUrl);
 
     response.cookies.set('jwt', jwtToken, {
       httpOnly: true,
-      sameSite: 'none',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production' ? true : false,
       maxAge: tokenData.expires_in ?? 3600,
     });
 
