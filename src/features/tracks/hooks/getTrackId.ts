@@ -1,9 +1,8 @@
 import { Track } from '@/shared/types/SpotifyTrack';
+import { getBaseUrl } from '@/lib/utils/baseUrl';
 
 export default async function getTrackId(trackId?: string): Promise<Track> {
-  const baseUrl =
-    process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
-
+  const baseUrl = getBaseUrl();
   const tokenRes = await fetch(`${baseUrl}/api/spotify/spotify-token`, {
     cache: 'no-store',
   });

@@ -1,4 +1,3 @@
-/// eslint-disable-next-line react-hooks/exhaustive-deps
 'use client';
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
@@ -9,8 +8,8 @@ import useUserStore from '@/stores/userStore';
 import HeaderSort from '@/public/image/header-sort.png';
 
 interface SpotifyProfile {
-  name: string;
-  imageUrl?: string;
+  displayName: string;
+  profileImageUrl?: string;
 }
 export default function HeaderMain() {
   const [isScroll, setIsScroll] = useState(false);
@@ -30,7 +29,11 @@ export default function HeaderMain() {
 
   // 로그인 및 프로필 확인
   useEffect(() => {
-    fetch('/api/profile', { credentials: 'include', cache: 'no-store' })
+    fetch('/api/profile', {
+      method: 'GET',
+      credentials: 'include',
+      cache: 'no-store',
+    })
       .then((res) => {
         if (!res.ok) throw new Error('로그인 안 됨');
         return res.json();
@@ -74,16 +77,16 @@ export default function HeaderMain() {
                 href="/profile"
                 className="cursor-pointer text-sm font-semibold  flex items-center"
               >
-                {profile.imageUrl && (
+                {profile.profileImageUrl && (
                   <Image
-                    src={profile.imageUrl}
+                    src={profile.profileImageUrl}
                     alt="Profile Image"
                     width={24}
                     height={24}
                     className="rounded-full mr-2"
                   />
                 )}
-                {profile.name}
+                {profile.displayName}
               </Link>
               <button onClick={handleLogout}>로그아웃</button>
             </div>
@@ -110,7 +113,7 @@ export default function HeaderMain() {
               profile && (
                 <div className="cursor-pointer">
                   <Link href="/profile" className="text-sm font-semibold">
-                    환영합니다, {profile.name}님!
+                    환영합니다, {profile?.displayName}님!
                   </Link>
                   <button onClick={handleLogout}>로그아웃</button>
                 </div>

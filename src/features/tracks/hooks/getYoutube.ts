@@ -2,6 +2,7 @@ import { YoutubeVideo } from '@/features/tracks/types/youtube-video';
 import connectToDB from '@/lib/mongo/mongo';
 import { YoutubeChannel } from '@/lib/mongo/models/YoutubeChannel';
 import { Youtube } from '@/lib/mongo/models/Youtube';
+import { getBaseUrl } from '@/lib/utils/baseUrl';
 // 유튜브 뮤직비디오 가져오기
 export async function getYoutubeTrackIdVideo(trackName: string): Promise<YoutubeVideo[]> {
   try {
@@ -13,9 +14,7 @@ export async function getYoutubeTrackIdVideo(trackName: string): Promise<Youtube
       return cached.videos;
     }
 
-    const baseUrl =
-      process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
-
+    const baseUrl = getBaseUrl();
     const res = await fetch(`${baseUrl}/api/youtube-search?q=${encodeURIComponent(trackName)}`);
 
     if (!res.ok) {

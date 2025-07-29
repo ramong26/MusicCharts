@@ -1,8 +1,11 @@
-export const runtime = 'nodejs'; // 몽고로 인해 nodejs 런타임 사용
 import { NextRequest, NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
+
+import { getBaseUrl, getRedirectUri } from '@/lib/utils/baseUrl';
 import connectToDB from '@/lib/mongo/mongo';
 import { UserModel } from '@/lib/mongo/models/UserModel';
-import jwt from 'jsonwebtoken';
+
+export const runtime = 'nodejs'; // 몽고로 인해 nodejs 런타임 사용
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -14,9 +17,14 @@ export async function GET(request: NextRequest) {
 
   const clientId = process.env.SPOTIFY_CLIENT_ID;
   const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-  const redirectUri = process.env.SPOTIFY_REDIRECT_URI || 'http://127.0.0.1:3000/api/auth/callback';
-  const baseUrl =
-    process.env.BASE_URL || process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:3000';
+  const redirectUri = getRedirectUri();
+
+  const baseUrl = getBaseUrl();
+
+  if (!baseUrl) {
+    console.error('BASE_URL is not defined');
+    return NextResponse.json({ error: 'BASE_URL missing' }, { status: 500 });
+  }
 
   if (!clientId || !clientSecret || !redirectUri) {
     console.error('Missing Spotify environment variables');
@@ -101,15 +109,14 @@ export async function GET(request: NextRequest) {
     const jwtToken = jwt.sign(payload, jwtSecret, {
       expiresIn: '1h',
     });
-
     // 리다이렉트 응답 생성 및 쿠키 설정
     const response = NextResponse.redirect(baseUrl);
 
     response.cookies.set('jwt', jwtToken, {
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
-      secure: process.env.NODE_ENV === 'production',
+      secure: process.env.NODE_ENV === 'production' ? true : false,
       maxAge: tokenData.expires_in ?? 3600,
     });
 

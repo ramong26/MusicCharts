@@ -6,7 +6,9 @@ import { UserModel } from '@/lib/mongo/models/UserModel';
 
 export async function GET(req: NextRequest) {
   // JWT 쿠키 가져오기
+
   const token = req.cookies.get('jwt')?.value;
+
   if (!token) {
     return NextResponse.json({ error: 'JWT not found' }, { status: 401 });
   }
@@ -30,9 +32,6 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     console.error('JWT verification failed:', error);
-    return NextResponse.json(
-      { error: 'Invalid or expired token' },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: 'Invalid or expired token' }, { status: 401 });
   }
 }
