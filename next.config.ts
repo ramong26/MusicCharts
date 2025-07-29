@@ -1,7 +1,3 @@
-//* eslint-disable */
-
-// /* eslint-disable @typescript-eslint/no-unused-vars */
-
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
@@ -23,6 +19,40 @@ const nextConfig: NextConfig = {
         pathname: '/**',
       },
     ],
+  },
+
+  webpack(config) {
+    const fileLoaderRule = config.module?.rules?.find(
+      (rule: object) =>
+        typeof rule === 'object' &&
+        rule !== null &&
+        'test' in rule &&
+        (rule.test as RegExp)?.test?.('.svg')
+    );
+
+    if (fileLoaderRule && typeof fileLoaderRule === 'object') {
+      config.module?.rules?.push(
+        {
+          ...fileLoaderRule,
+          test: /\.svg$/i,
+          resourceQuery: /url/,
+        },
+        {
+          test: /\.svg$/i,
+          issuer: fileLoaderRule.issuer,
+          resourceQuery: { not: [/url/] },
+          use: ['@svgr/webpack'],
+        }
+      );
+
+      if (Array.isArray(fileLoaderRule.exclude)) {
+        fileLoaderRule.exclude.push(/\.svg$/i);
+      } else {
+        fileLoaderRule.exclude = [/\.svg$/i];
+      }
+    }
+
+    return config;
   },
 };
 

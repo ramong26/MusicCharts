@@ -3,13 +3,9 @@ import Image from 'next/image';
 import InterviewList from '@/features/homepage/components/InterviewList';
 
 import { getYoutubeTrackIdVideo } from '@/features/tracks/hooks/getYoutube';
-import { TrackItem } from '@/shared/types/SpotifyTrack';
+import { TrackItem } from '@/shared/types/spotifyTrack';
 
-export default async function ChartTop({
-  tracksList,
-}: {
-  tracksList: TrackItem[];
-}) {
+export default async function ChartTop({ tracksList }: { tracksList: TrackItem[] }) {
   const musicVideo = await getYoutubeTrackIdVideo(
     `${tracksList[0]?.track.artists[0].name} ${tracksList[0]?.track.name} official music video`
   );

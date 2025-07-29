@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaPlay, FaPause } from 'react-icons/fa';
 
-import { Track } from '@/shared/types/SpotifyTrack';
+import { Track } from '@/shared/types/spotifyTrack';
 
 export default function Miniplayer({ track }: { track: Track }) {
   const [paused, setPaused] = useState(true);

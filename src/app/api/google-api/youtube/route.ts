@@ -1,4 +1,4 @@
-import { YouTubeItem } from '@/shared/types/Youtube';
+import { YouTubeItem } from '@/shared/types/youtube';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {

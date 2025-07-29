@@ -1,5 +1,5 @@
 'use client';
-import { Comment } from '@/shared/types/Comment';
+import { Comment } from '@/shared/types/comment';
 import CommentItem from './CommentItem';
 import { commentsService } from '@/service/commentService';
 export default function CommentList({
@@ -28,9 +28,7 @@ export default function CommentList({
       if (!updatedComment) throw new Error('수정 실패');
       setComments((prev) =>
         prev.map((c) =>
-          c._id === commentId
-            ? { ...c, text: newText, updatedAt: new Date().toISOString() }
-            : c
+          c._id === commentId ? { ...c, text: newText, updatedAt: new Date().toISOString() } : c
         )
       );
     } catch (err) {

@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 
-import { Comment } from '@/shared/types/Comment';
+import { Comment } from '@/shared/types/comment';
 import { formatDate } from '@/lib/utils/date';
 import CommentEditInput from './CommentEditInput';
 import useUserStore from '@/stores/userStore';
@@ -22,8 +22,7 @@ export default function CommentItem({ comment, onDelete, onEdit }: Props) {
     setIsEditing(false);
   };
 
-  const commentUserId =
-    typeof comment.userId === 'string' ? comment.userId : comment.userId?._id;
+  const commentUserId = typeof comment.userId === 'string' ? comment.userId : comment.userId?._id;
 
   const isMyComment = user?._id === commentUserId;
   return (
@@ -33,8 +32,7 @@ export default function CommentItem({ comment, onDelete, onEdit }: Props) {
           width={32}
           height={32}
           src={
-            typeof comment.userId === 'object' &&
-            comment.userId?.profileImageUrl
+            typeof comment.userId === 'object' && comment.userId?.profileImageUrl
               ? comment.userId.profileImageUrl
               : user?.profileImageUrl || '/default-profile.png'
           }
@@ -42,9 +40,7 @@ export default function CommentItem({ comment, onDelete, onEdit }: Props) {
           className="w-8 h-8 rounded-full"
         />
         <span className="font-semibold">
-          {typeof comment.userId === 'string'
-            ? undefined
-            : comment?.userId?.displayName}
+          {typeof comment.userId === 'string' ? undefined : comment?.userId?.displayName}
         </span>
       </div>
 

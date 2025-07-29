@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { TrackItem } from '@/shared/types/SpotifyTrack';
+import { TrackItem } from '@/shared/types/spotifyTrack';
 
 export default function ChartTop5({ tracksList }: { tracksList: TrackItem[] }) {
   return (
@@ -35,9 +35,7 @@ export default function ChartTop5({ tracksList }: { tracksList: TrackItem[] }) {
                   </div>
                   <div className="text-lg">{track?.track?.name}</div>
                   <div className="text-sm">
-                    {track.track.artists
-                      .map((artist) => artist.name)
-                      .join(', ')}
+                    {track.track.artists.map((artist) => artist.name).join(', ')}
                   </div>
                 </div>
               </div>
