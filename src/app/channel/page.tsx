@@ -7,7 +7,7 @@ export default function ChannelPage() {
       <HeaderMain />
       <main className="flex flex-col mt-[188px] gap-4 h-[617px] w-[1043px] mx-auto">
         <YoutubeChannels />
-        <div className="flex flex-col gap-10 w-full">
+        <div className="flex flex-col gap-10 w-full pb-[100px]">
           {['믹스 채널 추천', 'Jazz 채널 추천', 'Hiphop 채널 추천', 'Rock 채널 추천'].map(
             (title) => (
               <ChannelList key={title} title={title} />

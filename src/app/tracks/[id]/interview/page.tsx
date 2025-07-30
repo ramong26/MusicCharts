@@ -25,7 +25,7 @@ export default async function InterviewPage({ params }: PageProps) {
   return (
     <div className="h-screen ">
       <HeaderMain />
-      <main className="flex mt-[188px] gap-4 h-fit w-[1043px] mx-auto ">
+      <main className="flex mt-[188px] gap-4 h-fit w-[1043px] items-center justify-center mx-auto">
         <div className="flex flex-col gap-10 ">
           <ArtistProfile artist={artist} />
           <ArtistInterview artist={artist} />

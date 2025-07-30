@@ -8,7 +8,6 @@ export default async function ChannelList({ title }: { title: string }) {
     return null;
   }
 
-  // 여기 해야함
   const channelHandleMap: Record<string, string[]> = {
     '믹스 채널 추천': ['RAPHAEL_MIXES', 'retapestudios', 'HumanoStudios'],
     'Jazz 채널 추천': ['ICYFOG', 'midnightradio2', 'RetroCafeRadio'],
