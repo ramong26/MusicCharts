@@ -11,13 +11,19 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
   color?: string;
 }
 
-export function Icon({ name, size = 24, className, color = 'currentColor', ...props }: IconProps) {
+export default function IconsComponet({
+  name,
+  size = 24,
+  className,
+  color = 'currentColor',
+  ...props
+}: IconProps) {
   if (name === 'NONE') return null;
 
   const IconComponent = svg[name];
 
   if (!IconComponent) {
-    console.warn(`Icon "${name}" not found`);
+    console.error(`Icon "${name}" not found`);
     return null;
   }
 
