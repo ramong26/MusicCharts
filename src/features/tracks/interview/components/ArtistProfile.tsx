@@ -7,7 +7,7 @@ export default function ArtistProfile({ artist }: { artist: Artist | null }) {
   const artistName = artist?.name;
 
   return (
-    <div className="flex flex-col items-center justify-center bg-[#f5f4f3] p-8 rounded-lg shadow-md font-serif text-gray-900 select-none">
+    <div className="flex min-w-[1043px] flex-col items-center justify-center bg-[#f5f4f3] p-8 rounded-lg shadow-md font-serif text-gray-900 select-none">
       <div className="flex flex-col items-center mb-6">
         <div className="overflow-hidden shadow-lg border-4 border-[#E0DCCF] mb-4 w-[300px] h-[300px]">
           <Image

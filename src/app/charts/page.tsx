@@ -18,7 +18,7 @@ export default async function Charts() {
   return (
     <div className="h-screen ">
       <HeaderMain />
-      <div className="w-[1043px] h-[630px] mx-auto mt-[300px] ">
+      <div className="w-[1043px]  mx-auto mt-[300px] ">
         <ChartTop tracksList={tracksList} />
         <div className="flex items-center justify-between  w-full gap-10">
           <ChartComponent tracksList={koraTracksList} title="한국 Top 50" />

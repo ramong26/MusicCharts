@@ -5,19 +5,13 @@ export async function GET(request: Request) {
   const q = searchParams.get('q');
 
   if (!q) {
-    return NextResponse.json(
-      { error: 'Query parameter q is required' },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: 'Query parameter q is required' }, { status: 400 });
   }
 
   try {
     const apiKey = process.env.GOOGLE_API_KEY;
     if (!apiKey) {
-      return NextResponse.json(
-        { error: 'YouTube API key is missing' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'YouTube API key is missing' }, { status: 500 });
     }
 
     const response = await fetch(
@@ -27,19 +21,14 @@ export async function GET(request: Request) {
     );
 
     if (!response.ok) {
-      return NextResponse.json(
-        { error: 'YouTube API request failed' },
-        { status: 500 }
-      );
+      return NextResponse.json({ error: 'YouTube API request failed' }, { status: 500 });
     }
 
     const data = await response.json();
+    console.log('YouTube search data:', data);
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error fetching data from YouTube API:', error);
-    return NextResponse.json(
-      { error: 'Failed to fetch data from YouTube API' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Failed to fetch data from YouTube API' }, { status: 500 });
   }
 }

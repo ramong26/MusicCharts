@@ -8,13 +8,13 @@ const ONE_HOUR = 1000 * 60 * 60;
 export async function getTrackList({
   playlistId,
   offset = 0,
-  limit = 10,
+  limit = 50,
 }: {
   playlistId?: string;
   offset?: number;
   limit?: number;
 } = {}) {
-  const finalPlaylistId = playlistId || '2fmFoUa7WNxIfvUg2jghxD';
+  const finalPlaylistId = playlistId || '1Gg5BI7b5xljyHnGXXrX0E';
   const tracksList = await getTopTrackPlaylist({
     playlistId: finalPlaylistId,
     offset,
