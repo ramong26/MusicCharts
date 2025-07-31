@@ -1,7 +1,7 @@
 import HeaderMain from '@/shared/components/HeaderMain';
-import TodayMusic from '@/features/foryou/components/TodayMusic';
+import TodayMusic from '@/features/recommend/components/TodayMusic';
 
-export default function Foryou() {
+export default function Recommend() {
   return (
     <div className="h-screen ">
       <HeaderMain />

@@ -6,7 +6,6 @@ interface RecommendCardProps {
 }
 
 export default function RecommendCard({ track }: RecommendCardProps) {
-  console.log('Track in RecommendCard:', track);
   const actualTrack = track.track;
   return (
     <div className="bg-white dark:bg-neutral-900 shadow-md rounded-2xl overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer">

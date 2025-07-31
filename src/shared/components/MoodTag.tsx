@@ -20,7 +20,7 @@ export default function MoodTag({ tag, onClick }: MoodTagProps) {
     HipHop,
     Jazz,
     Pop,
-    'K-Pop': KPop,
+    KPop,
     Rock,
     Classical,
   };
@@ -35,7 +35,7 @@ export default function MoodTag({ tag, onClick }: MoodTagProps) {
             src={tagImages[tag]}
             alt={tag}
             width={300}
-            height={150}
+            height={200}
             priority
             className="w-full h-full object-cover rounded"
           />
