@@ -20,7 +20,7 @@ export default async function Charts() {
       <HeaderMain />
       <div className="w-[1043px]  mx-auto mt-[300px] ">
         <ChartTop tracksList={tracksList} />
-        <div className="flex items-center justify-between  w-full gap-10">
+        <div className="flex items-center justify-between  w-full gap-10 pb-10">
           <ChartComponent tracksList={koraTracksList} title="한국 Top 50" />
           <ChartComponent tracksList={usaTracksList} title="미국 Top 50" />
         </div>

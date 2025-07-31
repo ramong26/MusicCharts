@@ -2,14 +2,14 @@
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { FaPlay, FaPause } from 'react-icons/fa';
-
-import { Track } from '@/shared/types/spotifyTrack';
+import { Track } from '@/shared/types/SpotifyTrack';
 
 export default function Miniplayer({ track }: { track: Track }) {
   const [paused, setPaused] = useState(true);
   const [currentTrack, setCurrentTrack] = useState(track);
   const [player, setPlayer] = useState<Spotify.Player | null>(null);
 
+  // 리펙토링 할 필요가 있음
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (!token) {
@@ -62,7 +62,6 @@ export default function Miniplayer({ track }: { track: Track }) {
       };
     };
 
-    // 클린업 함수
     return () => {
       document.body.removeChild(script);
     };
@@ -97,28 +96,29 @@ export default function Miniplayer({ track }: { track: Track }) {
       player.removeListener('ready', onReady);
     };
   }, [track, player]);
+
   return (
     <div className="w-full bg-black text-white p-4 flex items-center justify-between">
       <div className="flex items-center">
         <Image
           src={currentTrack?.album?.images[1]?.url}
           alt="Album Art"
-          className="w-12 h-12  mr-4"
-          width={48}
-          height={48}
+          className="mr-4"
+          width={50}
+          height={50}
         />
-        <div>
-          <h3 className="text-lg font-semibold">{currentTrack?.name}</h3>
-          <p className="text-sm text-gray-400">{currentTrack?.artists[0]?.name}</p>
+        <div className="flex flex-row items-center space-x-2 justify-center gap-5">
+          <h3 className="text-2xl font-semibold">{currentTrack?.name}</h3>
+          <p className="text-xl text-gray-400">{currentTrack?.artists[0]?.name}</p>
         </div>
       </div>
 
       <div className="flex items-center space-x-4">
         <button
           onClick={() => player?.togglePlay()}
-          className="text-white bg-green-500 p-2 rounded-full hover:bg-green-600"
+          className="w-12 h-12 flex items-center justify-center text-white bg-green-500 p-2 rounded-full hover:bg-green-600"
         >
-          {paused ? <FaPlay /> : <FaPause />}
+          {paused ? <FaPlay className="w-6 h-6" /> : <FaPause className="w-6 h-6" />}
         </button>
       </div>
     </div>
