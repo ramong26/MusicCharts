@@ -2,7 +2,7 @@ import connectToDB from '@/lib/mongo/mongo';
 import { YoutubeChannel } from '@/lib/mongo/models/YoutubeChannel';
 import { Youtube } from '@/lib/mongo/models/Youtube';
 import { getBaseUrl } from '@/lib/utils/baseUrl';
-
+import { YouTubeItem } from '@/shared/types/youtube';
 // 유튜브 뮤직비디오 가져오기
 export async function getYoutubeTrackIdVideo(trackName: string) {
   try {
@@ -11,7 +11,6 @@ export async function getYoutubeTrackIdVideo(trackName: string) {
     const cached = await Youtube.findOne({ trackName });
 
     if (cached) {
-      console.log('getYoutubeTrackIdVideo() cached:', cached);
       return cached.videos;
     }
 
@@ -23,12 +22,11 @@ export async function getYoutubeTrackIdVideo(trackName: string) {
     }
 
     const data = await res.json();
-    const videos = data.items.map((item: any) => ({
-      videoId: item.id.videoId,
-      title: item.snippet.title,
-      thumbnailUrl: item.snippet.thumbnails.high.url,
+    const videos = data.items.map((item: YouTubeItem) => ({
+      videoId: item?.id.videoId,
+      title: item?.snippet.title,
+      thumbnailUrl: item?.snippet.thumbnails.high.url,
     }));
-    console.log('getYoutubeTrackIdVideo() videos:', videos);
     if (videos.length === 0) {
       throw new Error('비디오를 찾을 수 없습니다');
     }
