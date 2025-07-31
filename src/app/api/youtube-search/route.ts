@@ -25,6 +25,7 @@ export async function GET(request: Request) {
     }
 
     const data = await response.json();
+    console.log('YouTube search data:', data);
     return NextResponse.json(data);
   } catch (error) {
     console.error('Error fetching data from YouTube API:', error);
