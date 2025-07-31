@@ -1,4 +1,4 @@
-import { Artist } from '@/shared/types/spotifyTrack';
+import { Artist } from '@/shared/types/SpotifyTrack';
 import { getSpotifyAccessToken } from '@/lib/spotify/spotifyTokenManager';
 
 export default async function getArtist(artistId?: string): Promise<Artist> {

@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 
 import { getTopWikiTitle, fetchWikiSummary } from '@/features/tracks/hooks/fetchWikiSummary';
 import useTranslate from '@/shared/hooks/useTranslate';
-
 import { Album } from '@/shared/types/spotifyTrack';
 
 export default function TrackDescription({ album }: { album: Album }) {
@@ -12,6 +11,7 @@ export default function TrackDescription({ album }: { album: Album }) {
   const [loading, setLoading] = useState(true);
   const { translateText } = useTranslate();
 
+  // 위키 정보 가져오기
   useEffect(() => {
     const fetchWikiInfo = async () => {
       const searchQuery = [album.name, album.artists[0].name, album.type].filter(Boolean).join(' ');

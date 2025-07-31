@@ -1,34 +1,46 @@
-'use client';
-
 import { useEffect, useState } from 'react';
-import { MUSIC_GENRES } from '@/shared/constants/musicGenres';
 
-export default function RecommendList({ tag }: { tag?: string }) {
-  const [recommendations, setRecommendations] = useState([]);
+import RecommendCard from '@/features/foryou/components/RecommendCard';
+import { getTrackList } from '@/shared/hooks/getTrackList';
+import { TrackItem } from '@/shared/types/SpotifyTrack';
+interface MoodTagProps {
+  tag: string;
+}
 
+export default function RecommendList({ tag }: MoodTagProps) {
+  const [tracks, setTracks] = useState<TrackItem[]>([]);
+  const moodTagMap: Record<string, string> = {
+    Chill: '5oInhZHEhRY0APnViqHEfn',
+    HipHop: '5oInhZHEhRY0APnViqHEfn',
+    Jazz: '5oInhZHEhRY0APnViqHEfn',
+    Pop: '5oInhZHEhRY0APnViqHEfn',
+    KPop: '5oInhZHEhRY0APnViqHEfn',
+    Rock: '5oInhZHEhRY0APnViqHEfn',
+    Classical: '5oInhZHEhRY0APnViqHEfn',
+  };
   useEffect(() => {
-    async function fetchRecommendations() {
-      try {
-        const response = await fetch(`/api/track-view/track-get`);
-        if (!response.ok) {
-          throw new Error('Failed to fetch recommendations');
-        }
-        const data = await response.json();
-        setRecommendations(data);
-      } catch (error) {
-        console.error('Error fetching recommendations:', error);
-      }
-    }
+    const playlistId = moodTagMap[tag];
+    if (!playlistId) return;
 
-    fetchRecommendations();
+    const fetchTracks = async () => {
+      const res = await getTrackList({ playlistId });
+      console.log('Fetched tracks:', res);
+      setTracks(res);
+    };
+
+    fetchTracks();
   }, [tag]);
 
-  console.log('Recommendations:', recommendations);
   return (
     <div className="flex flex-col gap-4">
       <h2 className="text-2xl font-bold">Recommended for You</h2>
-      <p className="text-gray-600">위 카드를 클릭하면 추천 리스트를 볼 수 있어요!</p>
-      {/* 리스트 출력 추가 */}
+      <p className="text-gray-600">Explore tracks based on your listening habits.</p>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-4">
+        {tracks.map((track, index) => (
+          <RecommendCard key={index} track={track} />
+        ))}
+      </div>
     </div>
   );
 }
