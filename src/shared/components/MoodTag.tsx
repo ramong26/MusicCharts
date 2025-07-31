@@ -11,27 +11,31 @@ import Classical from '@/public/image/classical-tag.jpg';
 
 interface MoodTagProps {
   tag: string;
+  onClick?: () => void;
 }
 
-export default function MoodTag({ tag }: MoodTagProps) {
+export default function MoodTag({ tag, onClick }: MoodTagProps) {
   const tagImages: Record<string, StaticImageData> = {
     Chill,
     HipHop,
     Jazz,
     Pop,
-    'K-Pop': KPop,
+    KPop,
     Rock,
     Classical,
   };
   return (
-    <div className="flex items-center justify-center flex-col w-fit h-fit cursor-pointer">
+    <div
+      className="flex items-center justify-center flex-col w-fit h-fit cursor-pointer"
+      onClick={onClick}
+    >
       <div className="pt-4 border-t-2 border-gray-dark hover:border-[#cccccc] transition-colors group">
         <div className="group w-[300px] h-[150px]  bg-beige-light hover:bg-beige-medium transition-colors rounded">
           <Image
             src={tagImages[tag]}
             alt={tag}
             width={300}
-            height={150}
+            height={200}
             priority
             className="w-full h-full object-cover rounded"
           />

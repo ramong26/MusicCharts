@@ -1,14 +1,12 @@
 import HeaderMain from '@/shared/components/HeaderMain';
-import TodayMusic from '@/features/foryou/components/TodayMusic';
-import RecommandList from '@/features/foryou/components/RecommendList';
+import TodayMusic from '@/features/recommend/components/TodayMusic';
 
-export default function Foryou() {
+export default function Recommend() {
   return (
     <div className="h-screen ">
       <HeaderMain />
       <main className="flex flex-col mt-[200px] gap-4 h-screen w-[1043px] mx-auto">
         <TodayMusic />
-        <RecommandList />
       </main>
     </div>
   );

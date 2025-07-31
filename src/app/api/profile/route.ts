@@ -5,8 +5,6 @@ import connectToDB from '@/lib/mongo/mongo';
 import { UserModel } from '@/lib/mongo/models/UserModel';
 
 export async function GET(req: NextRequest) {
-  // JWT 쿠키 가져오기
-
   const token = req.cookies.get('jwt')?.value;
 
   if (!token) {

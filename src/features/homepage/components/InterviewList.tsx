@@ -28,7 +28,7 @@ export default async function InterviewList({
     });
   return (
     <div className={`pt-6 px-6  border-2 border-black ${className}`}>
-      <h1 className="text-2xl font-semibold mb-6 text-slate-700 text-center">Latest Interviews</h1>
+      <h1 className="text-4xl font-extrabold mb-6 text-black text-center">Latest Interviews</h1>
       <ul>
         {sortedInterviews.slice(0, slice).map((interview) => (
           <li key={interview.link} className="p-4  border-t border-black">

@@ -1,5 +1,5 @@
 import type { CreateCommentBody, UpdateCommentBody } from '@/shared/types/api/CreateCommentBody';
-import type { Comment } from '@/shared/types/comment';
+import type { Comment } from '@/shared/types/Comment';
 import { checkLoginStatus } from '@/shared/hooks/checkLoginStatus';
 
 const isServer = typeof window === 'undefined';
