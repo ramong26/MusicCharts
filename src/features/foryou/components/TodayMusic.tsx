@@ -1,13 +1,15 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
+import RecommandList from '@/features/foryou/components/RecommendList';
 import useUserStore from '@/stores/userStore';
 import MoodTag from '@/shared/components/MoodTag';
 import { Icon } from '@/shared/components/IconsComponet';
 
 export default function TodayMusic() {
   const moodTagRef = useRef<HTMLDivElement>(null);
+  const [choicedTag, setChoicedTag] = useState<string>('Chill');
   const { user } = useUserStore();
   const isLoggedIn = !!user;
 
@@ -32,6 +34,10 @@ export default function TodayMusic() {
       });
     }
   };
+
+  const handleTagClick = (tag: string) => {
+    setChoicedTag(tag);
+  };
   return (
     <>
       {!isLoggedIn ? (
@@ -48,7 +54,7 @@ export default function TodayMusic() {
         </p>
       )}
       <div className="flex items-center justify-between flex-row">
-        <span className="text-3xl font-semibold ">오늘 이 음악 어때?</span>
+        <span className="text-3xl font-semibold ">오늘은 이 음악 어때요? 유명한 곡들이에요!</span>
         <div className="flex items-center justify-center gap-2">
           <Icon
             name="ArrowButton"
@@ -70,10 +76,11 @@ export default function TodayMusic() {
       <div>
         <div className="flex gap-4 overflow-auto scrollbar-hide" ref={moodTagRef}>
           {moodTags.map((tag) => (
-            <MoodTag key={tag} tag={tag} />
+            <MoodTag key={tag} tag={tag} onClick={() => handleTagClick(tag)} />
           ))}
         </div>
       </div>
+      <RecommandList tag={choicedTag} />
     </>
   );
 }

@@ -3,7 +3,7 @@ export const checkLoginStatus = async (): Promise<{
   accessToken?: string;
 }> => {
   try {
-    const response = await fetch('/api/cookie', {
+    const response = await fetch(`/api/cookie`, {
       method: 'GET',
       credentials: 'include',
     });
