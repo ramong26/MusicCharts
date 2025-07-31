@@ -14,11 +14,11 @@ export default function ChartTop5({ tracksList }: { tracksList: TrackItem[] }) {
       </div>
 
       <div className="flex h-[270px] bg-[#ffffff] border-2 border-[#000000]">
-        <div className="w-[960px] mx-auto flex items-center justify-between ">
+        <div className="w-[1000px] mx-auto flex items-center justify-between ">
           {tracksList.slice(0, 5).map((track, index) => (
             <Link key={track.track.id} href={`/tracks/${track.track.id}`}>
               <div
-                className={`flex flex-col items-center gap-[10px] cursor-pointer pr-4 ${
+                className={`w-[150px] flex flex-col items-center gap-[10px] cursor-pointer pr-3 ${
                   index !== 4 ? 'border-r-[1px] border-[#000000]' : ''
                 }`}
               >
@@ -34,7 +34,7 @@ export default function ChartTop5({ tracksList }: { tracksList: TrackItem[] }) {
                     {index + 1}
                   </div>
                   <div className="text-lg">{track?.track?.name}</div>
-                  <div className="text-sm">
+                  <div className="text-sm truncate max-w-[140px] text-center">
                     {track.track.artists.map((artist) => artist.name).join(', ')}
                   </div>
                 </div>

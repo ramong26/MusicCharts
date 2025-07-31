@@ -1,3 +1,4 @@
+// 클라이언트 측에서 Spotify API 토큰을 관리
 import { getBaseUrl } from '@/lib/utils/baseUrl';
 let cachedToken: string | null = null;
 

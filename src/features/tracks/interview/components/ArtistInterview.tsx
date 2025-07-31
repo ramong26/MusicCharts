@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import ArtistInterviewComponent from '@/features/tracks/interview/components/ArtistInterviewComponent';
 
-import { Artist } from '@/shared/types/spotifyTrack';
+import { Artist } from '@/shared/types/SpotifyTrack';
 import { getCombinedInterviews } from '@/shared/hooks/searchInterviews';
 
 export default function ArtistInterview({ artist }: { artist: Artist }) {
@@ -39,18 +39,25 @@ export default function ArtistInterview({ artist }: { artist: Artist }) {
       {interviews.map((interview) => (
         <ArtistInterviewComponent key={interview.link} artistInterview={interview} />
       ))}
-      <button
-        disabled={offset === 0}
-        onClick={() => setOffset((prev) => Math.max(prev - limit, 0))}
-      >
-        이전
-      </button>
-      <button
-        disabled={offset + limit >= totalCount}
-        onClick={() => setOffset((prev) => prev + limit)}
-      >
-        다음
-      </button>
+      <div className="flex pb-10 justify-center items-center">
+        <button
+          className="cursor-pointer text-black"
+          disabled={offset === 0}
+          onClick={() => setOffset((prev) => Math.max(prev - limit, 0))}
+        >
+          이전
+        </button>
+        <span className="mx-4">
+          {Math.ceil((offset + 1) / limit)} / {Math.ceil(totalCount / limit)}
+        </span>
+        <button
+          className="cursor-pointer text-black "
+          disabled={offset + limit >= totalCount}
+          onClick={() => setOffset((prev) => prev + limit)}
+        >
+          다음
+        </button>
+      </div>
     </>
   );
 }

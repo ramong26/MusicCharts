@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { TrackItem } from '@/shared/types/spotifyTrack';
+import { TrackItem } from '@/shared/types/SpotifyTrack';
 
 interface ChartComponentProps {
   tracksList: TrackItem[];
@@ -11,7 +11,9 @@ interface ChartComponentProps {
 
 export default function ChartComponent({ tracksList, title, className = '' }: ChartComponentProps) {
   return (
-    <div className={`relative border-3 border-black p-5 mt-10  bg-white w-full ${className}`}>
+    <div
+      className={`relative border-3 min-h-[6664px] border-black p-5 mt-10  bg-white w-full ${className} `}
+    >
       <h2 className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-2 border-2 border-black font-bold text-2xl">
         {title}
       </h2>
