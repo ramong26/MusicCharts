@@ -37,11 +37,12 @@ export default function RecommendList({ tag }: MoodTagProps) {
 
   return (
     <div className="flex flex-col gap-4 pb-10">
-      <div className="text-2xl font-bold">
-        <span>Recommended for You</span>
-        <span>{tag}</span>
+
+      <div className="text-2xl font-bold ">
+        <span className="inline-block mx-2">Recommended for You</span>
+        <span className="text-[#c2b59a] text-3xl">{tag}</span>
       </div>
-      <p className="text-gray-600">Explore tracks based on your listening habits.</p>
+
 
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
         {tracks.map((track, index) => (

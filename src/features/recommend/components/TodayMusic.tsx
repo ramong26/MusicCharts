@@ -5,7 +5,10 @@ import { useRef, useState } from 'react';
 import RecommandList from '@/features/recommend/components/RecommendList';
 import useUserStore from '@/stores/userStore';
 import MoodTag from '@/shared/components/MoodTag';
-import { Icon } from '@/shared/components/IconsComponet';
+
+import IconsComponet from '@/shared/components/IconsComponet';
+import RecommandList from '@/features/foryou/components/RecommendList';
+
 
 export default function TodayMusic() {
   const moodTagRef = useRef<HTMLDivElement>(null);
@@ -19,7 +22,9 @@ export default function TodayMusic() {
   const handleArrowClick = (direction: 'left' | 'right') => {
     if (!moodTagRef.current) return;
 
-    const scrollAmount = 1000;
+
+    const scrollAmount = 600;
+
     const currentScroll = moodTagRef.current.scrollLeft;
 
     if (direction === 'left') {
@@ -56,18 +61,18 @@ export default function TodayMusic() {
       <div className="flex items-center justify-between flex-row">
         <span className="text-3xl font-semibold ">오늘은 이 음악 어때요? </span>
         <div className="flex items-center justify-center gap-2">
-          <Icon
+
+          <IconsComponet
             name="ArrowButton"
             size={40}
-            className="origin-center transform translate-y-[-3px] cursor-pointer hover:scale-110 transition-all text-center flex items-center justify-center text-black hover:text-[#cccccc]"
-            color="currentColor"
+            className="origin-center transform translate-y-[-3px] cursor-pointer hover:scale-110  transition-all text-center flex items-center justify-center text-black hover:text-[#cccccc]"
             onClick={() => handleArrowClick('left')}
           />
-          <Icon
+          <IconsComponet
             name="ArrowButton"
             size={40}
             className="rotate-180 transform cursor-pointer hover:scale-110 transition-all flex items-center justify-center text-black hover:text-[#cccccc]"
-            color="currentColor"
+
             onClick={() => handleArrowClick('right')}
           />
         </div>

@@ -9,7 +9,9 @@ export async function GET() {
       Authorization: `Basic ${auth}`,
       'Content-Type': 'application/x-www-form-urlencoded',
     },
-    body: 'grant_type=client_credentials',
+    body: new URLSearchParams({
+      grant_type: 'client_credentials',
+    }),
   });
 
   const data = await tokenRes.json();
