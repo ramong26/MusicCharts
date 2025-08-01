@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { getYoutubeChannelInfo } from '@/features/tracks/hooks/getYoutube';
+import { getYoutubeChannelInfo } from '@/features/tracks/hooks/getYoutubeMongo';
 
 export default async function YoutubeChannels() {
   const channelHandles = [

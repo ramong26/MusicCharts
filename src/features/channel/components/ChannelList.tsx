@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import { YouTubeChannel } from '@/shared/types/Youtube';
-import { getYoutubeChannelInfo } from '@/features/tracks/hooks/getYoutube';
+import { getYoutubeChannelInfo } from '@/features/tracks/hooks/getYoutubeMongo';
 
 export default async function ChannelList({ title }: { title: string }) {
   if (!title) {

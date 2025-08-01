@@ -1,6 +1,6 @@
 export const checkLoginStatus = async (): Promise<{
   isLoggedIn: boolean;
-  accessToken?: string;
+  accessToken: string;
 }> => {
   try {
     const response = await fetch(`/api/cookie`, {
@@ -9,7 +9,7 @@ export const checkLoginStatus = async (): Promise<{
     });
 
     if (!response.ok) {
-      return { isLoggedIn: false };
+      return { isLoggedIn: false, accessToken: '' };
     }
 
     const data = await response.json();
@@ -19,6 +19,6 @@ export const checkLoginStatus = async (): Promise<{
     };
   } catch (error) {
     console.error('Error checking login status:', error);
-    return { isLoggedIn: false };
+    return { isLoggedIn: false, accessToken: '' };
   }
 };
