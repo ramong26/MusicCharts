@@ -8,7 +8,7 @@ import YoutubePlaylist from '@/features/homepage/components/YoutubePlaylist';
 import { getTrackList } from '@/shared/hooks/getTrackList';
 
 export default async function HomePage() {
-  const tracksList = await getTrackList();
+  const tracksList = await getTrackList({ playlistId: '1PcB3QM5sGbzFU5D9CbEGB' });
 
   return (
     <div className="h-screen ">

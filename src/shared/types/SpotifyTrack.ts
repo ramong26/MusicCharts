@@ -44,4 +44,14 @@ export interface TrackId {
   artists: Artist[];
   name: string;
   id: string;
+  album: {
+    images: Images[];
+  };
+  external_urls: {
+    spotify: string;
+  };
+  duration_ms: number;
+  explicit: boolean;
+  popularity: number;
+  type: string;
 }

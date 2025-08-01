@@ -5,9 +5,7 @@ import ChartComponent from '@/features/chart/components/ChartComponent';
 import { getTrackList } from '@/shared/hooks/getTrackList';
 
 export default async function Charts() {
-  // const playlistId = "2fmFoUa7WNxIfvUg2jghxD";
-
-  const tracksList = await getTrackList();
+  const tracksList = await getTrackList({ playlistId: '1PcB3QM5sGbzFU5D9CbEGB' });
   const koraTracksList = await getTrackList({
     playlistId: '1Gg5BI7b5xljyHnGXXrX0E',
   });

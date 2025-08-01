@@ -12,14 +12,13 @@ export default function ChartTop5({ tracksList }: { tracksList: TrackItem[] }) {
           <div className="cursor-pointer">Go Charts</div>
         </Link>
       </div>
-
-      <div className="flex h-[270px] bg-[#ffffff] border-2 border-[#000000]">
-        <div className="w-[1000px] mx-auto flex items-center justify-between ">
+      <div className="flex h-[270px] w-full px-[4px] pt-[15px] bg-[#ffffff] border-2 border-[#000000]">
+        <div className="w-full flex">
           {tracksList.slice(0, 5).map((track, index) => (
-            <Link key={track.track.id} href={`/tracks/${track.track.id}`}>
+            <Link key={track.track.id} href={`/tracks/${track.track.id}`} className="w-1/5">
               <div
-                className={`w-[150px] flex flex-col items-center gap-[10px] cursor-pointer pr-3 ${
-                  index !== 4 ? 'border-r-[1px] border-[#000000]' : ''
+                className={`flex flex-col items-center gap-[10px] cursor-pointer px-2 ${
+                  index !== 4 ? 'border-r border-[#000000]' : ''
                 }`}
               >
                 <Image
