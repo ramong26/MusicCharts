@@ -3,14 +3,14 @@ import './globals.css';
 import QueryProvider from './providers/QueryProvider';
 import { Playfair_Display, Nanum_Myeongjo } from 'next/font/google';
 
-export const playfair = Playfair_Display({
+const playfair = Playfair_Display({
   subsets: ['latin'],
   weight: ['400', '700', '800'],
   variable: '--font-playfair',
   display: 'swap',
 });
 
-export const myeongjo = Nanum_Myeongjo({
+const myeongjo = Nanum_Myeongjo({
   subsets: ['latin'],
   weight: ['400', '700', '800'],
   variable: '--font-myeongjo',
