@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaPlay, FaPause } from 'react-icons/fa';
 
 import { Track } from '@/shared/types/SpotifyTrack';
@@ -20,7 +20,7 @@ export default function Miniplayer({ track }: { track: Track }) {
       return;
     }
 
-    if (!window.Spotify) {
+    if (!window.Spotify && !document.getElementById('spotify-sdk')) {
       const script = document.createElement('script');
       script.src = 'https://sdk.scdn.co/spotify-player.js';
       script.async = true;
@@ -69,6 +69,13 @@ export default function Miniplayer({ track }: { track: Track }) {
     }
   };
 
+  useEffect(() => {
+    return () => {
+      if (player) {
+        player.disconnect();
+      }
+    };
+  }, [player]);
   return (
     <div className="w-full bg-black text-white p-4 flex items-center justify-between">
       <div className="flex items-center">

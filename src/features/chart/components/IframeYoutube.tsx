@@ -17,7 +17,10 @@ export default function IframeYoutube({ tracksList }: Props) {
     async function fetchVideo() {
       if (!tracksList || tracksList.length === 0) return;
 
-      const query = `${tracksList[0].track.artists[0].name} ${tracksList[0].track.name} official music video`;
+      const getQuery = (trackItem: TrackItem) =>
+        `${trackItem.track.artists[0].name} ${trackItem.track.name} official music video`;
+      const query = getQuery(tracksList[0]);
+
       const searchResults = await getYoutubeTrackFetchVideo(query);
       if (!searchResults || searchResults.length === 0) {
         setError(true);
@@ -48,6 +51,9 @@ export default function IframeYoutube({ tracksList }: Props) {
   }, [tracksList]);
 
   if (error || !videoId) {
+    if (!tracksList || tracksList.length === 0) {
+      return <div>⚠️ 트랙 정보가 없습니다.</div>;
+    }
     return (
       <div>
         ⚠️ 유튜브에서 영상이 재생되지 않습니다. <br />

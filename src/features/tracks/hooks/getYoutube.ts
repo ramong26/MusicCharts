@@ -7,7 +7,7 @@ export async function getYoutubeTrackFetchVideo(trackName: string) {
 
   if (!res.ok) {
     console.error('YouTube API 요청 실패:', res.statusText);
-    throw new Error('유튜브 검색에 실패했습니다');
+    throw new Error('유튜브 검색에 실패했습니다' + res.statusText);
   }
 
   const data = await res.json();

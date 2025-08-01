@@ -6,10 +6,10 @@ const YOUTUBE_VIDEO_URL = 'https://www.googleapis.com/youtube/v3/videos';
 export async function checkIfEmbeddable(videoId: string): Promise<boolean> {
   try {
     const url = new URL(YOUTUBE_VIDEO_URL);
-    url.searchParams.append('part', 'status');
+    url.searchParams.append('part', 'status,player');
     url.searchParams.append('id', videoId);
     url.searchParams.append('key', YOUTUBE_API_KEY || '');
-    url.searchParams.append('part', 'status,player');
+
     console.log(url.toString());
     const response = await fetch(url.toString());
     if (!response.ok) {
