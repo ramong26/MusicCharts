@@ -4,7 +4,7 @@ import { YouTubeItem } from '@/shared/types/Youtube';
 export async function getYoutubeTrackFetchVideo(trackName: string) {
   const baseUrl = getBaseUrl();
   const res = await fetch(`${baseUrl}/api/youtube-search?q=${encodeURIComponent(trackName)}`);
-  console.log(res.url);
+
   if (!res.ok) {
     console.error('YouTube API 요청 실패:', res.statusText);
     throw new Error('유튜브 검색에 실패했습니다');

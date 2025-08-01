@@ -88,7 +88,7 @@ export default function Miniplayer({ track }: { track: Track }) {
       <div className="flex items-center space-x-4">
         <button
           onClick={handlePlayClick}
-          className="w-12 h-12 flex items-center justify-center text-white bg-green-500 p-2 rounded-full hover:bg-green-600"
+          className="cursor-pointer w-12 h-12 flex items-center justify-center text-white bg-green-500 p-2 rounded-full hover:bg-green-600"
         >
           {paused ? <FaPlay className="w-6 h-6" /> : <FaPause className="w-6 h-6" />}
         </button>

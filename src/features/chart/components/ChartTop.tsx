@@ -18,7 +18,7 @@ export default async function ChartTop({ tracksList }: { tracksList: TrackItem[]
       </h1>
 
       <div className="flex flex-col items-center justify-center w-full gap-10">
-        {/* <IframeYoutube tracksList={tracksList} /> */}
+        <IframeYoutube tracksList={tracksList} />
 
         <Miniplayer track={tracksList[0]?.track} />
 
