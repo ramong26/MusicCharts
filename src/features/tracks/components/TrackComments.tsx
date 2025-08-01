@@ -6,7 +6,7 @@ import SubmitInput from '@/shared/components/SubmitInput';
 import CommentList from '@/features/tracks/components/CommentList';
 
 import { commentsService } from '@/service/commentService';
-import { Comment } from '@/shared/types/comment';
+import { Comment } from '@/shared/types/Comment';
 import { checkLoginStatus } from '@/shared/hooks/checkLoginStatus';
 
 export default function TrackComments({ trackId }: { trackId: string }) {
