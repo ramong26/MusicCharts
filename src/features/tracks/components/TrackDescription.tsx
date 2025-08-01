@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 
 import { getTopWikiTitle, fetchWikiSummary } from '@/features/tracks/hooks/fetchWikiSummary';
 import useTranslate from '@/shared/hooks/useTranslate';
-import { Album } from '@/shared/types/spotifyTrack';
+import { Album } from '@/shared/types/SpotifyTrack';
 
 export default function TrackDescription({ album }: { album: Album }) {
   const [summary, setSummary] = useState('');

@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { YouTubeChannel } from '@/shared/types/youtube';
+import { YouTubeChannel } from '@/shared/types/Youtube';
 import { getYoutubeChannelInfo } from '@/features/tracks/hooks/getYoutube';
 
 export default async function ChannelList({ title }: { title: string }) {

@@ -1,6 +1,6 @@
 import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 import { formatDate } from '@/lib/utils/date';
-import { YouTubeItem } from '@/shared/types/youtube';
+import { YouTubeItem } from '@/shared/types/Youtube';
 const BASE_URL =
   typeof window === 'undefined' ? process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000' : '';
 

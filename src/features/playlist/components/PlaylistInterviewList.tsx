@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useMemo, useState } from 'react';
-import { TrackItem } from '@/shared/types/spotifyTrack';
+import { TrackItem } from '@/shared/types/SpotifyTrack';
 import { getCombinedInterviews } from '@/shared/hooks/searchInterviews';
 import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 

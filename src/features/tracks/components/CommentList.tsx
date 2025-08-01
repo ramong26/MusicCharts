@@ -1,5 +1,5 @@
 'use client';
-import { Comment } from '@/shared/types/comment';
+import { Comment } from '@/shared/types/Comment';
 import CommentItem from './CommentItem';
 import { commentsService } from '@/service/commentService';
 export default function CommentList({
