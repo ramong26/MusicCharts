@@ -34,11 +34,8 @@ export default function SubmitPlaylist() {
       const regex = /(?:playlist[\/:])([a-zA-Z0-9]+)/;
       const match = url.match(regex);
       return match ? match[1] : '';
-    } else if (url.startsWith('https://open.spotify.com/album/')) {
-      const regex = /(?:album[\/:])([a-zA-Z0-9]+)/;
-      const match = url.match(regex);
-      return match ? match[1] : '';
     }
+
     return '';
   };
 
@@ -48,6 +45,11 @@ export default function SubmitPlaylist() {
 
     if (input.trim() === '') {
       alert('플레이리스트 ID가 비어있어요!');
+      setShowChart(false);
+      return;
+    }
+    if (!id) {
+      alert('유효한 플레이리스트 ID를 입력해주세요!');
       setShowChart(false);
       return;
     }

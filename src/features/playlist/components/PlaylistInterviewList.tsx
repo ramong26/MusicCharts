@@ -46,12 +46,14 @@ export default function PlaylistInterviewList({ trackData }: PlaylistInterviewLi
       },
       { root: null, threshold: 0.5, rootMargin: '0px' }
     );
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
+    const target = observerRef.current;
+    if (target) {
+      observer.observe(target);
     }
+
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
+      if (target) {
+        observer.unobserve(target);
       }
     };
   }, [trackData]);
