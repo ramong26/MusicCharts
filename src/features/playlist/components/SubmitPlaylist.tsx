@@ -14,11 +14,11 @@ const PlaylistInterviewList = dynamic(
   () => import('@/features/playlist/components/PlaylistInterviewList'),
   { ssr: false }
 );
-// https://open.spotify.com/playlist/6kVEeyek3h3P1eZZMxRQgD?si=0p17ZaUmQN6c5Tf69JiH5g
+//https://open.spotify.com/playlist/6kVEeyek3h3P1eZZMxRQgD?si=0p17ZaUmQN6c5Tf69JiH5g
 // https://open.spotify.com/playlist/6kVEeyek3h3P1eZZMxRQgD
 
 // https://open.spotify.com/album/0EiI8ylL0FmWWpgHVTsZjZ?si=LE7tAMWqTRSVSJU2bHoc7g
-// https://open.spotify.com/album/0EiI8ylL0FmWWpgHVTsZjZ
+// // https://open.spotify.com/album/0EiI8ylL0FmWWpgHVTsZjZ
 export default function SubmitPlaylist() {
   const [submitUrl, setSubmitUrl] = useState('');
   const [playlistId, setPlaylistId] = useState('');
@@ -30,17 +30,26 @@ export default function SubmitPlaylist() {
 
   // 플레이리스트 ID를 추출하는 함수
   const extractPlaylistId = (url: string): string => {
-    const regex = /(?:playlist[\/:])([a-zA-Z0-9]+)/;
-    const match = url.match(regex);
-    return match ? match[1] : '';
+    if (url.startsWith('https://open.spotify.com/playlist/')) {
+      const regex = /(?:playlist[\/:])([a-zA-Z0-9]+)/;
+      const match = url.match(regex);
+      return match ? match[1] : '';
+    }
+
+    return '';
   };
 
   // 플레이리스트 ID를 제출하는 함수
   const handleSubmit = (input: string) => {
     const id = extractPlaylistId(input.trim());
 
-    if (!id) {
+    if (input.trim() === '') {
       alert('플레이리스트 ID가 비어있어요!');
+      setShowChart(false);
+      return;
+    }
+    if (!id) {
+      alert('유효한 플레이리스트 ID를 입력해주세요!');
       setShowChart(false);
       return;
     }
@@ -60,7 +69,7 @@ export default function SubmitPlaylist() {
   return (
     <div>
       <SubmitInput
-        placeholder="플레이리스트 ID를 넣어주세요"
+        placeholder="플레이리스트 ID를 넣어주세요 (예: https://open.spotify.com/playlist/...)"
         value={submitUrl}
         onChange={(e) => setSubmitUrl(e.target.value)}
         onSubmit={() => handleSubmit(submitUrl)}
