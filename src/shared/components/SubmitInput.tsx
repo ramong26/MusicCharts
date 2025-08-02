@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 interface SubmitInputProps {
   className?: string;
@@ -16,15 +16,13 @@ export default function SubmitInput({
   value,
 }: SubmitInputProps) {
   return (
-    <div
-      className={`${className} w-full border-2  border-black p-2  hover:bg-gray-100 transition`}
-    >
+    <div className={`${className} w-full border-3  border-black p-2  hover:bg-gray-100 transition`}>
       <input
         type="text"
         placeholder={placeholder}
         onChange={onChange}
         onKeyDown={(e) => {
-          if (e.key === "Enter" && onSubmit) {
+          if (e.key === 'Enter' && onSubmit) {
             onSubmit(e.currentTarget.value);
           }
         }}

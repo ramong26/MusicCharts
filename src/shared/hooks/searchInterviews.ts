@@ -121,14 +121,13 @@ export async function getCombinedInterviews(
   results: CustomSearchResult[];
   totalCount: number;
 }> {
-  const [googleResults, genAIResults, youtubeResults] = await Promise.all([
+  const [googleResults, genAIResults] = await Promise.all([
     searchInterviews(who),
     searchInterviewsWithGeminiAI(who),
-    searchInterviewsWithYouTube(who),
   ]);
 
   const combinedMap = new Map<string, CustomSearchResult>();
-  [...googleResults, ...genAIResults, ...youtubeResults].forEach((item) => {
+  [...googleResults, ...genAIResults].forEach((item) => {
     if (!combinedMap.has(item.link)) {
       combinedMap.set(item.link, item);
     }
