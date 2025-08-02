@@ -12,11 +12,12 @@ export default function Miniplayer({ track }: { track: Track }) {
   const [player, setPlayer] = useState<Spotify.Player | null>(null);
   const [initialized, setInitialized] = useState(false);
 
+  // Spotify Player 핸들
   const initializePlayer = async () => {
     const accessToken = await getSpotifyUserAccessToken();
 
     if (!accessToken) {
-      alert('Spotify access token이 필요합니다.');
+      alert('Spotify 프리미엄 계정이 필요합니다.');
       return;
     }
 
@@ -61,6 +62,7 @@ export default function Miniplayer({ track }: { track: Track }) {
     setInitialized(true);
   };
 
+  // 재생/일시정지 핸들
   const handlePlayClick = () => {
     if (!initialized) {
       initializePlayer();
@@ -69,6 +71,7 @@ export default function Miniplayer({ track }: { track: Track }) {
     }
   };
 
+  // 컴포넌트 언마운트 시 플레이어 연결 해제
   useEffect(() => {
     return () => {
       if (player) {

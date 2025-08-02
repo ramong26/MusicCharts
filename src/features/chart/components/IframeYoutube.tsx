@@ -2,8 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { TrackItem } from '@/shared/types/SpotifyTrack';
-import { getYoutubeTrackFetchVideo } from '@/features/tracks/hooks/getYoutube';
-import { checkIfEmbeddable, getYoutubeEmbedFallback } from '@/shared/hooks/checkIfEmbeddable';
 
 interface Props {
   tracksList: TrackItem[];
@@ -17,33 +15,24 @@ export default function IframeYoutube({ tracksList }: Props) {
     async function fetchVideo() {
       if (!tracksList || tracksList.length === 0) return;
 
-      const getQuery = (trackItem: TrackItem) =>
-        `${trackItem.track.artists[0].name} ${trackItem.track.name} official music video`;
-      const query = getQuery(tracksList[0]);
+      const track = tracksList[0].track;
+      const params = new URLSearchParams({
+        artist: track.artists[0].name,
+        track: track.name,
+        album: track.album.name,
+      });
 
-      const searchResults = await getYoutubeTrackFetchVideo(query);
-      if (!searchResults || searchResults.length === 0) {
-        setError(true);
-        return;
-      }
-
-      const primaryId = searchResults[0].videoId;
-      const embeddable = await checkIfEmbeddable(primaryId);
-
-      if (embeddable) {
-        setVideoId(primaryId);
-      } else {
-        // fallback: 대체 가능한 영상 찾기
-        const fallbackId = await getYoutubeEmbedFallback(
-          tracksList[0].track.artists[0].name,
-          tracksList[0].track.album.name
-        );
-
-        if (fallbackId) {
-          setVideoId(fallbackId);
+      try {
+        const res = await fetch(`/api/google-api/youtube/check-embeddable?${params.toString()}`);
+        const data = await res.json();
+        if (res.ok && data.videoId) {
+          setVideoId(data.videoId);
         } else {
           setError(true);
         }
+      } catch (err) {
+        console.error('YouTube API 요청 실패:', err);
+        setError(true);
       }
     }
 
@@ -76,8 +65,8 @@ export default function IframeYoutube({ tracksList }: Props) {
 
   return (
     <iframe
-      width="560"
-      height="315"
+      width="950"
+      height="500"
       src={`https://www.youtube.com/embed/${videoId}?autoplay=1&modestbranding=1`}
       title="YouTube video player"
       frameBorder="0"

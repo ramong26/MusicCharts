@@ -32,7 +32,7 @@ export default function ChartComponent({ tracksList, title, className = '' }: Ch
               height={100}
             />
           </div>
-          <div className="flex flex-col overflow-hidden w-[300px] ">
+          <div className="flex flex-col justify-center overflow-hidden w-[300px] h-[100px]">
             <div className="font-bold text-xl break-words max-w-xs">{item.track.name}</div>
             <div className=" max-w-md text-gray-600 break-words">
               {item.track.artists.map((artist) => artist.name).join(', ')}
