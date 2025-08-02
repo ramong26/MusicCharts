@@ -1,4 +1,3 @@
-// app/api/youtube-embed/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 
 const YOUTUBE_API_KEY = process.env.GOOGLE_API_KEY;
