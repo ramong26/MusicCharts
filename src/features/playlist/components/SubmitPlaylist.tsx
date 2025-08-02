@@ -1,20 +1,24 @@
 'use client';
 
 import { useState } from 'react';
+
 import dynamic from 'next/dynamic';
 
 import SubmitInput from '@/shared/components/SubmitInput';
 import { useTrackList, useAllTracks } from '@/shared/hooks/getTrackList';
 
-const TrackComponent = dynamic(
-  () => import('@/features/playlist/components/TrackComponent'),
-  { ssr: false }
-);
+const TrackComponent = dynamic(() => import('@/features/playlist/components/TrackComponent'), {
+  ssr: false,
+});
 const PlaylistInterviewList = dynamic(
   () => import('@/features/playlist/components/PlaylistInterviewList'),
   { ssr: false }
 );
+// https://open.spotify.com/playlist/6kVEeyek3h3P1eZZMxRQgD?si=0p17ZaUmQN6c5Tf69JiH5g
+// https://open.spotify.com/playlist/6kVEeyek3h3P1eZZMxRQgD
 
+// https://open.spotify.com/album/0EiI8ylL0FmWWpgHVTsZjZ?si=LE7tAMWqTRSVSJU2bHoc7g
+// https://open.spotify.com/album/0EiI8ylL0FmWWpgHVTsZjZ
 export default function SubmitPlaylist() {
   const [submitUrl, setSubmitUrl] = useState('');
   const [playlistId, setPlaylistId] = useState('');
@@ -24,27 +28,34 @@ export default function SubmitPlaylist() {
   const limit = 10;
   const offset = page * limit;
 
-  const handleSubmit = (id: string) => {
+  // 플레이리스트 ID를 추출하는 함수
+  const extractPlaylistId = (url: string): string => {
+    const regex = /playlist\/([a-zA-Z0-9]+)/;
+    const match = url.match(regex);
+    return match ? match[1] : '';
+  };
+
+  // 플레이리스트 ID를 제출하는 함수
+  const handleSubmit = (input: string) => {
+    const id = extractPlaylistId(input.trim());
+
     if (!id) {
       console.error('플레이리스트 ID가 비어있음');
       setShowChart(false);
       return;
     }
     setPlaylistId(id.trim());
-    setPage(0); // 새 검색 시 첫 페이지로 초기화
+    setPage(0);
     setShowChart(true);
+    setSubmitUrl('');
   };
 
-  const {
-    data: pageTracks,
-    isLoading,
-    error,
-  } = useTrackList(playlistId, offset, limit);
+  const { data: pageTracks, isLoading, error } = useTrackList(playlistId, offset, limit);
   const { data: allTracks } = useAllTracks(playlistId);
 
   const isValidData = Array.isArray(pageTracks) && pageTracks.length > 0;
-
   const isLastPage = allTracks ? offset + limit >= allTracks.length : true;
+  console.log(submitUrl);
 
   return (
     <div>
@@ -73,17 +84,11 @@ export default function SubmitPlaylist() {
             <></>
           )}
           <div className="flex gap-4 mt-4">
-            <button
-              onClick={() => setPage((p) => Math.max(0, p - 1))}
-              disabled={page === 0}
-            >
+            <button onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0}>
               이전
             </button>
 
-            <button
-              onClick={() => setPage((p) => p + 1)}
-              disabled={!isValidData || isLastPage}
-            >
+            <button onClick={() => setPage((p) => p + 1)} disabled={!isValidData || isLastPage}>
               다음
             </button>
           </div>
