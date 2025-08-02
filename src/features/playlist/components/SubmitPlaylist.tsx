@@ -30,7 +30,7 @@ export default function SubmitPlaylist() {
 
   // 플레이리스트 ID를 추출하는 함수
   const extractPlaylistId = (url: string): string => {
-    const regex = /playlist\/([a-zA-Z0-9]+)/;
+    const regex = /(?:playlist[\/:])([a-zA-Z0-9]+)/;
     const match = url.match(regex);
     return match ? match[1] : '';
   };
@@ -40,7 +40,7 @@ export default function SubmitPlaylist() {
     const id = extractPlaylistId(input.trim());
 
     if (!id) {
-      console.error('플레이리스트 ID가 비어있음');
+      alert('플레이리스트 ID가 비어있어요!');
       setShowChart(false);
       return;
     }

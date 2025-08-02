@@ -31,7 +31,7 @@ export default function HowPlaylist() {
             alt="졸라맨 플레이리스트"
             width={100}
             height={150}
-            className="h-[150px] flex items-end"
+            className="h-[150px]"
             priority
           />
         </div>
