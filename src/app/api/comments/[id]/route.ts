@@ -17,13 +17,12 @@ export async function PUT(request: NextRequest) {
 
   try {
     const jwtSecret = process.env.JWT_SECRET;
-    const decoded = jwt.verify(token, jwtSecret!) as { userId: string };
-    const userId = decoded.userId;
 
     if (!jwtSecret) {
       throw new Error('JWT secret is not defined');
     }
-
+    const decoded = jwt.verify(token, jwtSecret!) as { userId: string };
+    const userId = decoded.userId;
     const { text } = await request.json();
     const url = new URL(request.url);
     const pathname = url.pathname;

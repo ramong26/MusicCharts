@@ -82,9 +82,6 @@ const deleteComments = async (commentId: number | string): Promise<void | undefi
     const res = await fetch(`${BASE_URL}/api/comments/${commentId}`, {
       method: 'DELETE',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
     });
     if (!res.ok) throw new Error('삭제 실패');
 
