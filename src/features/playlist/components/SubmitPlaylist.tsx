@@ -18,7 +18,7 @@ const PlaylistInterviewList = dynamic(
 // https://open.spotify.com/playlist/6kVEeyek3h3P1eZZMxRQgD
 
 // https://open.spotify.com/album/0EiI8ylL0FmWWpgHVTsZjZ?si=LE7tAMWqTRSVSJU2bHoc7g
-// // https://open.spotify.com/album/0EiI8ylL0FmWWpgHVTsZjZ
+// https://open.spotify.com/album/0EiI8ylL0FmWWpgHVTsZjZ
 export default function SubmitPlaylist() {
   const [submitUrl, setSubmitUrl] = useState('');
   const [playlistId, setPlaylistId] = useState('');

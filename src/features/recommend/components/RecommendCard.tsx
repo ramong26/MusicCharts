@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { TrackItem } from '@/shared/types/SpotifyTrack';
+import Link from 'next/link';
 
 interface RecommendCardProps {
   track: TrackItem;
@@ -7,8 +8,16 @@ interface RecommendCardProps {
 
 export default function RecommendCard({ track }: RecommendCardProps) {
   const actualTrack = track.track;
+  const albumUrl = actualTrack?.album.external_urls.spotify;
+
+  if (!actualTrack || !albumUrl) {
+    return <div className="text-red-500">Track information is not available.</div>;
+  }
   return (
-    <div className="bg-white dark:bg-neutral-900 shadow-md rounded-2xl overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer">
+    <a
+      href={actualTrack?.album.external_urls.spotify}
+      className="bg-white dark:bg-neutral-900 shadow-md rounded-2xl overflow-hidden hover:shadow-xl transition-shadow duration-300 cursor-pointer"
+    >
       <Image
         src={actualTrack?.album?.images[0]?.url}
         alt={actualTrack?.name}
@@ -22,6 +31,6 @@ export default function RecommendCard({ track }: RecommendCardProps) {
           {actualTrack?.artists[0]?.name}
         </p>
       </div>
-    </div>
+    </a>
   );
 }
