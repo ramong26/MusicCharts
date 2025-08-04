@@ -1,28 +1,17 @@
 import type { CreateCommentBody, UpdateCommentBody } from '@/shared/types/api/CreateCommentBody';
 import type { Comment } from '@/shared/types/Comment';
-import { checkLoginStatus } from '@/shared/hooks/checkLoginStatus';
 
 const isServer = typeof window === 'undefined';
 const BASE_URL = isServer ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000' : '';
 
 // POST: 댓글 생성
 const postComments = async (body: CreateCommentBody): Promise<Comment | undefined> => {
-  const { isLoggedIn, accessToken } = await checkLoginStatus();
-  const { trackId } = body;
-  if (!accessToken) {
-    throw new Error('사용자 인증 토큰이 없습니다.');
-  }
   try {
-    if (!isLoggedIn) {
-      console.error('로그인 상태가 아닙니다');
-      return;
-    }
-    const response = await fetch(`${BASE_URL}/api/comments?trackId=${trackId}`, {
+    const response = await fetch(`${BASE_URL}/api/comments`, {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify(body),
     });
@@ -69,23 +58,12 @@ const putComments = async (
   commentId: number | string,
   body: UpdateCommentBody
 ): Promise<Comment | undefined> => {
-  const { isLoggedIn, accessToken } = await checkLoginStatus();
-
-  if (!accessToken) {
-    throw new Error('사용자 인증 토큰이 없습니다.');
-  }
-
   try {
-    if (!isLoggedIn) {
-      console.error('로그인 상태가 아닙니다');
-      return;
-    }
     const res = await fetch(`${BASE_URL}/api/comments/${commentId}`, {
       method: 'PUT',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
       },
       body: JSON.stringify({ text: body.text }),
     });
@@ -100,26 +78,14 @@ const putComments = async (
 
 // DELETE: 댓글 삭제
 const deleteComments = async (commentId: number | string): Promise<void | undefined> => {
-  const { isLoggedIn, accessToken } = await checkLoginStatus();
-
-  if (!accessToken) {
-    throw new Error('사용자 인증 토큰이 없습니다.');
-  }
-
   try {
-    if (!isLoggedIn) {
-      console.error('로그인 상태가 아닙니다');
-      return;
-    }
-
     const res = await fetch(`${BASE_URL}/api/comments/${commentId}`, {
       method: 'DELETE',
       credentials: 'include',
       headers: {
-        Authorization: `Bearer ${accessToken}`,
+        'Content-Type': 'application/json',
       },
     });
-
     if (!res.ok) throw new Error('삭제 실패');
 
     const deleteData = await res.json();

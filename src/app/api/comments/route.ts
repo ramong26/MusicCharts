@@ -31,10 +31,10 @@ export async function POST(request: NextRequest) {
   await connectToDB();
 
   const token = request.cookies.get('jwt')?.value;
-  if (!token) {
-    return new Response('JWT not provided', { status: 401 });
-  }
 
+  if (!token) {
+    return new Response('로그인이 필요합니다', { status: 401 });
+  }
   try {
     const jwtSecret = process.env.JWT_SECRET;
     const decoded = jwt.verify(token, jwtSecret!) as {

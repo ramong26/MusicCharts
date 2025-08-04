@@ -10,17 +10,19 @@ export async function PUT(request: NextRequest) {
   await connectToDB();
 
   const token = request.cookies.get('jwt')?.value;
+
   if (!token) {
     return new Response('JWT not provided', { status: 401 });
   }
 
   try {
     const jwtSecret = process.env.JWT_SECRET;
+    const decoded = jwt.verify(token, jwtSecret!) as { userId: string };
+    const userId = decoded.userId;
+
     if (!jwtSecret) {
       throw new Error('JWT secret is not defined');
     }
-    const decoded = jwt.verify(token, jwtSecret!) as { userId: string };
-    const userId = decoded.userId;
 
     const { text } = await request.json();
     const url = new URL(request.url);
