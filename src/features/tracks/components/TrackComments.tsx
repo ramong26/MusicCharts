@@ -7,7 +7,6 @@ import CommentList from '@/features/tracks/components/CommentList';
 
 import { commentsService } from '@/service/commentService';
 import { Comment } from '@/shared/types/Comment';
-import { checkLoginStatus } from '@/shared/hooks/checkLoginStatus';
 
 export default function TrackComments({ trackId }: { trackId: string }) {
   const [comments, setComments] = useState<Comment[]>([]);
@@ -15,7 +14,6 @@ export default function TrackComments({ trackId }: { trackId: string }) {
 
   // 댓글 제출 핸들러
   const handleSubmit = async (value: string) => {
-    const { isLoggedIn } = await checkLoginStatus();
     if (!value.trim()) {
       console.error('댓글 내용이 비어있습니다');
       return;
@@ -37,11 +35,6 @@ export default function TrackComments({ trackId }: { trackId: string }) {
     setSubmitComment('');
 
     try {
-      if (!isLoggedIn) {
-        console.error('로그인 상태가 아닙니다');
-        setComments((prev) => prev.filter((c) => c._id !== tempId));
-        return;
-      }
       const res = await commentsService.postComments({
         trackId,
         text: value.trim(),
