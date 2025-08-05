@@ -93,11 +93,19 @@ export default function SubmitPlaylist() {
             <></>
           )}
           <div className="flex gap-4 mt-4">
-            <button onClick={() => setPage((p) => Math.max(0, p - 1))} disabled={page === 0}>
+            <button
+              onClick={() => setPage((p) => Math.max(0, p - 1))}
+              disabled={page === 0}
+              aria-label="이전 페이지로 이동"
+            >
               이전
             </button>
 
-            <button onClick={() => setPage((p) => p + 1)} disabled={!isValidData || isLastPage}>
+            <button
+              onClick={() => setPage((p) => p + 1)}
+              disabled={!isValidData || isLastPage}
+              aria-label="다음 페이지로 이동"
+            >
               다음
             </button>
           </div>

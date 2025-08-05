@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 
-import { getRedirectUri } from '@/lib/utils/baseUrl';
+import { getSpotifyRedirectUri } from '@/lib/utils/baseUrl';
 
 export async function GET() {
   const clientId = process.env.SPOTIFY_CLIENT_ID;
-  const redirectUri = getRedirectUri();
+  const redirectUri = getSpotifyRedirectUri();
 
   const scope = [
     'user-read-private',
