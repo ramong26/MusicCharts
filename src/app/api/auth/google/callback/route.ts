@@ -7,6 +7,22 @@ import { UserModel } from '@/lib/mongo/models/UserModel';
 
 export const runtime = 'nodejs'; // 몽고로 인해 nodejs 런타임 사용
 
+interface GoogleTokenResponse {
+  access_token: string;
+  expires_in: number;
+  refresh_token?: string;
+  scope: string;
+  token_type: string;
+  id_token?: string;
+}
+
+interface GoogleUserProfile {
+  sub: string;
+  name?: string;
+  email?: string;
+  picture?: string;
+}
+
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
@@ -60,7 +76,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: errorData }, { status: tokenRes.status });
     }
 
-    const tokenData = await tokenRes.json();
+    const tokenData: GoogleTokenResponse = await tokenRes.json();
     const accessToken = tokenData.access_token;
     const refreshToken = tokenData.refresh_token || '';
     // 사용자 정보 요청
@@ -76,7 +92,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: errorData }, { status: profileRes.status });
     }
 
-    const profileData = await profileRes.json();
+    const profileData: GoogleUserProfile = await profileRes.json();
 
     // 데이터베이스 연결
     await connectToDB();

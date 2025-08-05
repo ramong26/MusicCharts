@@ -17,7 +17,7 @@ const SignupModal = dynamic(() => import('@/shared/components/LoginModal/SignupM
 
 interface Profile {
   displayName: string;
-  profileImageUrl?: string;
+  profileImageUrl?: string | null;
 }
 
 export default function HeaderMain() {

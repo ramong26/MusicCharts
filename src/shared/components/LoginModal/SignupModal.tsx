@@ -12,7 +12,6 @@ interface SignupModalProps {
 }
 
 export default function SignupModal({ onClose, onChangeModal }: SignupModalProps) {
-  const { email, password, confirmPassword } = signupSchema.shape;
   return (
     <>
       <LoginModalLayout onClose={onClose}>
@@ -40,7 +39,7 @@ export default function SignupModal({ onClose, onChangeModal }: SignupModalProps
         <div className="w-full mb-3">
           <label className="flex items-center border rounded px-3 py-2 bg-white">
             <span className="mr-2 text-gray-400">
-              <svg width="20" height="20" fill="none" stroke="currentColor">
+              <svg width="20" height="20" fill="none" stroke="currentColor" aria-hidden="true">
                 <circle cx="10" cy="10" r="8" />
                 <path d="M10 14v-4" />
               </svg>
@@ -68,7 +67,7 @@ export default function SignupModal({ onClose, onChangeModal }: SignupModalProps
             </span>
             <input
               type="password"
-              placeholder="Password"
+              placeholder="Confirm Password"
               className="w-full outline-none bg-transparent"
             />
             <span className="ml-2 text-gray-400 cursor-pointer">

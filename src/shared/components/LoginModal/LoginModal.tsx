@@ -30,7 +30,7 @@ export default function LoginModal({ onClose, onChangeModal }: LoginModalProps) 
         <div className="w-full mb-3">
           <label className="flex items-center border rounded px-3 py-2 bg-white">
             <span className="mr-2 text-gray-400">
-              <svg width="20" height="20" fill="none" stroke="currentColor">
+              <svg width="20" height="20" fill="none" stroke="currentColor" aria-hidden="true">
                 <path d="M2 6l8 6 8-6" />
               </svg>
             </span>
@@ -73,7 +73,7 @@ export default function LoginModal({ onClose, onChangeModal }: LoginModalProps) 
           <span className="mx-2 text-gray-500 font-bold">OR</span>
           <hr className="flex-1 border-gray-300" />
         </div>
-        {/* aouth 로그인 버튼 */}
+        {/* oauth 로그인 버튼 */}
         <button
           onClick={signWithSpotify}
           className="cursor-pointer w-full flex items-center justify-center border rounded py-2 mb-4 bg-white hover:bg-gray-100"

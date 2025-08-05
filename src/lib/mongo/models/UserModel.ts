@@ -16,4 +16,11 @@ const userSchema = new Schema(
   }
 );
 
+userSchema.pre('validate', function (next) {
+  if (!this.spotifyId && !this.googleId) {
+    return next(new Error('At least one of spotifyId or googleId must be provided.'));
+  }
+  next();
+});
+
 export const UserModel = models.User || model('User', userSchema);
