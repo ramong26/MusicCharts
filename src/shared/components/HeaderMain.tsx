@@ -1,5 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -7,18 +8,27 @@ import useUserStore from '@/stores/userStore';
 
 import HeaderSort from '@/public/image/header-sort.png';
 
+const LoginModal = dynamic(() => import('@/shared/components/LoginModal/LoginModal'), {
+  ssr: false,
+});
+const SignupModal = dynamic(() => import('@/shared/components/LoginModal/SignupModal'), {
+  ssr: false,
+});
+
 interface SpotifyProfile {
   displayName: string;
   profileImageUrl?: string;
 }
+
 export default function HeaderMain() {
   const [isScroll, setIsScroll] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
   const [profile, setProfile] = useState<SpotifyProfile | null>(null);
+  const [modalType, setModalType] = useState<'login' | 'signup' | null>(null);
 
   const { setUser } = useUserStore();
 
-  // 스크롤 이벤트 핸들러
+  // 스크롤 이벤트
   useEffect(() => {
     const handleScroll = () => {
       setIsScroll(window.scrollY > 100);
@@ -27,7 +37,7 @@ export default function HeaderMain() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // 로그인 및 프로필 확인
+  // 로그인 상태 확인
   useEffect(() => {
     fetch('/api/profile', {
       method: 'GET',
@@ -41,10 +51,7 @@ export default function HeaderMain() {
       .then((data) => {
         setProfile(data);
         setIsLogin(true);
-        setUser({
-          ...data,
-          _id: data.id,
-        });
+        setUser({ ...data, _id: data.id });
       })
       .catch(() => {
         setProfile(null);
@@ -52,77 +59,92 @@ export default function HeaderMain() {
       });
   }, [setUser]);
 
-  // 로그아웃 핸들러
   const handleLogout = async () => {
-    await fetch('/api/auth/logout', {
-      credentials: 'include',
-    });
-
+    await fetch('/api/auth/logout', { credentials: 'include' });
     window.location.href = '/';
   };
 
-  return (
-    <header className="w-full bg-[rgba(18,18,18)] backdrop-blur-md text-amber-50 flex items-center justify-between flex-col transition-all duration-300 shadow-lg fixed top-0 left-0 right-0 z-999">
-      {/* 상단: 로고 및 로그인 상태 */}
-      {!isScroll && (
-        <div className="flex items-center justify-between w-full h-fit p-7">
-          <Image src={HeaderSort} alt="Header Sort" width={24} height={24} />
-          <div className="cursor-pointer">
-            <Link href="/">로고</Link>
-          </div>
-          {!isLogin && <Link href="/login">로그인</Link>}
-          {isLogin && profile && (
-            <div className="cursor-pointer">
-              <Link
-                href="/profile"
-                className="cursor-pointer text-sm font-semibold  flex items-center"
-              >
-                {profile.profileImageUrl && (
-                  <Image
-                    src={profile.profileImageUrl}
-                    alt="Profile Image"
-                    width={24}
-                    height={24}
-                    className="rounded-full mr-2"
-                  />
-                )}
-                {profile.displayName}
-              </Link>
-              <button onClick={handleLogout}>로그아웃</button>
-            </div>
-          )}
-        </div>
-      )}
+  const handleOpenModal = (type: 'login' | 'signup') => {
+    setModalType(type);
+    document.body.style.overflow = 'hidden';
+  };
 
-      {/* 하단: 메뉴 */}
-      <div className="flex items-center justify-between w-full h-fit p-7 transition-all duration-300">
-        <div>검색 input</div>
-        <div className="flex gap-[100px] font-bold text-2xl">
-          <Link href="/charts">chart</Link>
-          <Link href="/playlist">playlist</Link>
-          <Link href="/channel">channel</Link>
-          <Link href="/recommend">recommend</Link>
-        </div>
-        {isScroll && (
-          <div className="flex items-center">
-            {!isLogin ? (
-              <Link href="/login" className="cursor-pointer text-sm">
-                로그인
-              </Link>
-            ) : (
-              profile && (
-                <div className="cursor-pointer">
-                  <Link href="/profile" className="text-sm font-semibold">
-                    환영합니다, {profile?.displayName}님!
-                  </Link>
-                  <button onClick={handleLogout}>로그아웃</button>
-                </div>
-              )
-            )}
+  const renderAuthButtons = () => (
+    <div className="flex gap-4 text-sm font-semibold">
+      <button onClick={() => handleOpenModal('login')}>로그인</button>
+      <button onClick={() => handleOpenModal('signup')}>회원가입</button>
+    </div>
+  );
+
+  const renderProfile = () =>
+    profile && (
+      <div className="flex items-center gap-2 text-sm font-semibold">
+        <Link href="/profile" className="flex items-center gap-2">
+          {profile.profileImageUrl && (
+            <Image
+              src={profile.profileImageUrl}
+              alt="Profile"
+              width={24}
+              height={24}
+              className="rounded-full"
+            />
+          )}
+          {profile.displayName}
+        </Link>
+        <button className="cursor-pointer" onClick={handleLogout}>
+          로그아웃
+        </button>
+      </div>
+    );
+
+  return (
+    <>
+      <header className="w-full bg-[rgba(18,18,18)] backdrop-blur-md text-amber-50 fixed top-0 left-0 right-0 z-999 shadow-lg transition-all duration-300">
+        {/* 상단 영역 */}
+        {!isScroll && (
+          <div className="flex items-center justify-between w-full h-fit p-7">
+            <Image src={HeaderSort} alt="Header Sort" width={24} height={24} />
+            <Link className="text-4xl cursor-pointer" href="/">
+              Soundtalk
+            </Link>
+            {isLogin ? renderProfile() : renderAuthButtons()}
           </div>
         )}
-        {!isScroll && <div></div>}
-      </div>
-    </header>
+
+        {/* 메뉴 영역 */}
+        <div className="flex items-center justify-between w-full h-fit p-7 transition-all duration-300">
+          <div>검색 input</div>
+          <div className="flex gap-[100px] font-bold text-2xl">
+            <Link href="/charts">chart</Link>
+            <Link href="/playlist">playlist</Link>
+            <Link href="/channel">channel</Link>
+            <Link href="/recommend">recommend</Link>
+          </div>
+          {isScroll && <div>{isLogin ? renderProfile() : renderAuthButtons()}</div>}
+          {!isScroll && <div />}
+        </div>
+      </header>
+
+      {/* 모달 */}
+      {modalType === 'login' && (
+        <LoginModal
+          onClose={() => {
+            setModalType(null);
+            document.body.style.overflow = 'auto';
+          }}
+          onChangeModal={(type) => setModalType(type)}
+        />
+      )}
+
+      {modalType === 'signup' && (
+        <SignupModal
+          onClose={() => {
+            setModalType(null);
+            document.body.style.overflow = 'auto';
+          }}
+          onChangeModal={(type) => setModalType(type)}
+        />
+      )}
+    </>
   );
 }
