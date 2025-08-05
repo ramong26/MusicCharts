@@ -1,13 +1,9 @@
 'use client';
 import React from 'react';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 
 import LoginModalLayout from '@/shared/components/LoginModal/LoginModalLayout';
-
-const LoginModal = dynamic(() => import('@/shared/components/LoginModal/LoginModal'), {
-  ssr: false,
-});
+import { signupSchema } from '@/features/auth/schema/signupSchema';
 
 // 회원가입 모달 props
 interface SignupModalProps {
@@ -16,6 +12,7 @@ interface SignupModalProps {
 }
 
 export default function SignupModal({ onClose, onChangeModal }: SignupModalProps) {
+  const { email, password, confirmPassword } = signupSchema.shape;
   return (
     <>
       <LoginModalLayout onClose={onClose}>
@@ -60,7 +57,27 @@ export default function SignupModal({ onClose, onChangeModal }: SignupModalProps
             </span>
           </label>
         </div>
-
+        {/* 비밀번호 확인 입력 */}
+        <div className="w-full mb-3">
+          <label className="flex items-center border rounded px-3 py-2 bg-white">
+            <span className="mr-2 text-gray-400">
+              <svg width="20" height="20" fill="none" stroke="currentColor">
+                <circle cx="10" cy="10" r="8" />
+                <path d="M10 14v-4" />
+              </svg>
+            </span>
+            <input
+              type="password"
+              placeholder="Password"
+              className="w-full outline-none bg-transparent"
+            />
+            <span className="ml-2 text-gray-400 cursor-pointer">
+              <svg width="20" height="20" fill="none" stroke="currentColor">
+                <circle cx="10" cy="10" r="8" />
+              </svg>
+            </span>
+          </label>
+        </div>
         {/* 로그인 버튼 */}
         <button className="w-full bg-beige-light hover:bg-beige-medium border  text-black font-bold py-2 rounded mb-4 transition-colors duration-200">
           SIGN UP
