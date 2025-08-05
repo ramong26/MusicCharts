@@ -1,13 +1,8 @@
 'use client';
 import React from 'react';
-import dynamic from 'next/dynamic';
 import Image from 'next/image';
 
 import LoginModalLayout from '@/shared/components/LoginModal/LoginModalLayout';
-
-const SignupModal = dynamic(() => import('@/shared/components/LoginModal/SignupModal'), {
-  ssr: false,
-});
 
 // 로그인 모달 props
 interface LoginModalProps {
@@ -18,6 +13,10 @@ export default function LoginModal({ onClose, onChangeModal }: LoginModalProps) 
   // Spotify 로그인 함수
   const signWithSpotify = async () => {
     window.location.href = '/api/auth/spotify/login';
+  };
+
+  const signWithGoogle = async () => {
+    window.location.href = '/api/auth/google/login';
   };
   return (
     <>
@@ -88,7 +87,10 @@ export default function LoginModal({ onClose, onChangeModal }: LoginModalProps) 
           />
           <span className="font-semibold text-black">Sign In with Spotify</span>
         </button>
-        <button className="cursor-pointer w-full flex items-center justify-center border rounded py-2 mb-4 bg-white hover:bg-gray-100">
+        <button
+          onClick={signWithGoogle}
+          className="cursor-pointer w-full flex items-center justify-center border rounded py-2 mb-4 bg-white hover:bg-gray-100"
+        >
           <Image
             src="https://www.svgrepo.com/show/355037/google.svg"
             alt="Google"

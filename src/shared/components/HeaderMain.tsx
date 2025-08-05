@@ -15,7 +15,7 @@ const SignupModal = dynamic(() => import('@/shared/components/LoginModal/SignupM
   ssr: false,
 });
 
-interface SpotifyProfile {
+interface Profile {
   displayName: string;
   profileImageUrl?: string;
 }
@@ -23,7 +23,7 @@ interface SpotifyProfile {
 export default function HeaderMain() {
   const [isScroll, setIsScroll] = useState(false);
   const [isLogin, setIsLogin] = useState(false);
-  const [profile, setProfile] = useState<SpotifyProfile | null>(null);
+  const [profile, setProfile] = useState<Profile | null>(null);
   const [modalType, setModalType] = useState<'login' | 'signup' | null>(null);
 
   const { setUser } = useUserStore();
@@ -71,8 +71,12 @@ export default function HeaderMain() {
 
   const renderAuthButtons = () => (
     <div className="flex gap-4 text-sm font-semibold">
-      <button onClick={() => handleOpenModal('login')}>로그인</button>
-      <button onClick={() => handleOpenModal('signup')}>회원가입</button>
+      <button className="cursor-pointer" onClick={() => handleOpenModal('login')}>
+        로그인
+      </button>
+      <button className="cursor-pointer" onClick={() => handleOpenModal('signup')}>
+        회원가입
+      </button>
     </div>
   );
 

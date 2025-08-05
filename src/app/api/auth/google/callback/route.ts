@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 
-import { getBaseUrl, getSpotifyRedirectUri } from '@/lib/utils/baseUrl';
+import { getBaseUrl, getGoogleRedirectUri } from '@/lib/utils/baseUrl';
 import connectToDB from '@/lib/mongo/mongo';
 import { UserModel } from '@/lib/mongo/models/UserModel';
 
@@ -16,9 +16,9 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Authorization code not found' }, { status: 400 });
   }
 
-  const clientId = process.env.SPOTIFY_CLIENT_ID;
-  const clientSecret = process.env.SPOTIFY_CLIENT_SECRET;
-  const redirectUri = getSpotifyRedirectUri();
+  const clientId = process.env.GOOGLE_CLIENT_ID;
+  const clientSecret = process.env.GOOGLE_CLIENT_SECRET;
+  const redirectUri = getGoogleRedirectUri();
 
   const baseUrl = getBaseUrl();
 
@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
   }
 
   if (!clientId || !clientSecret || !redirectUri) {
-    console.error('Missing Spotify environment variables');
+    console.error('Missing Google environment variables');
     return NextResponse.json(
       { error: 'Server configuration error: missing environment variables' },
       { status: 500 }
@@ -37,20 +37,19 @@ export async function GET(request: NextRequest) {
 
   // 토큰 요청 바디
   const body = new URLSearchParams({
-    grant_type: 'authorization_code',
     code,
+    client_id: clientId,
+    client_secret: clientSecret,
     redirect_uri: redirectUri,
+    grant_type: 'authorization_code',
   });
-
-  const basicAuth = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
 
   try {
     // 토큰 요청
-    const tokenRes = await fetch('https://accounts.spotify.com/api/token', {
+    const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
-        Authorization: `Basic ${basicAuth}`,
       },
       body: body.toString(),
     });
@@ -64,32 +63,31 @@ export async function GET(request: NextRequest) {
     const tokenData = await tokenRes.json();
     const accessToken = tokenData.access_token;
     const refreshToken = tokenData.refresh_token || '';
-    // 사용자 프로필 요청
-    const profileRes = await fetch('https://api.spotify.com/v1/me', {
+    // 사용자 정보 요청
+    const profileRes = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
       headers: {
         Authorization: `Bearer ${accessToken}`,
       },
     });
 
     if (!profileRes.ok) {
-      const errorProfile = await profileRes.json();
-      console.error('Profile request failed:', errorProfile);
-      return NextResponse.json({ error: errorProfile }, { status: profileRes.status });
+      const errorData = await profileRes.json();
+      console.error('User info request failed:', errorData);
+      return NextResponse.json({ error: errorData }, { status: profileRes.status });
     }
 
     const profileData = await profileRes.json();
 
-    // DB 연결
+    // 데이터베이스 연결
     await connectToDB();
 
-    // 사용자 정보 저장 (upsert)
     const user = await UserModel.findOneAndUpdate(
-      { spotifyId: profileData.id },
+      { googleId: profileData.sub },
       {
-        spotifyId: profileData.id,
-        displayName: profileData.display_name || 'No Name',
-        email: profileData.email || `${profileData.id}@example.com`,
-        profileImageUrl: profileData.images?.[0]?.url || '',
+        googleId: profileData.sub,
+        displayName: profileData.name || 'No Name',
+        email: profileData.email || `${profileData.sub}@example.com`,
+        profileImageUrl: profileData.picture || '',
         lastLogin: new Date(),
         accessToken,
         refreshToken,
@@ -100,16 +98,16 @@ export async function GET(request: NextRequest) {
     const payload = {
       userId: user._id.toString(),
     };
+
     const jwtSecret = process.env.JWT_SECRET;
 
     if (!jwtSecret) {
       console.error('JWT_SECRET is not defined');
-      return NextResponse.json({ error: 'JWT secret missing' }, { status: 500 });
+      return NextResponse.json({ error: 'JWT_SECRET missing' }, { status: 500 });
     }
 
-    const jwtToken = jwt.sign(payload, jwtSecret, {
-      expiresIn: '1d',
-    });
+    const jwtToken = jwt.sign(payload, jwtSecret, { expiresIn: '1d' });
+
     // 리다이렉트 응답 생성 및 쿠키 설정
     const response = NextResponse.redirect(baseUrl);
 
