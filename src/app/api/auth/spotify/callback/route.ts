@@ -84,7 +84,12 @@ export async function GET(request: NextRequest) {
 
     // 사용자 정보 저장 (upsert)
     const user = await UserModel.findOneAndUpdate(
-      { spotifyId: profileData.id },
+      {
+        $or: [
+          { spotifyId: profileData.id },
+          { email: profileData.email || `${profileData.id}@example.com` },
+        ],
+      },
       {
         spotifyId: profileData.id,
         displayName: profileData.display_name || 'No Name',
