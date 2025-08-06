@@ -3,6 +3,7 @@ import { signupSchema } from '@/features/auth/schema/signupSchema';
 import connectToDB from '@/lib/mongo/mongo';
 import { UserModel } from '@/lib/mongo/models/UserModel';
 import jwt from 'jsonwebtoken';
+import { z } from 'zod';
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,7 +41,7 @@ export async function POST(request: NextRequest) {
 
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
-      console.error('JWT_SECRET is not defined');
+      console.error('Configuration error: JWT secret is missing');
       return NextResponse.json({ error: '서버 설정 오류: JWT 시크릿 누락' }, { status: 500 });
     }
 
@@ -52,20 +53,24 @@ export async function POST(request: NextRequest) {
       { status: 201 }
     );
 
-    response.cookies.set({
+    response.cookies.set('jwt', jwtToken, {
       httpOnly: true,
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
-      name: 'token',
       secure: process.env.NODE_ENV === 'production' ? true : false,
-      value: jwtToken,
       maxAge: 60 * 60 * 24,
     });
 
     return response;
   } catch (error) {
-    const err = error as Error;
-    console.error(error);
-    return NextResponse.json({ error: '회원가입 실패', message: err.message }, { status: 400 });
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: '유효하지 않은 입력값입니다.', details: error },
+        { status: 400 }
+      );
+    }
+
+    console.error('회원가입 처리 중 오류 발생:', error);
+    return NextResponse.json({ error: '회원가입 처리 중 오류 발생' }, { status: 500 });
   }
 }

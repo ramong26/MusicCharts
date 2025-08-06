@@ -110,7 +110,7 @@ export default function LoginModal({ onClose, onChangeModal }: LoginModalProps) 
             disabled={isSubmitting}
             className="w-full bg-beige-light hover:bg-beige-medium border  text-black font-bold py-2 rounded mb-4 transition-colors duration-200"
           >
-            {isSubmitting ? 'SIGNING UP...' : 'LOG IN'}
+            {isSubmitting ? 'LOGGING IN...' : 'LOG IN'}
           </button>
         </form>
         {/* OR 구분선 */}

@@ -3,7 +3,7 @@ import { loginSchema } from '@/features/auth/schema/loginSchema';
 import connectToDB from '@/lib/mongo/mongo';
 import { UserModel } from '@/lib/mongo/models/UserModel';
 import jwt from 'jsonwebtoken';
-
+import { z } from 'zod';
 export async function POST(request: NextRequest) {
   try {
     await connectToDB();
@@ -28,8 +28,10 @@ export async function POST(request: NextRequest) {
 
     const jwtSecret = process.env.JWT_SECRET;
     if (!jwtSecret) {
-      console.error('JWT_SECRET is not defined');
-      return NextResponse.json({ error: '서버 설정 오류: JWT 시크릿 누락' }, { status: 500 });
+      if (process.env.NODE_ENV !== 'production') {
+        console.error('JWT_SECRET is not defined');
+      }
+      return NextResponse.json({ error: '서버 오류가 발생했습니다.' }, { status: 500 });
     }
 
     const payload = { userId: user._id.toString() };
@@ -50,6 +52,12 @@ export async function POST(request: NextRequest) {
 
     return response;
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        { error: '유효하지 않은 입력값입니다.', details: error },
+        { status: 400 }
+      );
+    }
     console.error('로그인 처리 중 오류 발생:', error);
     return NextResponse.json({ error: '로그인 처리 중 오류 발생' }, { status: 500 });
   }
