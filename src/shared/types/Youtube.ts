@@ -4,13 +4,15 @@ export interface YouTubeItem {
   };
   snippet: {
     title: string;
+    link: string;
     thumbnails: {
       default: { url: string };
       medium: { url: string };
       high: { url: string };
     };
-    description: string;
     publishedAt: string;
+    displayLink: string;
+    description: string;
   };
 }
 
