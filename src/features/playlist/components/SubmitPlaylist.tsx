@@ -64,7 +64,6 @@ export default function SubmitPlaylist() {
 
   const isValidData = Array.isArray(pageTracks) && pageTracks.length > 0;
   const isLastPage = allTracks ? offset + limit >= allTracks.length : true;
-  console.log(submitUrl);
 
   return (
     <div>

@@ -70,12 +70,13 @@ export async function searchInterviewsWithGeminiAI(who: string): Promise<CustomS
     }
 
     const data = await res.json();
-    return data.items.map((item: YouTubeItem) => ({
+    const items = data.result || data.results || [];
+    return items.map((item: YouTubeItem) => ({
       title: item?.snippet?.title,
       link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
       thumbnail: item?.snippet?.thumbnails?.high?.url,
       publishedAt: item?.snippet?.publishedAt,
-      snippet: item?.snippet?.description,
+      description: item?.snippet?.description,
       displayLink: 'www.youtube.com',
     }));
   } catch (error) {
