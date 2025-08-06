@@ -1,8 +1,7 @@
 import { z } from 'zod';
 
-export const signupSchema = z
+export const loginSchema = z
   .object({
-    username: z.string().min(2, { message: '이름은 2자 이상이어야 합니다' }),
     email: z
       .string()
       .min(1, { message: '이메일을 입력해주세요' })
@@ -14,11 +13,10 @@ export const signupSchema = z
       .string()
       .min(8, { message: '비밀번호는 8자 이상이어야 합니다' })
       .regex(/(?=.*[!@#$%^&*])/, { message: '특수문자를 포함해야 합니다' }),
-    confirmPassword: z.string(),
   })
-  .refine((data) => data.password === data.confirmPassword, {
-    path: ['confirmPassword'],
-    message: '비밀번호가 일치하지 않습니다',
+  .refine((data) => data.email && data.password, {
+    message: '이메일과 비밀번호를 모두 입력해주세요',
+    path: ['email', 'password'],
   });
 
-export type SignupFormData = z.infer<typeof signupSchema>;
+export type LoginFormData = z.infer<typeof loginSchema>;
