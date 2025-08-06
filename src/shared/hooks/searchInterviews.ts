@@ -70,9 +70,7 @@ export async function searchInterviewsWithGeminiAI(who: string): Promise<CustomS
     }
 
     const data = await res.json();
-    console.log('Google GenAI 인터뷰 검색 결과:', data);
     const items = data.result || data.results || [];
-
     return items.map((item: YouTubeItem) => ({
       title: item?.snippet?.title,
       link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
