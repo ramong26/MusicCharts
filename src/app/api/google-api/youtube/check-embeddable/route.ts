@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-
+import { YouTubeSearchItem, YouTubeVideoItem } from '@/shared/types/Youtube';
 const YOUTUBE_API_KEY = process.env.GOOGLE_API_KEY;
 const YOUTUBE_SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
 const YOUTUBE_VIDEO_URL = 'https://www.googleapis.com/youtube/v3/videos';
@@ -30,7 +30,9 @@ export async function GET(req: NextRequest) {
     const searchRes = await fetch(searchUrl.toString());
     const searchData = await searchRes.json();
 
-    const videoIds = searchData.items?.map((item: any) => item.id.videoId).filter(Boolean);
+    const videoIds = searchData.items
+      ?.map((item: YouTubeSearchItem) => item.id.videoId)
+      .filter(Boolean);
     if (!videoIds || videoIds.length === 0) {
       return NextResponse.json({ videoId: null });
     }
@@ -44,7 +46,9 @@ export async function GET(req: NextRequest) {
     const statusRes = await fetch(statusUrl.toString());
     const statusData = await statusRes.json();
 
-    const embeddableVideo = statusData.items?.find((item: any) => item.status?.embeddable);
+    const embeddableVideo = statusData.items?.find(
+      (item: YouTubeVideoItem) => item.status?.embeddable
+    );
     if (embeddableVideo) {
       return NextResponse.json({ videoId: embeddableVideo.id });
     }
@@ -60,8 +64,9 @@ export async function GET(req: NextRequest) {
 
     const fallbackSearchRes = await fetch(fallbackSearchUrl.toString());
     const fallbackSearchData = await fallbackSearchRes.json();
+
     const fallbackIds = fallbackSearchData.items
-      ?.map((item: any) => item.id.videoId)
+      ?.map((item: YouTubeSearchItem) => item.id.videoId)
       .filter(Boolean);
 
     if (!fallbackIds || fallbackIds.length === 0) {
@@ -75,8 +80,9 @@ export async function GET(req: NextRequest) {
 
     const fallbackStatusRes = await fetch(fallbackStatusUrl.toString());
     const fallbackStatusData = await fallbackStatusRes.json();
-
-    const fallbackVideo = fallbackStatusData.items?.find((item: any) => item.status?.embeddable);
+    const fallbackVideo = fallbackStatusData.items?.find(
+      (item: YouTubeVideoItem) => item.status?.embeddable
+    );
     return NextResponse.json({ videoId: fallbackVideo?.id || null });
   } catch (e) {
     console.error('youtube-embed 에러:', e);
