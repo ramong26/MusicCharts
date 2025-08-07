@@ -18,7 +18,7 @@ export default function PlaylistInterviewList({ trackData }: PlaylistInterviewLi
   const chunkSize = 5;
 
   const observerRef = useRef(null);
-
+  const isScrollLoadingRef = useRef(false);
   // 아티스트 이름을 추출하여 정렬된 배열로 반환, 중복 제거
   const artists = useMemo(() => {
     const set = new Set<string>();
@@ -38,7 +38,7 @@ export default function PlaylistInterviewList({ trackData }: PlaylistInterviewLi
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
+          if (entry.isIntersecting && !isScrollLoadingRef.current) {
             setIsScrollLoading(true);
             setVisibleChunks((prev) => prev + 1);
           }
@@ -88,6 +88,7 @@ export default function PlaylistInterviewList({ trackData }: PlaylistInterviewLi
 
       setArtistInterviews((prev) => ({ ...prev, ...newInterviews }));
       setIsScrollLoading(false);
+      isScrollLoadingRef.current = false;
     };
     fetchChunkedInterviews();
   }, [visibleChunks, artists]);
