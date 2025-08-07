@@ -6,7 +6,7 @@ import SubmitInput from '@/shared/components/SubmitInput';
 import CommentList from '@/features/tracks/components/CommentList';
 
 import { commentsService } from '@/service/commentService';
-import { Comment } from '@/shared/types/Comment';
+import { Comment } from '@/shared/types/comment';
 
 export default function TrackComments({ trackId }: { trackId: string }) {
   const [comments, setComments] = useState<Comment[]>([]);
