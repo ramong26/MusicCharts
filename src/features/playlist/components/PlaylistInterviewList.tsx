@@ -56,7 +56,7 @@ export default function PlaylistInterviewList({ trackData }: PlaylistInterviewLi
         observer.unobserve(target);
       }
     };
-  }, [trackData]);
+  }, [trackData, isScrollLoading]);
 
   // 청크 단위로 아티스트 인터뷰 검색 결과를 가져오는 함수
   const chunkArray = (artistsArr: string[], chunkSize: number): string[][] => {
@@ -91,7 +91,7 @@ export default function PlaylistInterviewList({ trackData }: PlaylistInterviewLi
       isScrollLoadingRef.current = false;
     };
     fetchChunkedInterviews();
-  }, [visibleChunks, artists]);
+  }, [visibleChunks, artists, artistInterviews]);
 
   if (!trackData || trackData.length === 0) {
     return <p>트랙 데이터를 불러오는 중이거나 없습니다.</p>;

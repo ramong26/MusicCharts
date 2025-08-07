@@ -123,13 +123,25 @@ export interface YouTubeChannelResponse {
 
 // 통합 YouTube 아이템 (검색과 비디오 정보를 모두 처리)
 export interface YouTubeItem {
-  id: string;
-  title: string;
-  description: string;
-  thumbnails: YouTubeThumbnails;
-  publishedAt?: string;
+  id: {
+    videoId: string;
+  };
+  snippet: {
+    channelId: string;
+    title: string;
+    description: string;
+    thumbnails: YouTubeThumbnails;
+    publishedAt: string;
+    channelTitle: string;
+  };
+  statistics?: {
+    viewCount: string;
+    likeCount: string;
+    commentCount: string;
+  };
+  videoId?: string;
+  channelHandle?: string;
   channelTitle?: string;
-  embeddable: boolean;
-  viewCount?: string;
-  likeCount?: string;
+  channelThumbnail?: string;
+  publishedAt?: string;
 }
