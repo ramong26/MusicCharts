@@ -3,6 +3,7 @@ import type { Comment } from '@/shared/types/comment';
 import { getBaseUrl } from '@/lib/utils/baseUrl';
 
 const baseUrl = getBaseUrl();
+
 // POST: 댓글 생성
 const postComments = async (body: CreateCommentBody): Promise<Comment | undefined> => {
   try {
