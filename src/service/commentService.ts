@@ -1,13 +1,12 @@
 import type { CreateCommentBody, UpdateCommentBody } from '@/shared/types/api/CreateCommentBody';
-import type { Comment } from '@/shared/types/Comment';
+import type { Comment } from '@/shared/types/comment';
+import { getBaseUrl } from '@/lib/utils/baseUrl';
 
-const isServer = typeof window === 'undefined';
-const BASE_URL = isServer ? process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000' : '';
-
+const baseUrl = getBaseUrl();
 // POST: 댓글 생성
 const postComments = async (body: CreateCommentBody): Promise<Comment | undefined> => {
   try {
-    const response = await fetch(`${BASE_URL}/api/comments`, {
+    const response = await fetch(`${baseUrl}/api/comments`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -31,7 +30,7 @@ const getComments = async (
   nextCursorId?: number
 ): Promise<{ comments: Comment[]; nextCursorId?: number } | undefined> => {
   try {
-    let url = `${BASE_URL}/api/comments?trackId=${trackId}`;
+    let url = `${baseUrl}/api/comments?trackId=${trackId}`;
     if (nextCursorId) {
       url += `&nextCursorId=${nextCursorId}`;
     }
@@ -59,7 +58,7 @@ const putComments = async (
   body: UpdateCommentBody
 ): Promise<Comment | undefined> => {
   try {
-    const res = await fetch(`${BASE_URL}/api/comments/${commentId}`, {
+    const res = await fetch(`${baseUrl}/api/comments/${commentId}`, {
       method: 'PUT',
       credentials: 'include',
       headers: {
@@ -79,7 +78,7 @@ const putComments = async (
 // DELETE: 댓글 삭제
 const deleteComments = async (commentId: number | string): Promise<void | undefined> => {
   try {
-    const res = await fetch(`${BASE_URL}/api/comments/${commentId}`, {
+    const res = await fetch(`${baseUrl}/api/comments/${commentId}`, {
       method: 'DELETE',
       credentials: 'include',
     });

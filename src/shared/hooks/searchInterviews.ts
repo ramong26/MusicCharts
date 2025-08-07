@@ -1,8 +1,9 @@
 import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 import { formatDate } from '@/lib/utils/date';
 import { YouTubeItem } from '@/shared/types/Youtube';
-const BASE_URL =
-  typeof window === 'undefined' ? process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000' : '';
+import { getBaseUrl } from '@/lib/utils/baseUrl';
+
+const baseUrl = getBaseUrl();
 
 const INTERVIEW_SITES = [
   'site:rollingstone.com',
@@ -27,7 +28,7 @@ export async function searchInterviews(who: string): Promise<CustomSearchResult[
 
   try {
     const res = await fetch(
-      `${BASE_URL}/api/google-api/interviews?query=${encodeURIComponent(query)}`
+      `${baseUrl}/api/google-api/interviews?query=${encodeURIComponent(query)}`
     );
 
     if (!res.ok) {
@@ -89,7 +90,7 @@ export async function searchInterviewsWithGeminiAI(who: string): Promise<CustomS
 export async function searchInterviewsWithYouTube(who: string): Promise<CustomSearchResult[]> {
   try {
     const res = await fetch(
-      `${BASE_URL}/api/google-api/youtube?q=${encodeURIComponent(who)}  ${who} interview`
+      `${baseUrl}/api/google-api/youtube?q=${encodeURIComponent(who)}  ${who} interview`
     );
 
     if (!res.ok) {
