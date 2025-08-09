@@ -8,10 +8,10 @@ import useUserStore from '@/stores/userStore';
 
 import HeaderSort from '@/public/image/header-sort.png';
 import DefaultProfile from '@/public/image/default-profile-image.avif';
-const LoginModal = dynamic(() => import('@/shared/components/LoginModal/LoginModal'), {
+const LoginModal = dynamic(() => import('@/features/auth/components/LoginModal'), {
   ssr: false,
 });
-const SignupModal = dynamic(() => import('@/shared/components/LoginModal/SignupModal'), {
+const SignupModal = dynamic(() => import('@/features/auth/components/SignupModal'), {
   ssr: false,
 });
 
@@ -58,7 +58,7 @@ export default function HeaderMain() {
         setProfile(null);
         setIsLogin(false);
       });
-  }, [setUser, isLogin]);
+  }, [setUser]);
 
   // 로그아웃 처리
   const handleLogout = async () => {

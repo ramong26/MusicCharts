@@ -28,6 +28,7 @@ export async function POST(request: NextRequest) {
     }
 
     const jwtSecret = process.env.JWT_SECRET;
+    const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET!;
     if (!jwtSecret) {
       if (process.env.NODE_ENV !== 'production') {
         console.error('JWT_SECRET is not defined');
@@ -37,10 +38,9 @@ export async function POST(request: NextRequest) {
 
     const payload = { userId: user._id.toString() };
     const accessToken = jwt.sign(payload, jwtSecret, { expiresIn: '1d' });
-    const refreshToken = jwt.sign(payload, jwtSecret, { expiresIn: '7d' });
+    const refreshToken = jwt.sign(payload, jwtRefreshSecret, { expiresIn: '7d' });
 
     // 사용자 정보 업데이트
-    user.accessToken = accessToken;
     user.refreshToken = refreshToken;
     user.lastLogin = new Date();
     await user.save();

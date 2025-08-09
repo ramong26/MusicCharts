@@ -1,23 +1,23 @@
 'use client';
 import Image from 'next/image';
 
-import type { LoginFormData } from '@/features/auth/schema/loginSchema';
-import type { UseFormRegister } from 'react-hook-form';
+import type { UseFormRegister, FieldValues, Path } from 'react-hook-form';
+import LoginModalLayout from '@/features/auth/components/LoginModalLayout';
 
-import LoginModalLayout from '@/shared/components/LoginModal/LoginModalLayout';
+type FieldName<T extends FieldValues> = Path<T>;
 
-type FieldName = keyof LoginFormData;
+interface FieldProps<T extends FieldValues> {
+  name: FieldName<T>;
+  type: string;
+  placeholder: string;
+  register: UseFormRegister<T>;
+  error?: string;
+}
 
-interface LoginModalMainProps {
+interface LoginModalMainProps<T extends FieldValues> {
   onClose: () => void;
   title: string;
-  fields: {
-    name: FieldName;
-    type: string;
-    placeholder: string;
-    register: UseFormRegister<LoginFormData>;
-    error?: string;
-  }[];
+  fields: FieldProps<T>[];
   isSubmitting?: boolean;
   submitLabel: string;
   oauthButtons?: {
@@ -32,7 +32,7 @@ interface LoginModalMainProps {
   onSubmit: (e?: React.FormEvent<HTMLFormElement>) => Promise<void>;
 }
 
-export default function LoginModalMain({
+export default function LoginModalMain<T extends FieldValues>({
   onClose,
   title,
   onSubmit,
@@ -43,7 +43,7 @@ export default function LoginModalMain({
   switchLabel,
   onSwitch,
   errors,
-}: LoginModalMainProps) {
+}: LoginModalMainProps<T>) {
   return (
     <LoginModalLayout onClose={onClose}>
       <div className="mb-6 flex items-center justify-center">
