@@ -1,9 +1,8 @@
 'use client';
-
-import { useEffect, useMemo, useState, useRef } from 'react';
+import { useState, useEffect, useMemo, useRef } from 'react';
 import { TrackItem } from '@/shared/types/SpotifyTrack';
-import { getCombinedInterviews } from '@/shared/hooks/searchInterviews';
 import { CustomSearchResult } from '@/features/tracks/types/custom-search';
+import { getCombinedInterviews } from '@/shared/hooks/searchInterviews';
 
 interface PlaylistInterviewListProps {
   trackData?: TrackItem[];
@@ -11,7 +10,8 @@ interface PlaylistInterviewListProps {
 
 type ArtistInterviewMap = Record<string, CustomSearchResult[] | null>;
 
-export default function PlaylistInterviewList({ trackData }: PlaylistInterviewListProps) {
+export function useFetchArtistInterviews(props: PlaylistInterviewListProps) {
+  const { trackData } = props;
   const [artistInterviews, setArtistInterviews] = useState<ArtistInterviewMap>({});
   const [visibleChunks, setVisibleChunks] = useState(1);
   const [isScrollLoading, setIsScrollLoading] = useState(false);
@@ -92,45 +92,14 @@ export default function PlaylistInterviewList({ trackData }: PlaylistInterviewLi
     };
     fetchChunkedInterviews();
   }, [visibleChunks, artists, artistInterviews]);
-
-  if (!trackData || trackData.length === 0) {
-    return <p>트랙 데이터를 불러오는 중이거나 없습니다.</p>;
-  }
-
-  return (
-    <div className="relative  border-3 border-t-black border-l-black border-r-black pt-5 pl-5 pr-5 mt-10 bg-white w-full ">
-      <h3 className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-2 border-2 border-black font-bold text-2xl whitespace-nowrap">
-        아티스트 인터뷰 검색 결과
-      </h3>
-      <div className="space-y-6 mt-10 ">
-        {artists.slice(0, visibleChunks * chunkSize).map((artist) => (
-          <div key={artist} className="flex flex-col border-b border-black pb-4 last:border-none">
-            <h4 className="text-xl font-semibold mb-3 text-gray-900">{artist}</h4>
-            <ul className="text-gray-700 text-sm space-y-1">
-              {artistInterviews[artist] === undefined ? (
-                <li className="text-gray-400 italic animate-pulse">로딩 중...</li>
-              ) : artistInterviews[artist] && artistInterviews[artist]!.length > 0 ? (
-                artistInterviews[artist]!.slice(0, 5).map((result, i) => (
-                  <li key={i}>
-                    <a
-                      href={result.link}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-blue-600 underline hover:bg-gray-100 transition"
-                    >
-                      {result.title}
-                    </a>
-                  </li>
-                ))
-              ) : (
-                <li className="text-gray-400 italic">검색 결과 없음</li>
-              )}
-            </ul>
-          </div>
-        ))}
-        {isScrollLoading && <div className="text-center text-gray-500">로딩 중...</div>}
-        {visibleChunks * chunkSize < artists.length && <div ref={observerRef} className="h-10" />}
-      </div>
-    </div>
-  );
+  return {
+    artistInterviews,
+    observerRef,
+    isScrollLoading,
+    setIsScrollLoading,
+    visibleChunks,
+    setVisibleChunks,
+    artists,
+    chunkSize,
+  };
 }
