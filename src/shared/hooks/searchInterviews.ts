@@ -2,7 +2,7 @@ import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 import { formatDate } from '@/lib/utils/date';
 import { YouTubeItem } from '@/shared/types/Youtube';
 import { getBaseUrl } from '@/lib/utils/baseUrl';
-
+import callApi from '@/shared/hooks/callApi';
 const baseUrl = getBaseUrl();
 
 const INTERVIEW_SITES = [
@@ -18,7 +18,6 @@ function getDateYearsAgo(years: number): string {
   today.setFullYear(today.getFullYear() - years);
   return formatDate(today);
 }
-
 // 검색어로 인터뷰를 검색하는 함수
 export async function searchInterviews(who: string): Promise<CustomSearchResult[]> {
   const afterDate = getDateYearsAgo(4);
@@ -26,92 +25,62 @@ export async function searchInterviews(who: string): Promise<CustomSearchResult[
     ' OR '
   )}) after:${afterDate}`;
 
-  try {
-    const res = await fetch(
-      `${baseUrl}/api/google-api/interviews?query=${encodeURIComponent(query)}`
-    );
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error('API Route 호출 실패:', res.status, res.statusText, errorText);
-      throw new Error('Failed to fetch interview search results');
-    }
-
-    const data: CustomSearchResult[] = await res.json();
-
-    const filtered = data.filter((item) => {
-      const title = item.title?.toLowerCase() || '';
-      return !title.includes('shorts') && !title.includes('reaction');
-    });
-
-    return filtered;
-  } catch (error) {
-    console.error('getTrackIdInterview() 에러:', error);
-    return [];
-  }
+  return callApi<CustomSearchResult[]>(
+    `${baseUrl}/api/google-api/interviews?query=${encodeURIComponent(query)}`,
+    undefined,
+    (data) =>
+      Array.isArray(data)
+        ? data.filter((item) => {
+            const title = item.title?.toLowerCase() || '';
+            return !title.includes('shorts') && !title.includes('reaction');
+          })
+        : []
+  );
 }
-
 // 사용법:  const interviews = await getTrackIdInterview(who);
 
 // Google GeminiAi 사용하여 인터뷰 검색
 export async function searchInterviewsWithGeminiAI(who: string): Promise<CustomSearchResult[]> {
-  try {
-    const res = await fetch('/api/gemini-api/getInterviews', {
+  return callApi<CustomSearchResult[]>(
+    `${baseUrl}/api/gemini-api/getInterviews`,
+    {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ query: who }),
-    });
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error('Google GenAI API 호출 실패:', res.status, res.statusText, errorText);
-      return [];
-    }
-
-    const data = await res.json();
-    const items = data.result || data.results || [];
-    return items.map((item: YouTubeItem) => ({
-      title: item?.snippet?.title,
-      link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
-      thumbnail: item?.snippet?.thumbnails?.high?.url,
-      publishedAt: item?.snippet?.publishedAt,
-      description: item?.snippet?.description,
-      displayLink: 'www.youtube.com',
-    }));
-  } catch (error) {
-    console.error('searchInterviewsWithGoogleGenAI() 에러:', error);
-    return [];
-  }
+    },
+    (data) =>
+      Array.isArray(data)
+        ? data.filter((item: YouTubeItem) => ({
+            title: item?.snippet?.title,
+            link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
+            thumbnail: item?.snippet?.thumbnails?.high?.url,
+            publishedAt: item?.snippet?.publishedAt,
+            description: item?.snippet?.description,
+            displayLink: 'www.youtube.com',
+          }))
+        : []
+  );
 }
 
 // 유튜브 인터뷰 검색
 export async function searchInterviewsWithYouTube(who: string): Promise<CustomSearchResult[]> {
-  try {
-    const res = await fetch(
-      `${baseUrl}/api/google-api/youtube?q=${encodeURIComponent(who)}  ${who} interview`
-    );
-
-    if (!res.ok) {
-      const errorText = await res.text();
-      console.error('YouTube API 호출 실패:', res.status, res.statusText, errorText);
-      return [];
-    }
-
-    const data = await res.json();
-    return data.items.map((item: YouTubeItem) => ({
-      title: item?.snippet?.title,
-      link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
-      thumbnail: item?.snippet?.thumbnails?.high?.url,
-      publishedAt: item?.snippet?.publishedAt,
-      snippet: item?.snippet?.description,
-      displayLink: 'www.youtube.com',
-    }));
-  } catch (error) {
-    console.error('searchInterviewsWithYouTube() 에러:', error);
-    return [];
-  }
+  return callApi<CustomSearchResult[]>(
+    `${baseUrl}/api/google-api/youtube?q=${encodeURIComponent(who)}  ${who} interview`,
+    undefined,
+    (data) =>
+      Array.isArray(data)
+        ? data.map((item: YouTubeItem) => ({
+            title: item?.snippet?.title,
+            link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
+            thumbnail: item?.snippet?.thumbnails?.high?.url,
+            publishedAt: item?.snippet?.publishedAt,
+            description: item?.snippet?.description,
+            displayLink: 'www.youtube.com',
+          }))
+        : []
+  );
 }
 
 // 아티스트별 인터뷰 검색 결과를 통합하여 반환하는 함수

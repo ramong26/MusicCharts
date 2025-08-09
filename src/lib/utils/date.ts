@@ -36,3 +36,10 @@ export const formatTime = (seconds: number) => {
   }
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 };
+
+// 특정 연도만큼 이전 날짜를 반환하는 함수
+export const getDateYearsAgo = (years: number): string => {
+  const today = new Date();
+  today.setFullYear(today.getFullYear() - years);
+  return formatDate(today);
+};

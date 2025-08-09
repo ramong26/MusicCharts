@@ -1,72 +1,38 @@
 'use client';
 
-import { useState } from 'react';
-
 import dynamic from 'next/dynamic';
 
 import SubmitInput from '@/shared/components/SubmitInput';
 import { useTrackList, useAllTracks } from '@/shared/hooks/getTrackList';
-
+import usePagination from '@/shared/hooks/usePagination';
+import { usePlaylistSubmit } from '@/features/playlist/hooks/SubmitPlaylist/usePlaylistSubmit';
 const TrackComponent = dynamic(() => import('@/features/playlist/components/TrackComponent'), {
   ssr: false,
 });
 const PlaylistInterviewList = dynamic(
-  () => import('@/features/playlist/components/PlaylistInterviewList'),
+  () => import('@/features/playlist/components/PlaylistInterviewList/PlaylistInterviewList'),
   { ssr: false }
 );
-//https://open.spotify.com/playlist/6kVEeyek3h3P1eZZMxRQgD?si=0p17ZaUmQN6c5Tf69JiH5g
-// https://open.spotify.com/playlist/6kVEeyek3h3P1eZZMxRQgD
 
-// https://open.spotify.com/album/0EiI8ylL0FmWWpgHVTsZjZ?si=LE7tAMWqTRSVSJU2bHoc7g
-// https://open.spotify.com/album/0EiI8ylL0FmWWpgHVTsZjZ
 export default function SubmitPlaylist() {
-  const [submitUrl, setSubmitUrl] = useState('');
-  const [playlistId, setPlaylistId] = useState('');
-  const [showChart, setShowChart] = useState(false);
-  const [page, setPage] = useState(0);
+  // 플레이리스트 제출 훅
+  const { submitUrl, setSubmitUrl, playlistId, showChart, handleSubmit, error } =
+    usePlaylistSubmit();
 
+  // 페이지네이션 훅
   const limit = 10;
-  const offset = page * limit;
+  const { page, offset, nextPage, prevPage } = usePagination(limit);
 
-  // 플레이리스트 ID를 추출하는 함수
-  const extractPlaylistId = (url: string): string => {
-    if (url.startsWith('https://open.spotify.com/playlist/')) {
-      const regex = /(?:playlist[\/:])([a-zA-Z0-9]+)/;
-      const match = url.match(regex);
-      return match ? match[1] : '';
-    }
-
-    return '';
-  };
-
-  // 플레이리스트 ID를 제출하는 함수
-  const handleSubmit = (input: string) => {
-    const id = extractPlaylistId(input.trim());
-
-    if (input.trim() === '') {
-      alert('플레이리스트 ID가 비어있어요!');
-      setShowChart(false);
-      return;
-    }
-    if (!id) {
-      alert('유효한 플레이리스트 ID를 입력해주세요!');
-      setShowChart(false);
-      return;
-    }
-    setPlaylistId(id.trim());
-    setPage(0);
-    setShowChart(true);
-    setSubmitUrl('');
-  };
-
-  const { data: pageTracks, isLoading, error } = useTrackList(playlistId, offset, limit);
+  // 트랙 목록 가져오기
+  const { data: pageTracks, isLoading } = useTrackList(playlistId, offset, limit);
   const { data: allTracks } = useAllTracks(playlistId);
 
+  // 유효성 검사
   const isValidData = Array.isArray(pageTracks) && pageTracks.length > 0;
   const isLastPage = allTracks ? offset + limit >= allTracks.length : true;
 
   return (
-    <div>
+    <>
       <SubmitInput
         placeholder="플레이리스트 ID를 넣어주세요 (예: https://open.spotify.com/playlist/...)"
         value={submitUrl}
@@ -76,42 +42,39 @@ export default function SubmitPlaylist() {
 
       {showChart && (
         <>
-          {isLoading && <TrackComponent title="Top Tracks" isLoading={true} />}
-          {error && <p>오류 발생: {error.message}</p>}
-          {isValidData ? (
-            <>
-              <TrackComponent
-                link={true}
-                tracksList={pageTracks}
-                title="차트 제목"
-                page={page}
-                limit={limit}
-              />
-            </>
-          ) : (
-            <></>
-          )}
-          <div className="flex gap-4 mt-4">
-            <button
-              onClick={() => setPage((p) => Math.max(0, p - 1))}
-              disabled={page === 0}
-              aria-label="이전 페이지로 이동"
-            >
-              이전
-            </button>
+          {isLoading && <TrackComponent title="Top Tracks" isLoading />}
+          {error && <p>오류 발생: {error}</p>}
 
-            <button
-              onClick={() => setPage((p) => p + 1)}
-              disabled={!isValidData || isLastPage}
-              aria-label="다음 페이지로 이동"
-            >
-              다음
-            </button>
-          </div>
+          {!isLoading && !error && (
+            <>
+              {isValidData ? (
+                <TrackComponent
+                  link
+                  tracksList={pageTracks}
+                  title="차트 제목"
+                  page={page}
+                  limit={limit}
+                />
+              ) : (
+                <p>
+                  트랙을 표시할 수 없습니다. 플레이리스트가 비어있거나 올바른 플레이리스트 ID를
+                  입력했는지 확인해주세요.
+                </p>
+              )}
+
+              <div className="flex gap-4 mt-4">
+                <button onClick={prevPage} disabled={page === 0}>
+                  이전
+                </button>
+                <button onClick={nextPage} disabled={isLoading || isLastPage}>
+                  다음
+                </button>
+              </div>
+            </>
+          )}
+          <PlaylistInterviewList trackData={allTracks} />
         </>
       )}
-
-      <PlaylistInterviewList trackData={allTracks} />
-    </div>
+    </>
   );
 }
