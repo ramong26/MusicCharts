@@ -18,7 +18,6 @@ function getDateYearsAgo(years: number): string {
   today.setFullYear(today.getFullYear() - years);
   return formatDate(today);
 }
-
 // 검색어로 인터뷰를 검색하는 함수
 export async function searchInterviews(who: string): Promise<CustomSearchResult[]> {
   const afterDate = getDateYearsAgo(4);
@@ -38,41 +37,46 @@ export async function searchInterviews(who: string): Promise<CustomSearchResult[
         : []
   );
 }
+// 사용법:  const interviews = await getTrackIdInterview(who);
 
 // Google GeminiAi 사용하여 인터뷰 검색
 export async function searchInterviewsWithGeminiAI(who: string): Promise<CustomSearchResult[]> {
   return callApi<CustomSearchResult[]>(
-    '/api/gemini-api/getInterviews',
+    `${baseUrl}/api/gemini-api/getInterviews`,
     {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({ query: who }),
     },
     (data) =>
-      (data?.result || data?.results || []).map((item: YouTubeItem) => ({
-        title: item?.snippet?.title,
-        link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
-        thumbnail: item?.snippet?.thumbnails?.high?.url,
-        publishedAt: item?.snippet?.publishedAt,
-        description: item?.snippet?.description,
-        displayLink: 'www.youtube.com',
-      }))
+      Array.isArray(data)
+        ? data.filter((item: YouTubeItem) => ({
+            title: item?.snippet?.title,
+            link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
+            thumbnail: item?.snippet?.thumbnails?.high?.url,
+            publishedAt: item?.snippet?.publishedAt,
+            description: item?.snippet?.description,
+            displayLink: 'www.youtube.com',
+          }))
+        : []
   );
 }
 
 // 유튜브 인터뷰 검색
 export async function searchInterviewsWithYouTube(who: string): Promise<CustomSearchResult[]> {
   return callApi<CustomSearchResult[]>(
-    `${baseUrl}/api/google-api/youtube?q=${encodeURIComponent(who)} ${who} interview`,
+    `${baseUrl}/api/google-api/youtube?q=${encodeURIComponent(who)}  ${who} interview`,
     undefined,
     (data) =>
-      Array.isArray(data?.items)
-        ? data.items.map((item: YouTubeItem) => ({
+      Array.isArray(data)
+        ? data.map((item: YouTubeItem) => ({
             title: item?.snippet?.title,
             link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
             thumbnail: item?.snippet?.thumbnails?.high?.url,
             publishedAt: item?.snippet?.publishedAt,
-            snippet: item?.snippet?.description,
+            description: item?.snippet?.description,
             displayLink: 'www.youtube.com',
           }))
         : []

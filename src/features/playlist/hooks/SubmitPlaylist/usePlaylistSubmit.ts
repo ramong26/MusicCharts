@@ -6,7 +6,7 @@ export function usePlaylistSubmit() {
   const [submitUrl, setSubmitUrl] = useState('');
   const [playlistId, setPlaylistId] = useState('');
   const [showChart, setShowChart] = useState(false);
-
+  const [error, setError] = useState<string | null>(null);
   // 플레이리스트 ID를 추출하는 함수
   const extractPlaylistId = (url: string): string => {
     if (url.startsWith('https://open.spotify.com/playlist/')) {
@@ -22,18 +22,18 @@ export function usePlaylistSubmit() {
     const id = extractPlaylistId(input.trim());
 
     if (input.trim() === '') {
-      alert('플레이리스트 ID가 비어있어요!');
+      setError('플레이리스트 ID가 비어있어요!');
       setShowChart(false);
       return;
     }
     if (!id) {
-      alert('유효한 플레이리스트 ID를 입력해주세요!');
+      setError('유효한 플레이리스트 ID를 입력해주세요!');
       setShowChart(false);
       return;
     }
     setPlaylistId(id.trim());
     setShowChart(true);
-    setSubmitUrl('');
+    setError(null);
   };
 
   return {
@@ -42,5 +42,6 @@ export function usePlaylistSubmit() {
     playlistId,
     showChart,
     handleSubmit,
+    error,
   };
 }

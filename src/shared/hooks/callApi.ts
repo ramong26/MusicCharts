@@ -1,7 +1,7 @@
 export default async function callApi<T>(
   url: string,
   options?: RequestInit,
-  transform?: (data: any) => T
+  transform?: (data: unknown) => T
 ): Promise<T> {
   try {
     const res = await fetch(url, options);
@@ -14,6 +14,6 @@ export default async function callApi<T>(
     return transform ? transform(data) : data;
   } catch (error) {
     console.error('callApi() 에러:', error);
-    return transform ? transform(undefined) : ([] as unknown as T);
+    throw error;
   }
 }

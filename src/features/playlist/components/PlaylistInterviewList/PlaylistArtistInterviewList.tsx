@@ -16,8 +16,8 @@ export default function PlaylistArtistInterviewList({
         {interviews === undefined ? (
           <li className="text-gray-400 italic animate-pulse">로딩 중...</li>
         ) : interviews && interviews.length > 0 ? (
-          interviews.slice(0, 5).map((result, i) => (
-            <li key={i}>
+          interviews.slice(0, 5).map((result) => (
+            <li key={result.link}>
               <a
                 href={result.link}
                 target="_blank"

@@ -16,14 +16,15 @@ const PlaylistInterviewList = dynamic(
 
 export default function SubmitPlaylist() {
   // 플레이리스트 제출 훅
-  const { submitUrl, setSubmitUrl, playlistId, showChart, handleSubmit } = usePlaylistSubmit();
+  const { submitUrl, setSubmitUrl, playlistId, showChart, handleSubmit, error } =
+    usePlaylistSubmit();
 
   // 페이지네이션 훅
   const limit = 10;
   const { page, offset, nextPage, prevPage } = usePagination(limit);
 
   // 트랙 목록 가져오기
-  const { data: pageTracks, isLoading, error } = useTrackList(playlistId, offset, limit);
+  const { data: pageTracks, isLoading } = useTrackList(playlistId, offset, limit);
   const { data: allTracks } = useAllTracks(playlistId);
 
   // 유효성 검사
@@ -42,7 +43,7 @@ export default function SubmitPlaylist() {
       {showChart && (
         <>
           {isLoading && <TrackComponent title="Top Tracks" isLoading />}
-          {error && <p>오류 발생: {error.message}</p>}
+          {error && <p>오류 발생: {error}</p>}
 
           {!isLoading && !error && (
             <>
@@ -55,7 +56,10 @@ export default function SubmitPlaylist() {
                   limit={limit}
                 />
               ) : (
-                <p>표시할 트랙이 없습니다.</p>
+                <p>
+                  트랙을 표시할 수 없습니다. 플레이리스트가 비어있거나 올바른 플레이리스트 ID를
+                  입력했는지 확인해주세요.
+                </p>
               )}
 
               <div className="flex gap-4 mt-4">
