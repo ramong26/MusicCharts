@@ -65,7 +65,9 @@ export default function LoginModalMain<T extends FieldValues>({
                 className="w-full outline-none bg-transparent"
                 {...field.register(field.name)}
               />
-              <span className="text-red-500 text-sm">{errors?.[field.name] ?? ''}</span>
+              {errors?.[field.name] && (
+                <span className="text-red-500 text-sm block mt-1">{errors[field.name]}</span>
+              )}
             </label>
           </div>
         ))}

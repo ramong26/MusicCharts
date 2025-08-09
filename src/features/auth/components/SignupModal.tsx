@@ -19,28 +19,6 @@ export default function SignupModal({ onClose, onChangeModal }: SignupModalProps
     ? Object.fromEntries(Object.entries(errors).map(([key, value]) => [key, value?.message]))
     : undefined;
 
-  // 회원가입 처리 함수
-  // const onSubmit = async (data: SignupFormData) => {
-  //   try {
-  //     const response = await fetch('/api/auth/signup', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify(data),
-  //     });
-
-  //     if (!response.ok) {
-  //       throw new Error('회원가입 실패');
-  //     }
-
-  //     onChangeModal('login');
-  //   } catch (error) {
-  //     console.error('회원가입 오류:', error);
-  //     alert('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
-  //   }
-  // };
-
   return (
     <>
       <LoginModalMain<SignupFormData>
