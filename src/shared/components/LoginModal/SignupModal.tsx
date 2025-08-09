@@ -52,6 +52,25 @@ export default function SignupModal({ onClose, onChangeModal }: SignupModalProps
           <span className="text-3xl font-extrabold text-black">Soundtalk</span>
         </div>
         <h2 className="text-lg font-bold mb-4 text-center text-black">Sign up to your account.</h2>
+        {/* 닉네임 입력 */}
+        <div className="w-full mb-3">
+          <label className="flex items-center border rounded px-3 py-2 bg-white">
+            <span className="mr-2 text-gray-400">
+              <svg width="20" height="20" fill="none" stroke="currentColor">
+                <path d="M2 6l8 6 8-6" />
+              </svg>
+            </span>
+            <input
+              {...register('username')}
+              type="text"
+              placeholder="Nickname"
+              className="w-full outline-none bg-transparent"
+            />
+            {errors.username && (
+              <span className="text-red-500 text-sm">{errors.username.message}</span>
+            )}
+          </label>
+        </div>
         {/* 이메일 입력 */}
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
           <div className="w-full mb-3">
@@ -70,25 +89,7 @@ export default function SignupModal({ onClose, onChangeModal }: SignupModalProps
               {errors.email && <span className="text-red-500 text-sm">{errors.email.message}</span>}
             </label>
           </div>
-          {/* 닉네임 입력 */}
-          <div className="w-full mb-3">
-            <label className="flex items-center border rounded px-3 py-2 bg-white">
-              <span className="mr-2 text-gray-400">
-                <svg width="20" height="20" fill="none" stroke="currentColor">
-                  <path d="M2 6l8 6 8-6" />
-                </svg>
-              </span>
-              <input
-                {...register('username')}
-                type="text"
-                placeholder="Nickname"
-                className="w-full outline-none bg-transparent"
-              />
-              {errors.username && (
-                <span className="text-red-500 text-sm">{errors.username.message}</span>
-              )}
-            </label>
-          </div>
+
           {/* 비밀번호 입력 */}
           <div className="w-full mb-3">
             <label className="flex items-center border rounded px-3 py-2 bg-white">

@@ -7,7 +7,7 @@ import Link from 'next/link';
 import useUserStore from '@/stores/userStore';
 
 import HeaderSort from '@/public/image/header-sort.png';
-
+import DefaultProfile from '@/public/image/default-profile-image.avif';
 const LoginModal = dynamic(() => import('@/shared/components/LoginModal/LoginModal'), {
   ssr: false,
 });
@@ -49,21 +49,24 @@ export default function HeaderMain() {
         return res.json();
       })
       .then((data) => {
-        setProfile(data);
+        const profileImage = data.profileImageUrl || DefaultProfile;
+        setProfile({ ...data, profileImageUrl: profileImage });
         setIsLogin(true);
-        setUser({ ...data, _id: data.id });
+        setUser({ ...data, _id: data.id, profileImageUrl: profileImage });
       })
       .catch(() => {
         setProfile(null);
         setIsLogin(false);
       });
-  }, [setUser]);
+  }, [setUser, isLogin]);
 
+  // 로그아웃 처리
   const handleLogout = async () => {
     await fetch('/api/auth/logout', { credentials: 'include' });
     window.location.href = '/';
   };
 
+  // 모달 열기 처리
   const handleOpenModal = (type: 'login' | 'signup') => {
     setModalType(type);
     document.body.style.overflow = 'hidden';

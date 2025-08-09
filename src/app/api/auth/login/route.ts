@@ -36,14 +36,21 @@ export async function POST(request: NextRequest) {
     }
 
     const payload = { userId: user._id.toString() };
-    const jwtToken = jwt.sign(payload, jwtSecret, { expiresIn: '1d' });
+    const accessToken = jwt.sign(payload, jwtSecret, { expiresIn: '1d' });
+    const refreshToken = jwt.sign(payload, jwtSecret, { expiresIn: '7d' });
+
+    // 사용자 정보 업데이트
+    user.accessToken = accessToken;
+    user.refreshToken = refreshToken;
+    user.lastLogin = new Date();
+    await user.save();
 
     const response = NextResponse.json(
-      { message: '로그인 성공', token: jwtToken },
+      { message: '로그인 성공', accessToken, refreshToken },
       { status: 200 }
     );
 
-    response.cookies.set('jwt', jwtToken, {
+    response.cookies.set('jwt', accessToken, {
       httpOnly: true,
       sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       path: '/',
