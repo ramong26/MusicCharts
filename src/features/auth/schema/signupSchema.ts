@@ -4,9 +4,8 @@ export const signupSchema = z
   .object({
     username: z.string().min(2, { message: '이름은 2자 이상이어야 합니다' }),
     email: z
-      .string()
-      .min(1, { message: '이메일을 입력해주세요' })
       .email({ message: '올바른 이메일 형식이 아닙니다 (예: user@example.com)' })
+      .min(1, { message: '이메일을 입력해주세요' })
       .regex(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/, {
         message: '유효한 이메일 주소를 입력해주세요',
       }),
