@@ -42,7 +42,7 @@ export default function CommentList({
       {comments.length === 0 ? (
         <p>댓글이 없습니다.</p>
       ) : (
-        <ul className="border-2 p-3 mb-2 space-y-4">
+        <ul className="border-2 p-3 mb-10 space-y-4">
           {comments.map((comment) => (
             <CommentItem
               key={comment._id}

@@ -1,5 +1,6 @@
 import type { CreateCommentBody, UpdateCommentBody } from '@/shared/types/api/CreateCommentBody';
 import type { Comment } from '@/shared/types/comment';
+
 import { getBaseUrl } from '@/lib/utils/baseUrl';
 
 const baseUrl = getBaseUrl();
