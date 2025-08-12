@@ -4,6 +4,13 @@ import ChartComponent from '@/features/chart/components/ChartComponent';
 
 import { getTrackList } from '@/shared/hooks/getTrackList';
 
+export const metadata = {
+  title: 'Music Charts',
+  description: 'Explore the top music tracks and albums',
+};
+
+export const revalidate = 60 * 60 * 24;
+
 export default async function Charts() {
   const tracksList = await getTrackList({ playlistId: '1PcB3QM5sGbzFU5D9CbEGB' });
   const koraTracksList = await getTrackList({

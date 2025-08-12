@@ -25,7 +25,14 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-
+  async rewrites() {
+    return [
+      {
+        source: '/api/comments/:path*',
+        destination: 'https://music-charts.vercel.app/api/comments/:path*',
+      },
+    ];
+  },
   webpack(config) {
     const fileLoaderRule = config.module?.rules?.find(
       (rule: object) =>

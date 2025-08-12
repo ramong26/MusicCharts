@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import getTrackId from '@/features/tracks/hooks/getTrackId';
 import getArtist from '@/features/tracks/hooks/getArtist';
 
@@ -5,6 +6,12 @@ import HeaderMain from '@/shared/components/HeaderMain';
 import ArtistProfile from '@/features/tracks/interview/components/ArtistProfile';
 import ArtistInterview from '@/features/tracks/interview/components/ArtistInterview';
 
+export const metadata = {
+  title: 'Artist Interview',
+  description: 'Interview with the artist',
+};
+
+export const revalidate = 60 * 60 * 24;
 interface PageProps {
   params: Promise<{ id: string }>;
 }
@@ -27,8 +34,12 @@ export default async function InterviewPage({ params }: PageProps) {
       <HeaderMain />
       <main className="flex mt-[188px] gap-4 h-fit w-[1043px] items-center justify-center mx-auto">
         <div className="flex flex-col gap-10 ">
-          <ArtistProfile artist={artist} />
-          <ArtistInterview artist={artist} />
+          <Suspense fallback={<div className="h-40 w-full bg-gray-200 animate-pulse mt-10" />}>
+            <ArtistProfile artist={artist} />
+          </Suspense>
+          <Suspense fallback={<div className="h-40 w-full bg-gray-200 animate-pulse mt-10" />}>
+            <ArtistInterview artist={artist} />
+          </Suspense>
         </div>
       </main>
     </div>

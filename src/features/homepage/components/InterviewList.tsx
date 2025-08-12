@@ -1,21 +1,17 @@
 import Link from 'next/link';
 
-import { searchInterviews } from '@/shared/hooks/searchInterviews';
-
+import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 import { formatDate } from '@/lib/utils/date';
 
 export default async function InterviewList({
-  artistName,
+  interviews,
   className = '',
   slice = 5,
 }: {
-  artistName?: string;
+  interviews: CustomSearchResult[];
   className?: string;
   slice?: number;
 }) {
-  const LATEST_INTERVIEWS_QUERY = `${artistName} artist interview site:rollingstone.com OR site:billboard.com OR site:pitchfork.com OR site:complex.com`;
-  const interviews = await searchInterviews(LATEST_INTERVIEWS_QUERY);
-
   const sortedInterviews = interviews
     .filter(
       (interview) =>
