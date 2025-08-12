@@ -8,6 +8,12 @@ import TrackDescription from '@/features/tracks/components/TrackDescription';
 import TrackList from '@/features/tracks/components/TrackList';
 import TrackComments from '@/features/tracks/components/TrackComments';
 
+export const metadata = {
+  title: 'Track Page',
+  description: 'Details about the track',
+};
+
+export const revalidate = 60 * 60 * 24 * 7;
 interface PageProps {
   params: Promise<{ id: string }>;
 }

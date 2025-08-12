@@ -18,9 +18,7 @@ export function middleware(request: NextRequest) {
   if (token) {
     try {
       const secret = process.env.JWT_SECRET;
-      if (!secret) {
-        throw new Error('JWT secret is not defined');
-      }
+      if (!secret) throw new Error('JWT secret is not defined');
       jwt.verify(token, secret);
     } catch (error) {
       if (request.nextUrl.pathname.startsWith('/api/')) {

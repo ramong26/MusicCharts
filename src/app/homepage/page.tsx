@@ -1,11 +1,19 @@
 import Image from 'next/image';
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
 
 import HeaderMain from '@/shared/components/HeaderMain';
 import InterviewList from '@/features/homepage/components/InterviewList';
 import ChartTop5 from '@/features/homepage/components/ChartTop5';
-import YoutubePlaylist from '@/features/homepage/components/YoutubePlaylist';
 
 import { getTrackList } from '@/shared/hooks/getTrackList';
+const YoutubePlaylist = dynamic(() => import('@/features/homepage/components/YoutubePlaylist'));
+export const metadata = {
+  title: 'Home Page',
+  description: 'Welcome to the home page',
+};
+
+export const revalidate = 60 * 60 * 24;
 
 export default async function HomePage() {
   const tracksList = await getTrackList({ playlistId: '1PcB3QM5sGbzFU5D9CbEGB' });
@@ -23,6 +31,7 @@ export default async function HomePage() {
                   alt="Album Cover"
                   width={627}
                   height={627}
+                  priority
                 />
               </header>
             </div>
@@ -33,7 +42,9 @@ export default async function HomePage() {
           <div className="mx-auto mt-10 w-full">
             <ChartTop5 tracksList={tracksList} />
           </div>
-          <YoutubePlaylist />
+          <Suspense fallback={<div className="h-[200px] w-full bg-gray-200 animate-pulse mt-10" />}>
+            <YoutubePlaylist />
+          </Suspense>
         </div>
       </div>
       <div className="w-full bg-[#000000] mt-10 h-100 text-white"> footer</div>
