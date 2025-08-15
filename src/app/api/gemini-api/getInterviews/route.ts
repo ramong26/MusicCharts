@@ -46,8 +46,10 @@ Only include real existing links. Do not make up data.`;
         .trim()
         .replace(/^```json\s*/, '')
         .replace(/```$/, '');
-      if (jsonString && (jsonString.trim().startsWith('{') || jsonString.trim().startsWith('['))) {
-        parsedResult = JSON.parse(jsonString);
+
+      const trimmedJsonString = jsonString.trim();
+      if (jsonString && (trimmedJsonString.startsWith('{') || trimmedJsonString.startsWith('['))) {
+        parsedResult = JSON.parse(trimmedJsonString);
       } else {
         parsedResult = [];
       }
