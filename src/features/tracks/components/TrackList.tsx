@@ -1,4 +1,4 @@
-import { Album } from '@/shared/types/SpotifyTrack';
+import { Album } from '@/shared/types/spotifyTrack';
 import TrackComments from '@/features/playlist/components/TrackComponent';
 export default function TrackList({ album }: { album: Album }) {
   if (!album) {

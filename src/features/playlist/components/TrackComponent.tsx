@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { TrackItem } from '@/shared/types/SpotifyTrack';
+import { TrackItem } from '@/shared/types/spotifyTrack';
 import Link from 'next/link';
 import React from 'react';
 
@@ -58,7 +58,9 @@ export default function TrackComponent({
                 />
               </div>
               <div className="flex flex-col overflow-hidden w-full">
-                <div className="font-bold text-lg break-words w-full">{item.track.name}</div>
+                <div className="font-bold text-lg break-words w-full whitespace-nowrap text-ellipsis">
+                  {item.track.name}
+                </div>
                 <div className="max-w-md text-gray-600 break-words">
                   {item.track.artists.map((artist) => artist.name).join(', ')}
                 </div>
@@ -77,7 +79,9 @@ export default function TrackComponent({
               />
             </div>
             <div className="flex flex-col overflow-hidden w-full">
-              <div className="font-bold text-lg break-words w-full">{item.track.name}</div>
+              <div className="font-bold text-lg break-words w-full whitespace-nowrap text-ellipsis">
+                {item.track.name}
+              </div>
               <div className="max-w-md text-gray-600 break-words">
                 {item.track.artists.map((artist) => artist.name).join(', ')}
               </div>
@@ -90,9 +94,12 @@ export default function TrackComponent({
 
   return (
     <div className={`relative border-3 border-black p-5 mt-10 bg-white w-full  ${className}`}>
-      <h1 className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-2 border-2 border-black font-bold text-2xl">
+      <span
+        className="absolute -top-6 left-1/2 -translate-x-1/2 bg-black text-white px-6 py-2 
+      border-2 border-black font-bold text-2xl whitespace-nowrap text-ellipsis"
+      >
         {title}
-      </h1>
+      </span>
       <div className="grid grid-cols-2 gap-x-3 gap-y-3 mt-3">
         {isLoading ? renderSkeletonItems() : renderTrackItems()}
       </div>

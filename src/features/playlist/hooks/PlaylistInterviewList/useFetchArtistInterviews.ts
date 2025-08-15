@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useMemo, useRef } from 'react';
-import { TrackItem } from '@/shared/types/SpotifyTrack';
+
+import { TrackItem } from '@/shared/types/spotifyTrack';
 import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 import { getCombinedInterviews } from '@/shared/hooks/searchInterviews';
 
@@ -72,12 +73,13 @@ export function useFetchArtistInterviews(props: PlaylistInterviewListProps) {
     if (!artists.length) return;
 
     const fetchChunkedInterviews = async () => {
+      const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
       const chunked = chunkArray(artists, chunkSize);
       const currentChunk = chunked[visibleChunks - 1];
       if (!currentChunk) return;
 
       const newInterviews: ArtistInterviewMap = {};
-      await Promise.all(
+      await Promise.allSettled(
         currentChunk.map(async (artist) => {
           if (!artistInterviews[artist]) {
             const result = await getCombinedInterviews(artist);
@@ -87,11 +89,14 @@ export function useFetchArtistInterviews(props: PlaylistInterviewListProps) {
       );
 
       setArtistInterviews((prev) => ({ ...prev, ...newInterviews }));
+
+      await delay(500);
       setIsScrollLoading(false);
       isScrollLoadingRef.current = false;
     };
     fetchChunkedInterviews();
   }, [visibleChunks, artists, artistInterviews]);
+
   return {
     artistInterviews,
     observerRef,

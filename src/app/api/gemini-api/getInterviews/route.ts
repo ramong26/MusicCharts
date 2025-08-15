@@ -46,10 +46,13 @@ Only include real existing links. Do not make up data.`;
         .trim()
         .replace(/^```json\s*/, '')
         .replace(/```$/, '');
-      if (jsonString) {
+      if (jsonString && (jsonString.trim().startsWith('{') || jsonString.trim().startsWith('['))) {
         parsedResult = JSON.parse(jsonString);
+      } else {
+        parsedResult = [];
       }
     } catch (e) {
+      parsedResult = [];
       console.error('Failed to parse JSON from Gemini response:', e, 'Raw response:', resultText);
     }
     return NextResponse.json({ result: parsedResult });

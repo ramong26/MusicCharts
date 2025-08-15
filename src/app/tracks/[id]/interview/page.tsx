@@ -13,11 +13,11 @@ export const metadata = {
 
 export const revalidate = 60 * 60 * 24;
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 export default async function InterviewPage({ params }: PageProps) {
-  const { id } = await params;
+  const { id } = params;
   const trackId = id;
 
   const track = await getTrackId(trackId);

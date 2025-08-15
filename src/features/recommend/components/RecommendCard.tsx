@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { TrackItem } from '@/shared/types/SpotifyTrack';
+import { TrackItem } from '@/shared/types/spotifyTrack';
 
 interface RecommendCardProps {
   track: TrackItem;

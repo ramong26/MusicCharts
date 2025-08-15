@@ -1,10 +1,8 @@
 import getTrackId from '@/features/tracks/hooks/getTrackId';
 import getTrackIdAlbum from '@/features/tracks/hooks/getTrackIdAlbum';
-// import { getYoutubeTrackIdVideo } from '@/features/tracks/hooks/getYoutube';
-// import { searchInterviews } from '@/features/tracks/hooks/searchInterviews';
 
 import HeaderMain from '@/shared/components/HeaderMain';
-import TrackDescription from '@/features/tracks/components/TrackDescription';
+import TrackDescription from '@/features/tracks/components/TrackDescription/TrackDescription';
 import TrackList from '@/features/tracks/components/TrackList';
 import TrackComments from '@/features/tracks/components/TrackComments';
 
@@ -13,23 +11,20 @@ export const metadata = {
   description: 'Details about the track',
 };
 
-export const revalidate = 60 * 60 * 24 * 7;
+export const revalidate = 60 * 60 * 24;
+
 interface PageProps {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }
 
 export default async function TrackPage({ params }: PageProps) {
-  const { id } = await params;
+  const { id } = params;
   const trackId = id;
   // trackId로 트랙 정보 받아옴
   const track = await getTrackId(trackId);
 
   // trackId로 앨범 정보 받아옴
   const album = await getTrackIdAlbum(track);
-  // trackId로 유튜브 비디오 정보 받아옴
-  // const videos = await getYoutubeTrackIdVideo(track.name);
-  // // // trackId로 인터뷰 정보 받아옴
-  // const interviews = await searchInterviews(track.name);
 
   return (
     <div className="h-screen ">
