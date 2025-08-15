@@ -4,7 +4,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 import ArtistInterviewComponent from '@/features/tracks/interview/components/ArtistInterviewComponent';
 
-import { Artist } from '@/shared/types/SpotifyTrack';
+import { Artist } from '@/shared/types/spotifyTrack';
 import { getCombinedInterviews } from '@/shared/hooks/searchInterviews';
 
 export default function ArtistInterview({ artist }: { artist: Artist }) {

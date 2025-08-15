@@ -30,7 +30,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "testApi.js"
+    "src/shared/types/spotifyTrack.tsadf"
   ],
   "exclude": ["node_modules"]
 }

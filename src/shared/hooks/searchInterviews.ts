@@ -1,6 +1,6 @@
 import { CustomSearchResult } from '@/features/tracks/types/custom-search';
 import { formatDate } from '@/lib/utils/date';
-import { YouTubeItem } from '@/shared/types/Youtube';
+import { YouTubeItem } from '@/shared/types/youtube';
 import { getBaseUrl } from '@/lib/utils/baseUrl';
 import callApi from '@/shared/hooks/callApi';
 const baseUrl = getBaseUrl();
@@ -41,27 +41,35 @@ export async function searchInterviews(who: string): Promise<CustomSearchResult[
 
 // Google GeminiAi 사용하여 인터뷰 검색
 export async function searchInterviewsWithGeminiAI(who: string): Promise<CustomSearchResult[]> {
-  return callApi<CustomSearchResult[]>(
-    `${baseUrl}/api/gemini-api/getInterviews`,
-    {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ query: who }),
+  const response = await callApi<YouTubeItem[]>(`${baseUrl}/api/gemini-api/getInterviews`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
     },
-    (data) =>
-      Array.isArray(data)
-        ? data.filter((item: YouTubeItem) => ({
-            title: item?.snippet?.title,
-            link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
-            thumbnail: item?.snippet?.thumbnails?.high?.url,
-            publishedAt: item?.snippet?.publishedAt,
-            description: item?.snippet?.description,
-            displayLink: 'www.youtube.com',
-          }))
-        : []
-  );
+    body: JSON.stringify({ query: who }),
+  });
+
+  const chunkSize = 10;
+  const results: CustomSearchResult[] = [];
+
+  if (Array.isArray(response)) {
+    for (let i = 0; i < response.length; i += chunkSize) {
+      const chunk = response.slice(i, i + chunkSize);
+      results.push(
+        ...chunk.map((item) => ({
+          title: item?.snippet?.title,
+          link: `https://www.youtube.com/watch?v=${item?.id?.videoId}`,
+          thumbnail: item?.snippet?.thumbnails?.high?.url,
+          publishedAt: item?.snippet?.publishedAt,
+          description: item?.snippet?.description,
+          displayLink: 'www.youtube.com',
+        }))
+      );
+      await ((globalThis as unknown as Global).scheduler?.yield?.() ||
+        new Promise((r) => setTimeout(r, 0)));
+    }
+  }
+  return results;
 }
 
 // 유튜브 인터뷰 검색
