@@ -5,6 +5,7 @@ import useFetchWikiInfo from '../../hooks/TrackDescription/useFetchWikiInfo';
 import { Album } from '@/shared/types/spotifyTrack';
 
 export default function TrackDescription({ album }: { album: Album }) {
+  // 앨범 정보를 위키피디아를 통해 가져옴
   const { summary } = useFetchWikiInfo({ album });
 
   const handleCopyLink = () => {
@@ -20,26 +21,6 @@ export default function TrackDescription({ album }: { album: Album }) {
       });
   };
 
-  // // 위키 정보 가져오기
-  // useEffect(() => {
-  //   const fetchWikiInfo = async () => {
-  //     const searchQuery = [album.name, album.artists[0].name, album.type].filter(Boolean).join(' ');
-  //     const topTitle = await getTopWikiTitle(searchQuery);
-
-  //     if (topTitle) {
-  //       const summaryText = await fetchWikiSummary(topTitle);
-  //       const translatedSummary = await translateText(summaryText, 'ko');
-
-  //       setLoading(false);
-  //       setSummary(translatedSummary);
-  //     } else {
-  //       setSummary('해당 앨범에 대한 위키 문서를 찾을 수 없습니다.');
-  //     }
-  //   };
-
-  //   setLoading(true);
-  //   fetchWikiInfo();
-  // }, [album.id, translateText, album.name, album.artists, album.type]);
   if (!album) {
     return <div>앨범 정보를 불러오는 중...</div>;
   }

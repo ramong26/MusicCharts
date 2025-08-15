@@ -14,11 +14,11 @@ export const metadata = {
 export const revalidate = 60 * 60 * 24;
 
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function TrackPage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = await params;
   const trackId = id;
   // trackId로 트랙 정보 받아옴
   const track = await getTrackId(trackId);

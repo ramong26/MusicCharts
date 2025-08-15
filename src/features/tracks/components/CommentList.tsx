@@ -1,7 +1,8 @@
 'use client';
 import { Comment } from '@/shared/types/comment';
-import CommentItem from './CommentItem';
-import { commentsService } from '@/service/commentService';
+import CommentItem from '@/features/tracks/components/CommentItem';
+import useCommentAction from '../hooks/TrackComments/useCommentAction';
+
 export default function CommentList({
   comments,
   setComments,
@@ -9,32 +10,8 @@ export default function CommentList({
   comments: Comment[];
   setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
 }) {
-  // 댓글 삭제 핸들러
-  const handleDelete = async (commentId: string) => {
-    try {
-      await commentsService.deleteComments(commentId);
-      setComments((prev) => prev.filter((c) => c._id !== commentId));
-    } catch (err) {
-      console.error(err);
-    }
-  };
-
-  // 댓글 수정 핸들러
-  const handleEdit = async (commentId: string, newText: string) => {
-    try {
-      const updatedComment = await commentsService.putComments(commentId, {
-        text: newText,
-      });
-      if (!updatedComment) throw new Error('수정 실패');
-      setComments((prev) =>
-        prev.map((c) =>
-          c._id === commentId ? { ...c, text: newText, updatedAt: new Date().toISOString() } : c
-        )
-      );
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // 댓글 수정과 삭제
+  const { handleDelete, handleEdit } = useCommentAction({ setComments });
 
   return (
     <div className="mt-4">
