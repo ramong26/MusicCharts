@@ -25,8 +25,8 @@ export default function AuthModal({ onClose, onChangeModal, type }: AuthModalPro
     return (
       <LoginModalMain<LoginFormData>
         key={'login-modal'}
-        title="Login"
-        submitLabel="Login"
+        title="Log in to your account."
+        submitLabel="Log in"
         fields={loginFields}
         onClose={onClose}
         onSubmit={handleSubmit(onSubmit)}
@@ -53,7 +53,7 @@ export default function AuthModal({ onClose, onChangeModal, type }: AuthModalPro
       <LoginModalMain<SignupFormData>
         key={'signup-modal'}
         title="Sign up to Soundtalk"
-        submitLabel="Sign up"
+        submitLabel="Sign Up"
         fields={signupFields}
         onClose={onClose}
         onSubmit={handleSubmit(onSubmit)}

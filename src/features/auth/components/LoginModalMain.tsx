@@ -38,12 +38,12 @@ export default function LoginModalMain<T extends FieldValues>({
   errors,
 }: LoginModalMainProps<T>) {
   // Spotify 로그인 함수
-  const signWithSpotify = async () => {
+  const signWithSpotify = () => {
     window.location.href = '/api/auth/spotify/login';
   };
 
   // Google 로그인 함수
-  const signWithGoogle = async () => {
+  const signWithGoogle = () => {
     window.location.href = '/api/auth/google/login';
   };
 
