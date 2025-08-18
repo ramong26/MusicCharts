@@ -18,7 +18,7 @@ export default function HeaderMain() {
   const { isLogin, profile, handleLogout } = useHeaderAuth();
   const [isScroll, setIsScroll] = useState(false);
 
-  // 스크롤 이벤트
+  //  스크롤 이벤트
   useEffect(() => {
     const handleScroll = () => {
       setIsScroll(window.scrollY > 100);

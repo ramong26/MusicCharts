@@ -37,15 +37,6 @@ export default function useLoginSubmit({ onClose }: { onClose: () => void }) {
     }
   };
 
-  // Spotify 로그인 함수
-  const signWithSpotify = async () => {
-    window.location.href = '/api/auth/spotify/login';
-  };
-
-  // Google 로그인 함수
-  const signWithGoogle = async () => {
-    window.location.href = '/api/auth/google/login';
-  };
   const loginField = {
     email: {
       name: 'email' as const,
@@ -61,27 +52,11 @@ export default function useLoginSubmit({ onClose }: { onClose: () => void }) {
     },
   };
 
-  const oauthButtonsField = [
-    {
-      label: 'Continue with Spotify',
-      icon: 'https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg',
-      alt: 'Spotify',
-      onClick: signWithSpotify,
-    },
-    {
-      label: 'Continue with Google',
-      icon: 'https://www.svgrepo.com/show/355037/google.svg',
-      alt: 'Google',
-      onClick: signWithGoogle,
-    },
-  ];
-
   return {
     handleSubmit,
     isSubmitting,
     onSubmit,
     loginField,
-    oauthButtonsField,
     errors,
   };
 }
