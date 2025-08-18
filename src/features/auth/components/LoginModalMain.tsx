@@ -20,12 +20,6 @@ interface LoginModalMainProps<T extends FieldValues> {
   fields: FieldProps<T>[];
   isSubmitting?: boolean;
   submitLabel: string;
-  oauthButtons?: {
-    label: string;
-    icon: string;
-    alt: string;
-    onClick: () => void;
-  }[];
   switchLabel: string;
   onSwitch: () => void;
   errors?: { [key: string]: string | undefined };
@@ -39,11 +33,36 @@ export default function LoginModalMain<T extends FieldValues>({
   fields,
   isSubmitting,
   submitLabel,
-  oauthButtons,
   switchLabel,
   onSwitch,
   errors,
 }: LoginModalMainProps<T>) {
+  // Spotify 로그인 함수
+  const signWithSpotify = () => {
+    window.location.href = '/api/auth/spotify/login';
+  };
+
+  // Google 로그인 함수
+  const signWithGoogle = () => {
+    window.location.href = '/api/auth/google/login';
+  };
+
+  // OAuth 버튼 설정
+  const oauthButtons = [
+    {
+      label: 'Continue with Spotify',
+      icon: 'https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_without_text.svg',
+      alt: 'Spotify',
+      onClick: signWithSpotify,
+    },
+    {
+      label: 'Continue with Google',
+      icon: 'https://www.svgrepo.com/show/355037/google.svg',
+      alt: 'Google',
+      onClick: signWithGoogle,
+    },
+  ];
+
   return (
     <LoginModalLayout onClose={onClose}>
       <div className="mb-6 flex items-center justify-center">

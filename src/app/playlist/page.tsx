@@ -1,4 +1,4 @@
-import HeaderMain from '@/shared/components/HeaderMain';
+import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import HowPlaylist from '@/features/playlist/components/HowPlaylist';
 import SubmitPlaylist from '@/features/playlist/components/SubmitPlaylist';
 

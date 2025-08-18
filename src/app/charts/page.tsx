@@ -1,4 +1,4 @@
-import HeaderMain from '@/shared/components/HeaderMain';
+import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import ChartTop from '@/features/chart/components/ChartTop';
 import ChartComponent from '@/features/chart/components/ChartComponent';
 

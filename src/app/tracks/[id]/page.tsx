@@ -1,7 +1,7 @@
 import getTrackId from '@/features/tracks/hooks/getTrackId';
 import getTrackIdAlbum from '@/features/tracks/hooks/getTrackIdAlbum';
 
-import HeaderMain from '@/shared/components/HeaderMain';
+import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import TrackDescription from '@/features/tracks/components/TrackDescription/TrackDescription';
 import TrackList from '@/features/tracks/components/TrackList';
 import TrackComments from '@/features/tracks/components/TrackComments';

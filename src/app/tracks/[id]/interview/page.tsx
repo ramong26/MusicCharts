@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import getTrackId from '@/features/tracks/hooks/getTrackId';
 import getArtist from '@/features/tracks/hooks/getArtist';
 
-import HeaderMain from '@/shared/components/HeaderMain';
+import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import ArtistProfile from '@/features/tracks/interview/components/ArtistProfile';
 import ArtistInterview from '@/features/tracks/interview/components/ArtistInterview';
 

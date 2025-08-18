@@ -1,4 +1,4 @@
-import HeaderMain from '@/shared/components/HeaderMain';
+import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import ChannelList from '@/features/channel/components/ChannelList';
 import YoutubeChannels from '@/features/homepage/components/YoutubePlaylist';
 

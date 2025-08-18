@@ -2,7 +2,7 @@ import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 
-import HeaderMain from '@/shared/components/HeaderMain';
+import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import InterviewList from '@/features/homepage/components/InterviewList';
 import ChartTop5 from '@/features/homepage/components/ChartTop5';
 
