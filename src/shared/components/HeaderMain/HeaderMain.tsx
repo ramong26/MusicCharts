@@ -6,10 +6,7 @@ import HeaderLayout from '@/shared/components/HeaderMain/HeaderLayout';
 import useHeaderModal from '@/shared/hooks/HeaderMain/useHeaderModal';
 import useHeaderAuth from '@/shared/hooks/HeaderMain/useHeaderAuth';
 
-const LoginModal = dynamic(() => import('@/features/auth/components/LoginModal'), {
-  ssr: false,
-});
-const SignupModal = dynamic(() => import('@/features/auth/components/SignupModal'), {
+const AuthModal = dynamic(() => import('@/features/auth/components/AuthModal'), {
   ssr: false,
 });
 
@@ -37,23 +34,14 @@ export default function HeaderMain() {
         isScroll={isScroll}
       />
       {/* 모달 */}
-      {modalType === 'login' && (
-        <LoginModal
+      {modalType && (
+        <AuthModal
           onClose={() => {
             setModalType(null);
             document.body.style.overflow = 'auto';
           }}
           onChangeModal={(type) => setModalType(type)}
-        />
-      )}
-
-      {modalType === 'signup' && (
-        <SignupModal
-          onClose={() => {
-            setModalType(null);
-            document.body.style.overflow = 'auto';
-          }}
-          onChangeModal={(type) => setModalType(type)}
+          type={modalType}
         />
       )}
     </>

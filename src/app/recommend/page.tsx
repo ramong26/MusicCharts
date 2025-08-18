@@ -1,4 +1,4 @@
-import HeaderMain from '@/shared/components/HeaderMain';
+import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import TodayMusic from '@/features/recommend/components/TodayMusic';
 
 export const metadata = {

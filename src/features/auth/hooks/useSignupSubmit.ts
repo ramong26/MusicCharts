@@ -36,7 +36,6 @@ export default function useSignupSubmit({ onClose }: { onClose: () => void }) {
       alert('회원가입 중 오류가 발생했습니다. 다시 시도해주세요.');
     }
   };
-
   // 회원가입 필드 설정
   const signupField = {
     username: {
@@ -70,7 +69,6 @@ export default function useSignupSubmit({ onClose }: { onClose: () => void }) {
     isSubmitting,
     onSubmit,
     signupField,
-
     errors,
   };
 }
