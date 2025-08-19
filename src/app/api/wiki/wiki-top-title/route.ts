@@ -22,6 +22,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (e) {
     console.error('Error fetching top wiki title:', e);
-    return null;
+    return NextResponse.json({ error: 'Error fetching top wiki title' }, { status: 500 });
   }
 }

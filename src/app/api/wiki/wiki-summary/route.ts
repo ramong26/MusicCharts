@@ -31,7 +31,6 @@ export async function GET(req: NextRequest) {
     await WikiSummary.create({
       title,
       extract: data.extract,
-      extract_en: data.extract,
       extract_ko: translated,
     });
 

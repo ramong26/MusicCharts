@@ -3,7 +3,6 @@ import { Schema, model, models } from 'mongoose';
 const wikiSummarySchema = new Schema({
   title: { type: String, required: true },
   extract: { type: String, required: true },
-  extract_en: { type: String },
   extract_ko: { type: String },
 });
 
