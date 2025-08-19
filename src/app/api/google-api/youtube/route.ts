@@ -1,8 +1,8 @@
 import { YouTubeItem } from '@/shared/types/youtube';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
+export async function GET(request: NextRequest) {
+  const { searchParams } = request.nextUrl;
   const query = searchParams.get('q');
 
   if (!query) {

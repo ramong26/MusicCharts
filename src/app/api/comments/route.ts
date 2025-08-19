@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   await connectToDB();
 
-  const url = new URL(request.url);
+  const url = request.nextUrl;
   const trackId = url.searchParams.get('trackId');
   if (!trackId) {
     return new Response('트랙 ID가 필요합니다', { status: 400 });
