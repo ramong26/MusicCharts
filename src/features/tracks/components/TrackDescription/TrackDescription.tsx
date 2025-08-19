@@ -1,9 +1,9 @@
 'use client';
 import Image from 'next/image';
 
-import useFetchWikiInfo from '../../hooks/TrackDescription/useFetchWikiInfo';
+import useFetchWikiInfo from '@/features/tracks/hooks/TrackDescription/useFetchWikiInfo';
 import { Album } from '@/shared/types/spotifyTrack';
-
+import TrackCommentsSkeleton from '@/features/tracks/components/TrackComets/TrackCommentsSkeleton';
 export default function TrackDescription({ album }: { album: Album }) {
   // 앨범 정보를 위키피디아를 통해 가져옴
   const { summary } = useFetchWikiInfo({ album });
@@ -22,7 +22,7 @@ export default function TrackDescription({ album }: { album: Album }) {
   };
 
   if (!album) {
-    return <div>앨범 정보를 불러오는 중...</div>;
+    return <TrackCommentsSkeleton />;
   }
   return (
     <div>

@@ -1,9 +1,14 @@
 'use client';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
 
 import SubmitInput from '@/shared/components/SubmitInput';
-import CommentList from '@/features/tracks/components/CommentList';
 import useTrackComments from '@/features/tracks/hooks/TrackComments/useTrackComments';
+import TrackCommentsSkeleton from './TrackCommentsSkeleton';
+const CommentList = dynamic(() => import('@/features/tracks/components/CommentList'), {
+  ssr: false,
+  loading: () => <TrackCommentsSkeleton />,
+});
 
 export default function TrackComments({ trackId }: { trackId: string }) {
   const { comments, setComments, submitComment, setSubmitComment, handleSubmit } =
@@ -22,7 +27,11 @@ export default function TrackComments({ trackId }: { trackId: string }) {
         value={submitComment}
       />
 
-      <CommentList comments={comments} setComments={setComments} />
+      {!comments ? (
+        <TrackCommentsSkeleton />
+      ) : (
+        <CommentList comments={comments} setComments={setComments} />
+      )}
     </div>
   );
 }

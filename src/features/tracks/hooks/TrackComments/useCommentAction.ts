@@ -1,17 +1,18 @@
 import { useCallback } from 'react';
 import { commentsService } from '@/service/commentService';
 import { Comment } from '@/shared/types/comment';
+
 export default function useCommentAction({
   setComments,
 }: {
-  setComments: React.Dispatch<React.SetStateAction<Comment[]>>;
+  setComments: React.Dispatch<React.SetStateAction<Comment[] | null>>;
 }) {
   // 댓글 삭제 핸들러
   const handleDelete = useCallback(
     async (commentId: string) => {
       try {
         await commentsService.deleteComments(commentId);
-        setComments((prev) => prev.filter((c) => c._id !== commentId));
+        setComments((prev) => (prev ?? []).filter((c) => c._id !== commentId));
       } catch (err) {
         console.error(err);
       }
@@ -28,7 +29,7 @@ export default function useCommentAction({
         });
         if (!updatedComment) throw new Error('수정 실패');
         setComments((prev) =>
-          prev.map((c) =>
+          (prev ?? []).map((c) =>
             c._id === commentId ? { ...c, text: newText, updatedAt: new Date().toISOString() } : c
           )
         );

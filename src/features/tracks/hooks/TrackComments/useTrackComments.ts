@@ -4,7 +4,7 @@ import { commentsService } from '@/service/commentService';
 import { Comment } from '@/shared/types/comment';
 
 export default function useTrackComments(trackId: string) {
-  const [comments, setComments] = useState<Comment[]>([]);
+  const [comments, setComments] = useState<Comment[] | null>(null);
   const [submitComment, setSubmitComment] = useState('');
   useEffect(() => {
     (async () => {
@@ -40,7 +40,7 @@ export default function useTrackComments(trackId: string) {
         profileImageUrl: '',
       },
     };
-    setComments((prev) => [...prev, tempComment]);
+    setComments((prev) => [...(prev ?? []), tempComment]);
     setSubmitComment('');
 
     try {
@@ -53,10 +53,10 @@ export default function useTrackComments(trackId: string) {
 
       const savedComment: Comment = res as Comment;
 
-      setComments((prev) => prev.map((c) => (c._id === tempId ? savedComment : c)));
+      setComments((prev) => (prev ?? []).map((c) => (c._id === tempId ? savedComment : c)));
     } catch (err) {
       console.error('댓글 등록 실패:', err);
-      setComments((prev) => prev.filter((c) => c._id !== tempId));
+      setComments((prev) => (prev ?? []).filter((c) => c._id !== tempId));
     }
   };
 
