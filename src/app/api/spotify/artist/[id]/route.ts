@@ -1,8 +1,8 @@
 import { NextResponse, NextRequest } from 'next/server';
 import getArtist from '@/features/tracks/hooks/getArtist';
 
-export async function GET(req: NextRequest) {
-  const { searchParams } = new URL(req.url);
+export async function GET(request: NextRequest) {
+  const { searchParams } = request.nextUrl;
   const id = searchParams.get('id');
 
   if (!id) {
