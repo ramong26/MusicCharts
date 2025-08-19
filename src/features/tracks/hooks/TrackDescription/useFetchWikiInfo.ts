@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 
 import { Album } from '@/shared/types/spotifyTrack';
-import { getTopWikiTitle, fetchWikiSummary } from '@/features/tracks/hooks/fetchWikiSummary';
 import useTranslate from '@/shared/hooks/useTranslate';
 
 export default function useFetchWikiInfo({ album }: { album: Album }) {

@@ -16,7 +16,7 @@ export async function POST(request: Request) {
       apiKey: googleApiKey,
     });
 
-    const prompt = `Translate the following text to ${targetLang}:\n\n${text}`;
+    const prompt = `아래 텍스트를 ${targetLang}로 번역해서 번역 결과만 출력하세요.\n\n${text}`;
 
     const response = await genAI.models.generateContent({
       model: 'gemini-2.5-flash',
