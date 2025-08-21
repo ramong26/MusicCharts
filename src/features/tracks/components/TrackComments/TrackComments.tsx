@@ -5,14 +5,19 @@ import dynamic from 'next/dynamic';
 import SubmitInput from '@/shared/components/SubmitInput';
 import useTrackComments from '@/features/tracks/hooks/TrackComments/useTrackComments';
 import TrackCommentsSkeleton from './TrackCommentsSkeleton';
+import { useTrackStore } from '@/stores/trackStrore';
+
 const CommentList = dynamic(() => import('@/features/tracks/components/CommentList'), {
   ssr: false,
   loading: () => <TrackCommentsSkeleton />,
 });
 
-export default function TrackComments({ trackId }: { trackId: string }) {
-  const { comments, setComments, submitComment, setSubmitComment, handleSubmit } =
-    useTrackComments(trackId);
+export default function TrackComments() {
+  const { trackId } = useTrackStore();
+
+  const { comments, setComments, submitComment, setSubmitComment, handleSubmit } = useTrackComments(
+    trackId ?? ''
+  );
 
   return (
     <div className="flex flex-col gap-4">

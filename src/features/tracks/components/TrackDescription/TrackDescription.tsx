@@ -3,7 +3,9 @@ import Image from 'next/image';
 
 import useFetchWikiInfo from '@/features/tracks/hooks/TrackDescription/useFetchWikiInfo';
 import { Album } from '@/shared/types/spotifyTrack';
-import TrackCommentsSkeleton from '@/features/tracks/components/TrackCommets/TrackCommentsSkeleton';
+
+import TrackCommentsSkeleton from '@/features/tracks/components/TrackComments/TrackCommentsSkeleton';
+
 export default function TrackDescription({ album }: { album: Album }) {
   // 앨범 정보를 위키피디아를 통해 가져옴
   const { summary } = useFetchWikiInfo({ album });
@@ -27,7 +29,7 @@ export default function TrackDescription({ album }: { album: Album }) {
   return (
     <div>
       <div className="flex gap-10">
-        <Image src={album.images[0].url} alt={album.name} width={400} height={400} />
+        <Image src={album.images[0].url} priority alt={album.name} width={400} height={400} />
         <div>
           <div className="flex gap-2 items-center">
             <div className="font-bold text-xl">{album.name}</div>

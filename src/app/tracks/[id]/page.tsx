@@ -3,15 +3,15 @@ import getTrackIdAlbum from '@/features/tracks/hooks/getTrackIdAlbum';
 
 import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import TrackDescription from '@/features/tracks/components/TrackDescription/TrackDescription';
-import TrackList from '@/features/tracks/components/TrackList';
-import TrackComments from '@/features/tracks/components/TrackCommets/TrackComments';
+
+import TrackClient from '@/features/tracks/components/TrackClient';
 
 export const metadata = {
   title: 'Track Page',
   description: 'Details about the track',
 };
 
-export const revalidate = 60 * 60 * 24;
+export const revalidate = 86400;
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -20,6 +20,7 @@ interface PageProps {
 export default async function TrackPage({ params }: PageProps) {
   const { id } = await params;
   const trackId = id;
+
   // trackId로 트랙 정보 받아옴
   const track = await getTrackId(trackId);
 
@@ -31,8 +32,7 @@ export default async function TrackPage({ params }: PageProps) {
       <HeaderMain />
       <main className="flex flex-col mt-[250px] gap-4 h-[617px] w-[1043px] mx-auto">
         {album && <TrackDescription album={album} />}
-        {album && <TrackList album={album} />}
-        {track && <TrackComments trackId={track.id} />}
+        {album && <TrackClient trackId={track.id} album={album} track={track} />}
       </main>
     </div>
   );
