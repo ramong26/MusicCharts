@@ -15,10 +15,7 @@ export async function GET(request: Request) {
     const query = searchParams.get('query');
 
     if (!query) {
-      return NextResponse.json(
-        { error: 'Query parameter is required' },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: 'Query parameter is required' }, { status: 400 });
     }
 
     const res = await fetch(
@@ -26,7 +23,7 @@ export async function GET(request: Request) {
         query
       )}`,
       {
-        next: { revalidate: 60 * 60 * 24 },
+        next: { revalidate: 86400 },
       }
     );
 
@@ -43,9 +40,6 @@ export async function GET(request: Request) {
     return NextResponse.json(data.items || []);
   } catch (error) {
     console.error('API route error:', error);
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

@@ -131,7 +131,7 @@ export async function GET(request: NextRequest) {
       httpOnly: true,
       sameSite: 'strict',
       path: '/',
-      secure: process.env.NODE_ENV === 'production' ? true : false,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: tokenData.expires_in ?? 3600,
     });
 

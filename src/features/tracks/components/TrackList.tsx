@@ -1,6 +1,11 @@
-import { Album } from '@/shared/types/spotifyTrack';
 import TrackComments from '@/features/playlist/components/TrackComponent';
-export default function TrackList({ album }: { album: Album }) {
+
+import { useTrackStore } from '@/stores/trackStore';
+
+export default function TrackList() {
+  // zustand로 앨범 정보 받아옴
+  const { album } = useTrackStore();
+
   if (!album) {
     return <div>앨범 정보가 없습니다.</div>;
   }

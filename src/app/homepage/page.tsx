@@ -13,7 +13,7 @@ export const metadata = {
   description: 'Welcome to the home page',
 };
 
-export const revalidate = 60 * 60 * 24;
+export const revalidate = 86400;
 
 export default async function HomePage() {
   const tracksList = await getTrackList({ playlistId: '1PcB3QM5sGbzFU5D9CbEGB' });

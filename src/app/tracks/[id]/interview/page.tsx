@@ -11,13 +11,14 @@ export const metadata = {
   description: 'Interview with the artist',
 };
 
-export const revalidate = 60 * 60 * 24;
+export const revalidate = 86400;
+
 interface PageProps {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }
 
 export default async function InterviewPage({ params }: PageProps) {
-  const { id } = params;
+  const { id } = await params;
   const trackId = id;
 
   const track = await getTrackId(trackId);

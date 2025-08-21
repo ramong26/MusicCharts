@@ -17,7 +17,7 @@ export const diffDate = (isoDate: string) => {
   today.setHours(0, 0, 0, 0);
 
   const diff = today.getTime() - createdDate.getTime();
-  const diffDays = diff / (1000 * 60 * 60 * 24);
+  const diffDays = diff / (1000 * 86400);
 
   return Math.floor(diffDays);
 };

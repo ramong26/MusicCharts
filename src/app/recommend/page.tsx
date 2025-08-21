@@ -6,7 +6,7 @@ export const metadata = {
   description: 'Discover new music tailored for you',
 };
 
-export const revalidate = 60 * 60 * 24;
+export const revalidate = 86400;
 
 export default function Recommend() {
   return (

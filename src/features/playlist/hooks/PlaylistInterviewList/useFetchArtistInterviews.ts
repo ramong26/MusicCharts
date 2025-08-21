@@ -94,8 +94,6 @@ export function useFetchArtistInterviews(props: PlaylistInterviewListProps) {
             `Failed to fetch interviews for artist: ${currentChunk[index]}`,
             result.reason
           );
-        } else {
-          console.log(`Successfully fetched interviews for artist: ${currentChunk[index]}`);
         }
       });
 
