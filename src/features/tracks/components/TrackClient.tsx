@@ -6,7 +6,7 @@ import LazyComponent from '@/shared/components/LazyComponent';
 
 import { Album } from '@/shared/types/spotifyTrack';
 import { Track } from '@/shared/types/spotifyTrack';
-import { useTrackStore } from '@/stores/trackStrore';
+import { useTrackStore } from '@/stores/trackStore';
 
 const TrackList = dynamic(() => import('@/features/tracks/components/TrackList'), {
   ssr: false,

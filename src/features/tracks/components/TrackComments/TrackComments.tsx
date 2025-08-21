@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 import SubmitInput from '@/shared/components/SubmitInput';
 import useTrackComments from '@/features/tracks/hooks/TrackComments/useTrackComments';
 import TrackCommentsSkeleton from './TrackCommentsSkeleton';
-import { useTrackStore } from '@/stores/trackStrore';
+import { useTrackStore } from '@/stores/trackStore';
 
 const CommentList = dynamic(() => import('@/features/tracks/components/CommentList'), {
   ssr: false,

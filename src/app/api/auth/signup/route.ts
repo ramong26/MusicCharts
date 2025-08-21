@@ -57,7 +57,7 @@ export async function POST(request: NextRequest) {
       httpOnly: true,
       sameSite: 'strict',
       path: '/',
-      secure: process.env.NODE_ENV === 'production' ? true : false,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: 86400,
     });
 

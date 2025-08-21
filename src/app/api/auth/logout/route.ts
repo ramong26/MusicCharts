@@ -9,7 +9,7 @@ export async function GET() {
     path: '/',
     httpOnly: true,
     sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production' ? true : false,
+    secure: process.env.NODE_ENV === 'production',
   });
   return response;
 }

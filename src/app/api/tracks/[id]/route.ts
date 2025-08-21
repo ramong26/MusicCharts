@@ -29,7 +29,10 @@ export async function GET(request: NextRequest, { params }: PageProps) {
   if (!trackRes.ok) {
     const errText = await trackRes.text();
     console.error(`Spotify Track Fetch failed: ${trackRes.status} ${trackRes.statusText}`, errText);
-    return NextResponse.error();
+    return NextResponse.json(
+      { error: `Spotify Track Fetch failed: ${trackRes.status} ${trackRes.statusText}` },
+      { status: trackRes.status }
+    );
   }
   let track;
   try {
@@ -37,7 +40,10 @@ export async function GET(request: NextRequest, { params }: PageProps) {
   } catch {
     const errText = await trackRes.text();
     console.error('Spotify Track JSON parse error. Body was:', errText);
-    return NextResponse.error();
+    return NextResponse.json(
+      { error: 'Failed to parse Spotify track JSON response.' },
+      { status: 502 }
+    );
   }
 
   // 4. 앨범 정보 fetch (track.album.id 사용)

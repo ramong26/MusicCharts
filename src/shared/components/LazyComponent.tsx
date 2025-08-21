@@ -7,17 +7,17 @@ export default function LazyComponent({ children }: { children: React.ReactNode 
 
   useEffect(() => {
     if (!ref.current) return;
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(
-        (entry) => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setShow(true);
             observer.disconnect();
           }
-        },
-        { threshold: 0.1 }
-      );
-    });
+        });
+      },
+      { threshold: 0.1 }
+    );
     observer.observe(ref.current);
     return () => observer.disconnect();
   }, [ref]);
