@@ -6,6 +6,7 @@
   "sideEffects": false,
   "scripts": {
     "dev": "next dev -H 127.0.0.1",
+    "analyze": "cross-env ANALYZE=true next build",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@next/bundle-analyzer": "^15.5.0",
     "@next/eslint-plugin-next": "^15.4.3",
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
@@ -41,6 +43,7 @@
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "@types/spotify-web-playback-sdk": "^0.1.19",
+    "cross-env": "^10.0.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.3",
     "eslint-config-prettier": "^10.1.8",
