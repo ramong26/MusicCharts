@@ -1,6 +1,6 @@
-import getTrackId from '@/features/tracks/hooks/getTrackId';
-import getTrackIdAlbum from '@/features/tracks/hooks/getTrackIdAlbum';
-
+// import getTrackId from '@/features/tracks/hooks/getTrackId';
+//  import getTrackIdAlbum from '@/features/tracks/hooks/getTrackIdAlbum';
+import { getBaseUrl } from '@/lib/utils/baseUrl';
 import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import TrackDescription from '@/features/tracks/components/TrackDescription/TrackDescription';
 
@@ -18,14 +18,13 @@ interface PageProps {
 }
 
 export default async function TrackPage({ params }: PageProps) {
+  const baseUrl = getBaseUrl();
   const { id } = await params;
-  const trackId = id;
 
-  // trackId로 트랙 정보 받아옴
-  const track = await getTrackId(trackId);
-
-  // trackId로 앨범 정보 받아옴
-  const album = await getTrackIdAlbum(track);
+  const res = await fetch(`${baseUrl}/api/tracks/${id}`, {
+    cache: 'no-store',
+  });
+  const { track, album } = await res.json();
 
   return (
     <div className="h-screen ">
