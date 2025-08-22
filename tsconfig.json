@@ -1,3 +1,21 @@
 {
-  "extends": "./tsconfig.base.json"
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "strict": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": { "@/*": ["src/*"] },
+    "esModuleInterop": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["next-env.d.ts", "svgr.d.ts", "**/*.ts", "**/*.tsx", "src"],
+  "exclude": ["node_modules"]
 }
