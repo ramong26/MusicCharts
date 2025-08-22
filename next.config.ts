@@ -7,6 +7,9 @@ const withAnalyzer = withBundleAnalyzer({
 });
 
 const nextConfig: NextConfig = {
+  experimental: {
+    esmExternals: 'loose',
+  },
   images: {
     remotePatterns: [
       { protocol: 'https', hostname: 'i.scdn.co', pathname: '/image/**' },
@@ -50,7 +53,7 @@ const nextConfig: NextConfig = {
     if (!config.resolve) config.resolve = {};
     if (!config.resolve.alias) config.resolve.alias = {};
     config.resolve.alias['@'] = path.resolve(__dirname, 'src');
-    config.experimental = { esmExternals: 'loose' };
+
     return config;
   },
 };
