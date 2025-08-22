@@ -23,14 +23,6 @@
       "@/*": ["./src/*"]
     }
   },
-
-  "include": [
-    "next-env.d.ts",
-    "svgr.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    ".next/types/**/*.ts",
-    "src/shared/types/spotifyTrack.tsadf"
-  ],
+  "include": ["next-env.d.ts", "svgr.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src"],
   "exclude": ["node_modules"]
 }
