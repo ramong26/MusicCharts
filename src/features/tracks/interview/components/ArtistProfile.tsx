@@ -1,7 +1,7 @@
 import Image from 'next/image';
 
 import ArtistProfileWiki from '@/features/tracks/interview/components/ArtistProfileWiki';
-import type { Artist } from '@/shared/types/spotifyTrack';
+import { Artist } from '@/shared/types/spotifyTrack';
 
 export default function ArtistProfile({ artist }: { artist: Artist | null }) {
   const artistName = artist?.name;

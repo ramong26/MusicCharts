@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest } from 'next/server';
 import jwt from 'jsonwebtoken';
 
 // JWT 미들웨어

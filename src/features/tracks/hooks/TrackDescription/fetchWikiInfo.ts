@@ -1,4 +1,4 @@
-import type { Album } from '@/shared/types/spotifyTrack';
+import { Album } from '@/shared/types/spotifyTrack';
 import { getBaseUrl } from '@/lib/utils/baseUrl';
 
 export default async function fetchWikiInfo({ album }: { album: Album }) {

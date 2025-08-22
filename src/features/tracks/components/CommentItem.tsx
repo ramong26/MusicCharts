@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import Image from 'next/image';
 
-import type { Comment } from '@/shared/types/comment';
+import { Comment } from '@/shared/types/comment';
 
 import { formatDate } from '@/lib/utils/date';
 import CommentEditInput from './CommentEditInput';

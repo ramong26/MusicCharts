@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import type { TrackItem } from '@/shared/types/spotifyTrack';
+import { TrackItem } from '@/shared/types/spotifyTrack';
 
 interface Props {
   tracksList: TrackItem[];

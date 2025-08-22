@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-import type { Album } from '@/shared/types/spotifyTrack';
-import type { Track } from '@/shared/types/spotifyTrack';
+import { Album } from '@/shared/types/spotifyTrack';
+import { Track } from '@/shared/types/spotifyTrack';
 
 interface TrackStore {
   album: Album | null;

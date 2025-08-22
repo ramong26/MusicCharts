@@ -1,5 +1,5 @@
-import type { LoginFormData } from '@/features/auth/schema/loginSchema';
-import type { SignupFormData } from '@/features/auth/schema/signupSchema';
+import { LoginFormData } from '@/features/auth/schema/loginSchema';
+import { SignupFormData } from '@/features/auth/schema/signupSchema';
 import useLoginSubmit from '@/features/auth/hooks/useLoginSubmit';
 import useSignupSubmit from '@/features/auth/hooks/useSignupSubmit';
 import LoginModalMain from './LoginModalMain';

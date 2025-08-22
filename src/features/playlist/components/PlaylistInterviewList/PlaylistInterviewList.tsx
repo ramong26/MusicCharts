@@ -1,4 +1,4 @@
-import type { TrackItem } from '@/shared/types/spotifyTrack';
+import { TrackItem } from '@/shared/types/spotifyTrack';
 import { useFetchArtistInterviews } from '@/features/playlist/hooks/PlaylistInterviewList/useFetchArtistInterviews';
 
 import PlaylistArtistInterviewList from '@/features/playlist/components/PlaylistInterviewList/PlaylistArtistInterviewList';

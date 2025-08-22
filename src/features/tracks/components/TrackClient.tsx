@@ -4,8 +4,8 @@ import { useEffect } from 'react';
 
 import LazyComponent from '@/shared/components/LazyComponent';
 
-import type { Album } from '@/shared/types/spotifyTrack';
-import type { Track } from '@/shared/types/spotifyTrack';
+import { Album } from '@/shared/types/spotifyTrack';
+import { Track } from '@/shared/types/spotifyTrack';
 import { useTrackStore } from '@/stores/trackStore';
 
 const TrackList = dynamic(() => import('@/features/tracks/components/TrackList'), {

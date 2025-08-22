@@ -1,5 +1,5 @@
 import { getBaseUrl } from '@/lib/utils/baseUrl';
-import type { YouTubeItem } from '@/shared/types/youtube';
+import { YouTubeItem } from '@/shared/types/youtube';
 
 export async function getYoutubeTrackFetchVideo(trackName: string) {
   const baseUrl = getBaseUrl();

@@ -1,5 +1,5 @@
 import getTopTrackPlaylist from '@/features/chart/hooks/getTopTrackPlaylist';
-import type { TrackItem } from '@/shared/types/spotifyTrack';
+import { TrackItem } from '@/shared/types/spotifyTrack';
 
 export default async function getAllTracks(playlistId: string, limit = 50) {
   let offset = 0;
