@@ -3,7 +3,7 @@ import Image from 'next/image';
 import InterviewList from '@/features/homepage/components/InterviewList';
 import Miniplayer from '@/features/chart/components/Miniplayer';
 
-import { TrackItem } from '@/shared/types/spotifyTrack';
+import type { TrackItem } from '@/shared/types/spotifyTrack';
 import IframeYoutube from '@/features/chart/components/IframeYoutube';
 
 export default async function ChartTop({ tracksList }: { tracksList: TrackItem[] }) {

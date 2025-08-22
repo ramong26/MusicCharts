@@ -1,4 +1,4 @@
-import { Track, Album } from '@/shared/types/spotifyTrack';
+import type { Track, Album } from '@/shared/types/spotifyTrack';
 import { getSpotifyAccessToken } from '@/lib/spotify/spotifyTokenManager';
 
 export default async function getTrackIdAlbum(track: Track | null): Promise<Album | null> {

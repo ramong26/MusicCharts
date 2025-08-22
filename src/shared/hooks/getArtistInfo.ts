@@ -1,5 +1,5 @@
 import { ArtistWiki } from '@/features/tracks/types/WikiArtist';
-import { WikidataSearchResponse, WikidataEntityData } from '@/shared/types/wikidata';
+import type { WikidataSearchResponse, WikidataEntityData } from '@/shared/types/wikidata';
 
 // 위키피디아 데이터베이스에서 아티스트 정보를 가져오는 함수
 export default async function getArtistInfo(artistName: string): Promise<ArtistWiki> {

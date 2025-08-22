@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { TrackItem } from '@/shared/types/spotifyTrack';
+import type { TrackItem } from '@/shared/types/spotifyTrack';
 
 interface ChartComponentProps {
   tracksList: TrackItem[];

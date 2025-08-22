@@ -1,4 +1,4 @@
-import { Track } from '@/shared/types/spotifyTrack';
+import type { Track } from '@/shared/types/spotifyTrack';
 import { getBaseUrl } from '@/lib/utils/baseUrl';
 
 export default async function getTrackId(trackId?: string): Promise<Track> {

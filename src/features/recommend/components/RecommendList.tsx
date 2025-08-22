@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 import RecommendCard from '@/features/recommend/components/RecommendCard';
 import { getTrackList } from '@/shared/hooks/getTrackList';
-import { TrackItem } from '@/shared/types/spotifyTrack';
+import type { TrackItem } from '@/shared/types/spotifyTrack';
 interface MoodTagProps {
   tag: string;
 }

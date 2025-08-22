@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import { commentsService } from '@/service/commentService';
-import { Comment } from '@/shared/types/comment';
+import type { Comment } from '@/shared/types/comment';
 
 export default function useTrackComments(trackId: string) {
   const [comments, setComments] = useState<Comment[] | null>(null);

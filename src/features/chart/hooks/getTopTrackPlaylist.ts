@@ -1,4 +1,4 @@
-import { TrackItem } from '@/shared/types/spotifyTrack';
+import type { TrackItem } from '@/shared/types/spotifyTrack';
 import { getBaseUrl } from '@/lib/utils/baseUrl';
 
 export default async function getPlaylistTracks({

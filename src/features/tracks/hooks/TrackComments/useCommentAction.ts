@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { commentsService } from '@/service/commentService';
-import { Comment } from '@/shared/types/comment';
+import type { Comment } from '@/shared/types/comment';
 
 export default function useCommentAction({
   setComments,
