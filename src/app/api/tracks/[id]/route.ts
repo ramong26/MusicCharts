@@ -13,8 +13,6 @@ export async function GET(request: NextRequest, { params }: PageProps) {
   const cachedKey = `track:${id}:withAlbum`;
 
   // 1. Redis 캐시 확인
-  // const cached = await redis.get(cachedKey);
-
   const cached = await cacheGet(cachedKey);
   if (cached) {
     return NextResponse.json(JSON.parse(cached), { headers: { 'x-cache': 'HIT' } });

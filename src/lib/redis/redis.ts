@@ -48,7 +48,7 @@ export async function cacheGet(key: string): Promise<string | null> {
 export async function cacheSet(key: string, value: string, ttlSeconds?: number): Promise<void> {
   try {
     if (upstash) {
-      if (ttlSeconds) await upstash.set(key, value, { ex: ttlSeconds });
+      if (ttlSeconds && ttlSeconds > 0) await upstash.set(key, value, { ex: ttlSeconds });
       else await upstash.set(key, value);
       return;
     }

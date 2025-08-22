@@ -1,4 +1,5 @@
 'use client';
+
 export default function TrackPageShare() {
   const handleCopyLink = () => {
     const currentUrl = window.location.href;

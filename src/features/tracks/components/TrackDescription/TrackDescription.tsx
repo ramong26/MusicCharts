@@ -1,8 +1,6 @@
 import Image from 'next/image';
 
-import fetchWikiInfo from '@/features/tracks/hooks/TrackDescription/useFetchWikiInfo';
-
-// import useFetchWikiInfo from '@/features/tracks/hooks/TrackDescription/useFetchWikiInfo';
+import fetchWikiInfo from '@/features/tracks/hooks/TrackDescription/fetchWikiInfo';
 import { Album } from '@/shared/types/spotifyTrack';
 
 import TrackCommentsSkeleton from '@/features/tracks/components/TrackComments/TrackCommentsSkeleton';
