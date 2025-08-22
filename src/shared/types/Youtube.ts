@@ -67,7 +67,7 @@ export interface YouTubeSearchResponse {
   items: YouTubeSearchItem[];
 }
 
-// YouTube 비디오 상세 응답 (현재 받고 있는 데이터 구조)
+// YouTube 비디오 상세 응답
 export interface YouTubeVideoResponse {
   kind: string;
   etag: string;
