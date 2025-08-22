@@ -1,0 +1,52 @@
+name: Redis Daily Flush
+
+on:
+  # 매일 00:00 UTC에 실행 (한국 KST 기준 09:00)
+  schedule:
+    - cron: '0 0 * * *'
+  # 수동 실행도 가능(실수 방지용 확인 입력)
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type YES to flush the entire Redis database'
+        required: false
+        default: ''
+
+concurrency:
+  group: redis-daily-flush
+  cancel-in-progress: false
+
+jobs:
+  flush:
+    # 스케줄 실행이거나, 수동 실행 시 YES를 입력한 경우에만 수행
+    if: github.event_name == 'schedule' || inputs.confirm == 'YES'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate secrets
+        run: |
+          if [ -z "${{ secrets.UPSTASH_REDIS_REST_URL }}" ] || [ -z "${{ secrets.UPSTASH_REDIS_REST_TOKEN }}" ]; then
+            echo "Missing secrets: UPSTASH_REDIS_REST_URL or UPSTASH_REDIS_REST_TOKEN"
+            exit 1
+          fi
+
+      - name: Ping Upstash
+        env:
+          REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "Pinging Upstash (UTC: $(date -u))"
+          curl -fsS -H "Authorization: Bearer ${REST_TOKEN}" "${REST_URL}/PING" | tee /tmp/ping.json
+
+      - name: FLUSHDB (erase all keys)
+        env:
+          REST_URL: ${{ secrets.UPSTASH_REDIS_REST_URL }}
+          REST_TOKEN: ${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
+        run: |
+          set -euo pipefail
+          # 전체 삭제. 필요하면 ASYNC로 바꿀 수 있음: "${REST_URL}/FLUSHDB/ASYNC"
+          echo "Flushing database..."
+          RESP=$(curl -fsS -H "Authorization: Bearer ${REST_TOKEN}" "${REST_URL}/FLUSHDB")
+          echo "$RESP"
+          # 기대값: {"result":"OK"} 형태
+          echo "$RESP" | grep -qi '"OK"' || { echo "FLUSHDB did not return OK"; exit 1; }
