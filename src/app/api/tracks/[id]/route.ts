@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSpotifyAccessToken } from '@/lib/spotify/spotifyTokenManager';
-import redis from '@/lib/redis/redis';
+import { cacheGet, cacheSet } from '@/lib/redis/redis';
 
 const ONE_DAY = 86400;
 
@@ -13,7 +13,9 @@ export async function GET(request: NextRequest, { params }: PageProps) {
   const cachedKey = `track:${id}:withAlbum`;
 
   // 1. Redis 캐시 확인
-  const cached = await redis.get(cachedKey);
+  // const cached = await redis.get(cachedKey);
+
+  const cached = await cacheGet(cachedKey);
   if (cached) {
     return NextResponse.json(JSON.parse(cached), { headers: { 'x-cache': 'HIT' } });
   }
@@ -71,6 +73,6 @@ export async function GET(request: NextRequest, { params }: PageProps) {
 
   // 5. 트랙과 앨범을 함께 응답
   const response = { track, album };
-  await redis.set(cachedKey, JSON.stringify(response), 'EX', ONE_DAY);
+  await cacheSet(cachedKey, JSON.stringify(response), ONE_DAY);
   return NextResponse.json(response, { headers: { 'x-cache': 'MISS' } });
 }
