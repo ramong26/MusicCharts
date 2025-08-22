@@ -27,4 +27,3 @@
   "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", "src", "svgr.d.ts"],
   "exclude": ["node_modules"]
 }
-//
