@@ -26,24 +26,25 @@ export default async function InterviewList({
       const dateB = new Date(b.pagemap?.metatags?.[0]?.['article:published_time'] ?? '').getTime();
       return dateB - dateA;
     });
+
   return (
-    <div className={`pt-6 px-6  border-2 border-black ${className}`}>
-      <h1 className="text-4xl font-extrabold mb-6 text-black text-center">Latest Interviews</h1>
+    <div className={`pt-3 px-3  border-3 border-black ${className}`}>
+      <h1 className="text-4xl font-extrabold mb-3 text-black text-center">Latest Interviews</h1>
       <ul>
         {sortedInterviews.slice(0, slice).map((interview) => (
-          <li key={interview.link} className="p-4  border-t border-black">
+          <li key={interview.link} className="p-4  border-t border-black truncate">
             <Link
               href={interview.link}
               target="_blank"
               rel="noopener noreferrer"
-              className="text-black hover:text-indigo-800 hover:underline font-medium text-lg"
+              className="text-black hover:text-indigo-800 w-full hover:underline text-xl truncate"
             >
-              {interview.title}
+              {interview.pagemap?.metatags?.[0]?.['og:title'] || interview.title}
             </Link>
 
             {typeof interview.pagemap?.metatags?.[0]?.['article:published_time'] === 'string' &&
               interview.pagemap.metatags[0]['article:published_time'].trim() && (
-                <p className="text-gray-600 mt-2">
+                <p className="text-gray-600 mt-1">
                   {formatDate(interview.pagemap.metatags[0]['article:published_time'])}
                 </p>
               )}

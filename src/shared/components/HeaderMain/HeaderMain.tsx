@@ -1,5 +1,4 @@
 'use client';
-import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 
 import HeaderLayout from '@/shared/components/HeaderMain/HeaderLayout';
@@ -13,16 +12,6 @@ const AuthModal = dynamic(() => import('@/features/auth/components/AuthModal'), 
 export default function HeaderMain() {
   const { modalType, setModalType, handleOpenModal } = useHeaderModal();
   const { isLogin, profile, handleLogout } = useHeaderAuth();
-  const [isScroll, setIsScroll] = useState(false);
-
-  //  스크롤 이벤트
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScroll(window.scrollY > 100);
-    };
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   return (
     <>
@@ -31,7 +20,6 @@ export default function HeaderMain() {
         handleLogout={handleLogout}
         profile={profile}
         isLogin={isLogin}
-        isScroll={isScroll}
       />
       {/* 모달 */}
       {modalType && (

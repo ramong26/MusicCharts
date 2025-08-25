@@ -1,8 +1,6 @@
 import Link from 'next/link';
 import Image from 'next/image';
 
-import HeaderSort from '@/public/image/header-sort.png';
-
 interface Profile {
   displayName: string;
   profileImageUrl?: string | null;
@@ -13,7 +11,6 @@ interface HeaderLayoutProps {
   handleLogout: () => void;
   profile: Profile | null;
   isLogin: boolean;
-  isScroll: boolean;
 }
 
 export default function HeaderLayout({
@@ -21,15 +18,14 @@ export default function HeaderLayout({
   handleLogout,
   profile,
   isLogin,
-  isScroll,
 }: HeaderLayoutProps) {
   const renderAuthButtons = () => (
-    <div className="flex gap-4 text-sm font-semibold">
+    <div className="text-xl font-bold flex gap-[30px] items-center justify-between h-full">
       <button className="cursor-pointer" onClick={() => handleOpenModal('login')}>
-        로그인
+        SIGNIN
       </button>
       <button className="cursor-pointer" onClick={() => handleOpenModal('signup')}>
-        회원가입
+        SIGNUP
       </button>
     </div>
   );
@@ -56,32 +52,17 @@ export default function HeaderLayout({
     );
 
   return (
-    <>
-      <header className="w-full bg-[rgba(18,18,18)] backdrop-blur-md text-amber-50 fixed top-0 left-0 right-0 z-999 shadow-lg transition-all duration-300">
-        {/* 상단 영역 */}
-        {!isScroll && (
-          <div className="flex items-center justify-between w-full h-fit p-7">
-            <Image src={HeaderSort} alt="Header Sort" width={24} height={24} />
-            <Link className="text-4xl cursor-pointer" href="/">
-              Soundtalk
-            </Link>
-            {isLogin ? renderProfile() : renderAuthButtons()}
-          </div>
-        )}
-
-        {/* 메뉴 영역 */}
-        <div className="flex items-center justify-between w-full h-fit p-7 transition-all duration-300">
-          <div>검색 input</div>
-          <div className="flex gap-[100px] font-bold text-2xl">
-            <Link href="/charts">chart</Link>
-            <Link href="/playlist">playlist</Link>
-            <Link href="/channel">channel</Link>
-            <Link href="/recommend">recommend</Link>
-          </div>
-          {isScroll && <div>{isLogin ? renderProfile() : renderAuthButtons()}</div>}
-          {!isScroll && <div />}
-        </div>
-      </header>
-    </>
+    <div className="flex w-full justify-between px-[30px] h-[70px] bg-white">
+      <div className="text-xl font-bold flex gap-[30px] items-center justify-between">
+        <Link href="/charts">CHART</Link>
+        <Link href="/playlist">PLAYLIST</Link>
+        <Link href="/channel">CHANNEL</Link>
+        <Link href="/recommend">RECOMMEND</Link>
+      </div>
+      <div className="text-2xl font-extrabold flex items-center">SOUNDTALK</div>
+      <div className="h-full">
+        <div className="h-full">{isLogin ? renderProfile() : renderAuthButtons()}</div>
+      </div>
+    </div>
   );
 }
