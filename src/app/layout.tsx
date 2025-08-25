@@ -1,19 +1,20 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import QueryProvider from './providers/QueryProvider';
-import { Playfair_Display, Nanum_Myeongjo } from 'next/font/google';
+import { Archivo_Black, Oswald } from 'next/font/google';
+import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 
-const playfair = Playfair_Display({
+const archivoBlack = Archivo_Black({
   subsets: ['latin'],
-  weight: ['400', '700', '800'],
-  variable: '--font-playfair',
+  weight: '400',
+  variable: '--font-archivo-black',
   display: 'swap',
 });
 
-const myeongjo = Nanum_Myeongjo({
+const oswald = Oswald({
   subsets: ['latin'],
-  weight: ['400', '700', '800'],
-  variable: '--font-myeongjo',
+  weight: ['200', '400', '700'],
+  variable: '--font-oswald',
   display: 'swap',
 });
 
@@ -29,7 +30,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${playfair.variable} ${myeongjo.variable}`}>
+      <body className={`${oswald.variable} ${archivoBlack.variable}`}>
+        <HeaderMain />
         <QueryProvider>{children}</QueryProvider>
       </body>
     </html>
