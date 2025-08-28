@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
+import jwt from 'jsonwebtoken';
+import { z } from 'zod';
+
 import { signupSchema } from '@/features/auth/schema/signupSchema';
 import connectToDB from '@/lib/mongo/mongo';
 import { UserModel } from '@/lib/mongo/models/UserModel';
-import jwt from 'jsonwebtoken';
-import { z } from 'zod';
 
 export async function POST(request: NextRequest) {
   try {
@@ -23,7 +24,7 @@ export async function POST(request: NextRequest) {
     const user = new UserModel({
       displayName: username,
       email,
-      password: parsedData.password, // 비밀번호는 해싱 처리 필요
+      password: parsedData.password,
 
       accessToken: '',
       refreshToken: '',
