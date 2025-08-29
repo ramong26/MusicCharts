@@ -5,6 +5,8 @@ import InterviewList from '@/features/homepage/components/InterviewList';
 import { TrackItem } from '@/shared/types/spotifyTrack';
 
 export default function ChartTop1({ tracksList }: { tracksList: TrackItem[] }) {
+  if (!tracksList || tracksList.length === 0) return null;
+
   return (
     <section className="lg:mt-24 md:mt-16 mt-12 lg:gap-12 gap-8 lg:mx-auto mx-4 lg:w-fit lg:p-8 md:p-6 p-4 flex md:flex-row flex-col items-center justify-between bg-[#fdfbf7] border-4 border-black shadow-[6px_6px_0px_#000] ">
       {/* 앨범 커버*/}

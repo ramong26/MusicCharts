@@ -14,7 +14,7 @@ interface Ball {
   vy: number;
 }
 
-export default function YoutubeChannels({ channels }: { channels: YouTubeChannel[] }) {
+export default function YoutubeChannelClient({ channels }: { channels: YouTubeChannel[] }) {
   const [active, setActive] = useState<number | null>(null);
   const [activeCenter, setActiveCenter] = useState(false);
   const [balls, setBalls] = useState<Ball[]>([]);

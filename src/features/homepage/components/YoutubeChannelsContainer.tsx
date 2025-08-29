@@ -1,4 +1,4 @@
-import YoutubeChannels from '@/features/homepage/components/YoutubeChannelClient';
+import YoutubeChannelClient from '@/features/homepage/components/YoutubeChannelClient';
 import { getYoutubeChannelInfo } from '@/features/tracks/hooks/getYoutubeMongo';
 
 export default async function YoutubeChannelsContainer() {
@@ -15,5 +15,5 @@ export default async function YoutubeChannelsContainer() {
     channelHandles.map((handle) => getYoutubeChannelInfo(handle))
   );
 
-  return <YoutubeChannels channels={channelInfos} />;
+  return <YoutubeChannelClient channels={channelInfos} />;
 }
