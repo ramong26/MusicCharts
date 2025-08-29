@@ -83,6 +83,11 @@ export interface YouTubeChannel {
   kind: string;
   etag: string;
   id: string;
+  image: string;
+  title: string;
+  description: string;
+  subs: string;
+  videos: string;
   snippet: {
     title: string;
     description: string;

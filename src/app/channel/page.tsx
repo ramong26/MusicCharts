@@ -1,6 +1,6 @@
 import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import ChannelList from '@/features/channel/components/ChannelList';
-import YoutubeChannels from '@/features/homepage/components/YoutubePlaylist';
+import YoutubeChannels from '@/features/homepage/components/YoutubeChannelsContainer';
 
 export const metadata = {
   title: 'Music Channel Recommendation',

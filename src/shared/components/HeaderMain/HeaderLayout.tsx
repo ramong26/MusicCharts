@@ -20,7 +20,7 @@ export default function HeaderLayout({
   isLogin,
 }: HeaderLayoutProps) {
   const renderAuthButtons = () => (
-    <div className="text-xl font-bold flex gap-[30px] items-center justify-between h-full">
+    <div className="lg:text-xl md:text-lg text-sm font-bold flex lg:gap-[30px] md:gap-[15px] gap-[10px] items-center justify-between h-full ">
       <button className="cursor-pointer" onClick={() => handleOpenModal('login')}>
         SIGNIN
       </button>
@@ -32,7 +32,7 @@ export default function HeaderLayout({
 
   const renderProfile = () =>
     profile && (
-      <div className="flex items-center gap-2 text-sm font-semibold">
+      <div className="flex items-center gap-2 text-lg font-semibold h-full">
         <Link href="/profile" className="flex items-center gap-2">
           {profile.profileImageUrl && (
             <Image
@@ -46,20 +46,23 @@ export default function HeaderLayout({
           {profile.displayName}
         </Link>
         <button className="cursor-pointer" onClick={handleLogout}>
-          로그아웃
+          LOGOUT
         </button>
       </div>
     );
 
   return (
     <div className="flex w-full justify-between px-[30px] h-[70px] bg-white">
-      <div className="text-xl font-bold flex gap-[30px] items-center justify-between">
+      <div className="lg:text-xl md:text-lg text-sm font-bold flex lg:gap-[30px] md:gap-[15px] gap-[10px] items-center justify-between">
         <Link href="/charts">CHART</Link>
         <Link href="/playlist">PLAYLIST</Link>
         <Link href="/channel">CHANNEL</Link>
         <Link href="/recommend">RECOMMEND</Link>
       </div>
-      <div className="text-2xl font-extrabold flex items-center">SOUNDTALK</div>
+
+      <Link href="/" className="lg:text-xl md:text-lg font-extrabold flex items-center">
+        SOUNDTALK
+      </Link>
       <div className="h-full">
         <div className="h-full">{isLogin ? renderProfile() : renderAuthButtons()}</div>
       </div>
