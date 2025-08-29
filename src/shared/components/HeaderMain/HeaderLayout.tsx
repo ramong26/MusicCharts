@@ -53,14 +53,14 @@ export default function HeaderLayout({
 
   return (
     <div className="flex w-full justify-between px-[30px] h-[70px] bg-white">
-      <div className="lg:text-xl md:text-lg text-sm font-bold flex lg:gap-[30px] md:gap-[15px] gap-[10px] items-center justify-between">
+      <div className="lg:text-xl md:text-lg text-sm font-bold flex lg:gap-[20px] md:gap-[15px] gap-[10px] items-center justify-between">
         <Link href="/charts">CHART</Link>
         <Link href="/playlist">PLAYLIST</Link>
         <Link href="/channel">CHANNEL</Link>
         <Link href="/recommend">RECOMMEND</Link>
       </div>
 
-      <Link href="/" className="lg:text-xl md:text-lg font-extrabold flex items-center">
+      <Link href="/" className="lg:text-2xl md:text-lg font-extrabold flex items-center">
         SOUNDTALK
       </Link>
       <div className="h-full">

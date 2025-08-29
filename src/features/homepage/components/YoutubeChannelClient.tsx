@@ -23,8 +23,8 @@ export default function YoutubeChannels({ channels }: { channels: YouTubeChannel
   // 초기 위치/속도 세팅
   useEffect(() => {
     const initialBalls = channels.map(() => ({
-      x: Math.random() * 1200 - 300,
-      y: Math.random() * 400 - 200,
+      x: Math.random() * 1200 - 500,
+      y: Math.random() * 400 - 300,
       vx: (Math.random() - 0.5) * 2,
       vy: (Math.random() - 0.5) * 2,
     }));
@@ -52,8 +52,8 @@ export default function YoutubeChannels({ channels }: { channels: YouTubeChannel
           x += vx * 2;
           y += vy * 2;
 
-          const maxX = 900;
-          const maxY = 250;
+          const maxX = 700;
+          const maxY = 200;
 
           if (x > maxX || x < -maxX) vx *= -1;
           if (y > maxY || y < -maxY) vy *= -1;
@@ -76,7 +76,7 @@ export default function YoutubeChannels({ channels }: { channels: YouTubeChannel
   return (
     <section
       ref={containerRef}
-      className="relative w-full h-[700px] flex items-center justify-center bg-rose-500 overflow-hidden"
+      className="lg:h-[600px] md:h-[500px] h-[350px] relative w-full flex items-center justify-center bg-rose-500 overflow-hidden"
     >
       {/* 중앙 텍스트 */}
       <div
@@ -87,7 +87,7 @@ export default function YoutubeChannels({ channels }: { channels: YouTubeChannel
         {active !== null ? (
           <>
             <h2
-              className="font-bold text-3xl text-white"
+              className="lg:text-3xl md:text-2xl text-xl font-bold text-white"
               style={{
                 textShadow: '2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000',
               }}
@@ -95,7 +95,7 @@ export default function YoutubeChannels({ channels }: { channels: YouTubeChannel
               {channels?.[active]?.snippet?.title}
             </h2>
             <p
-              className="text-xl mt-2 max-w-sm text-white"
+              className="md:text-xl text-lg mt-2 max-w-sm text-white"
               style={{
                 textShadow: '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000',
               }}
@@ -103,7 +103,7 @@ export default function YoutubeChannels({ channels }: { channels: YouTubeChannel
               {channels?.[active]?.snippet?.description}
             </p>
             <p
-              className="text-lg mt-1 text-white"
+              className="md:text-lg text-md mt-1 text-white"
               style={{
                 textShadow: '1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000',
               }}
@@ -114,7 +114,7 @@ export default function YoutubeChannels({ channels }: { channels: YouTubeChannel
           </>
         ) : (
           <h2
-            className="text-4xl font-extrabold text-white hover:cursor-pointer hover:transition-transform hover:scale-105"
+            className="lg:text-4xl md:text-2xl text-xl font-extrabold text-white hover:cursor-pointer hover:transition-transform hover:scale-105"
             style={{
               textShadow: '3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000',
             }}
@@ -128,7 +128,7 @@ export default function YoutubeChannels({ channels }: { channels: YouTubeChannel
       {channels.map((channel, idx) => (
         <motion.div
           key={idx}
-          className="absolute w-32 h-32 rounded-full bg-white flex items-center justify-center cursor-pointer shadow-lg"
+          className="lg:w-32 lg:h-32 md:w-24 md:h-24 w-16 h-16 absolute rounded-full bg-white flex items-center justify-center cursor-pointer shadow-lg"
           animate={{
             x: balls[idx]?.x || 0,
             y: balls[idx]?.y || 0,
@@ -144,7 +144,7 @@ export default function YoutubeChannels({ channels }: { channels: YouTubeChannel
               alt={channel.snippet.title}
               width={96}
               height={96}
-              className="rounded-full"
+              className="lg:w-[96px] lg:h-[96px] md:w-[70px] md:h-[70px] w-[50px] h-[50px] rounded-full"
             />
           </Link>
         </motion.div>

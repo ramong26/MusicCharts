@@ -27,7 +27,9 @@ export default async function HomePage() {
       <Suspense fallback={<div className="h-[700px] w-full bg-gray-200 animate-pulse mt-10" />}>
         <YoutubePlaylist />
       </Suspense>
-      <HomepageFooter />
+      <Suspense fallback={<div className="h-[200px] w-full bg-gray-200 animate-pulse mt-10" />}>
+        <HomepageFooter />
+      </Suspense>
     </>
   );
 }
