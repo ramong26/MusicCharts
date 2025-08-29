@@ -29,6 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     const jwtSecret = process.env.JWT_SECRET;
+    const jwtRefreshSecret = process.env.JWT_REFRESH_SECRET!;
     if (!jwtSecret) {
       if (process.env.NODE_ENV !== 'production') {
         console.error('JWT_SECRET is not defined');
@@ -37,19 +38,25 @@ export async function POST(request: NextRequest) {
     }
 
     const payload = { userId: user._id.toString() };
-    const jwtToken = jwt.sign(payload, jwtSecret, { expiresIn: '1d' });
+    const accessToken = jwt.sign(payload, jwtSecret, { expiresIn: '1d' });
+    const refreshToken = jwt.sign(payload, jwtRefreshSecret, { expiresIn: '7d' });
+
+    // 사용자 정보 업데이트
+    user.refreshToken = refreshToken;
+    user.lastLogin = new Date();
+    await user.save();
 
     const response = NextResponse.json(
-      { message: '로그인 성공', token: jwtToken },
+      { message: '로그인 성공', accessToken, refreshToken },
       { status: 200 }
     );
 
-    response.cookies.set('jwt', jwtToken, {
+    response.cookies.set('jwt', accessToken, {
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: 'strict',
       path: '/',
-      secure: process.env.NODE_ENV === 'production' ? true : false,
-      maxAge: 60 * 60 * 24,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 86400,
     });
 
     return response;

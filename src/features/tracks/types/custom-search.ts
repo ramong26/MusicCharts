@@ -2,12 +2,12 @@ export interface CustomSearchResult {
   id?: {
     videoId?: string;
   };
-  kind: string;
-  title: string;
-  htmlTitle: string;
+  kind?: string;
+  title?: string;
+  htmlTitle?: string;
   link: string;
-  displayLink: string;
-  snippet:
+  displayLink?: string;
+  snippet?:
     | string
     | {
         videoId?: string;
@@ -20,10 +20,10 @@ export interface CustomSearchResult {
         };
         publishedAt?: string;
       };
-  htmlSnippet: string;
+  htmlSnippet?: string;
   cacheId?: string;
-  formattedUrl: string;
-  htmlFormattedUrl: string;
+  formattedUrl?: string;
+  htmlFormattedUrl?: string;
   pagemap?: {
     cse_image?: {
       src: string;

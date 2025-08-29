@@ -8,8 +8,8 @@ export async function GET() {
     maxAge: 0,
     path: '/',
     httpOnly: true,
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-    secure: process.env.NODE_ENV === 'production' ? true : false,
+    sameSite: 'strict',
+    secure: process.env.NODE_ENV === 'production',
   });
   return response;
 }

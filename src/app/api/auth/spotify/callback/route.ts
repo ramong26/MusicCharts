@@ -8,7 +8,7 @@ import { UserModel } from '@/lib/mongo/models/UserModel';
 export const runtime = 'nodejs'; // 몽고로 인해 nodejs 런타임 사용
 
 export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url);
+  const { searchParams } = request.nextUrl;
   const code = searchParams.get('code');
 
   if (!code) {
@@ -120,9 +120,9 @@ export async function GET(request: NextRequest) {
 
     response.cookies.set('jwt', jwtToken, {
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: 'strict',
       path: '/',
-      secure: process.env.NODE_ENV === 'production' ? true : false,
+      secure: process.env.NODE_ENV === 'production',
       maxAge: tokenData.expires_in ?? 3600,
     });
 

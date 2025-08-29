@@ -1,6 +1,11 @@
-import HeaderMain from "@/shared/components/HeaderMain";
-import HowPlaylist from "@/features/playlist/components/HowPlaylist";
-import SubmitPlaylist from "@/features/playlist/components/SubmitPlaylist";
+import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
+import HowPlaylist from '@/features/playlist/components/HowPlaylist';
+import SubmitPlaylist from '@/features/playlist/components/SubmitPlaylist';
+
+export const metadata = {
+  title: 'Import Spotify Playlists',
+  description: 'Easily import your favorite Spotify playlists',
+};
 
 export default function PlaylistPage() {
   return (
@@ -9,8 +14,7 @@ export default function PlaylistPage() {
       <main className="flex mt-[188px] gap-4 h-[617px] w-[1043px] mx-auto">
         <div className="flex flex-col gap-10 w-full">
           <HowPlaylist />
-          <SubmitPlaylist/>
-       
+          <SubmitPlaylist />
         </div>
       </main>
     </div>

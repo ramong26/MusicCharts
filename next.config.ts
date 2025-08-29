@@ -1,28 +1,21 @@
 import type { NextConfig } from 'next';
+import withBundleAnalyzer from '@next/bundle-analyzer';
+import path from 'path';
+
+const withAnalyzer = withBundleAnalyzer({
+  enabled: process.env.ANALYZE === 'true',
+});
 
 const nextConfig: NextConfig = {
+  experimental: {
+    esmExternals: 'loose',
+  },
   images: {
     remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'i.scdn.co',
-        pathname: '/image/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'yt3.ggpht.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'open.spotify.com',
-        pathname: '/**',
-      },
-      {
-        protocol: 'https',
-        hostname: 'lh3.googleusercontent.com',
-        pathname: '/**',
-      },
+      { protocol: 'https', hostname: 'i.scdn.co', pathname: '/image/**' },
+      { protocol: 'https', hostname: 'yt3.ggpht.com', pathname: '/**' },
+      { protocol: 'https', hostname: 'open.spotify.com', pathname: '/**' },
+      { protocol: 'https', hostname: 'lh3.googleusercontent.com', pathname: '/**' },
     ],
   },
 
@@ -57,8 +50,12 @@ const nextConfig: NextConfig = {
       }
     }
 
+    if (!config.resolve) config.resolve = {};
+    if (!config.resolve.alias) config.resolve.alias = {};
+    config.resolve.alias['@'] = path.resolve(__dirname, 'src');
+
     return config;
   },
 };
 
-export default nextConfig;
+export default withAnalyzer(nextConfig);

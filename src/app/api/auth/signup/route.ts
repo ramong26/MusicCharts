@@ -56,10 +56,10 @@ export async function POST(request: NextRequest) {
 
     response.cookies.set('jwt', jwtToken, {
       httpOnly: true,
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      sameSite: 'strict',
       path: '/',
-      secure: process.env.NODE_ENV === 'production' ? true : false,
-      maxAge: 60 * 60 * 24,
+      secure: process.env.NODE_ENV === 'production',
+      maxAge: 86400,
     });
 
     return response;

@@ -1,5 +1,12 @@
-import HeaderMain from '@/shared/components/HeaderMain';
+import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import TodayMusic from '@/features/recommend/components/TodayMusic';
+
+export const metadata = {
+  title: 'Music Recommendation',
+  description: 'Discover new music tailored for you',
+};
+
+export const revalidate = 86400;
 
 export default function Recommend() {
   return (

@@ -1,6 +1,14 @@
-import HeaderMain from '@/shared/components/HeaderMain';
+import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import ChannelList from '@/features/channel/components/ChannelList';
-import YoutubeChannels from '@/features/homepage/components/YoutubePlaylist';
+import YoutubeChannels from '@/features/homepage/components/YoutubeChannelsContainer';
+
+export const metadata = {
+  title: 'Music Channel Recommendation',
+  description: 'Discover new music channels tailored for you',
+};
+
+export const revalidate = 86400;
+
 export default function ChannelPage() {
   return (
     <div className="h-screen ">

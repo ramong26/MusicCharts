@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { YouTubeSearchItem, YouTubeVideoItem } from '@/shared/types/Youtube';
+import { YouTubeSearchItem, YouTubeVideoItem } from '@/shared/types/youtube';
+
 const YOUTUBE_API_KEY = process.env.GOOGLE_API_KEY;
 const YOUTUBE_SEARCH_URL = 'https://www.googleapis.com/youtube/v3/search';
 const YOUTUBE_VIDEO_URL = 'https://www.googleapis.com/youtube/v3/videos';

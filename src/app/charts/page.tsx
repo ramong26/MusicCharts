@@ -1,8 +1,15 @@
-import HeaderMain from '@/shared/components/HeaderMain';
+import HeaderMain from '@/shared/components/HeaderMain/HeaderMain';
 import ChartTop from '@/features/chart/components/ChartTop';
 import ChartComponent from '@/features/chart/components/ChartComponent';
 
 import { getTrackList } from '@/shared/hooks/getTrackList';
+
+export const metadata = {
+  title: 'Music Charts',
+  description: 'Explore the top music tracks and albums',
+};
+
+export const revalidate = 86400;
 
 export default async function Charts() {
   const tracksList = await getTrackList({ playlistId: '1PcB3QM5sGbzFU5D9CbEGB' });

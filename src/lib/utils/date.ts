@@ -17,7 +17,7 @@ export const diffDate = (isoDate: string) => {
   today.setHours(0, 0, 0, 0);
 
   const diff = today.getTime() - createdDate.getTime();
-  const diffDays = diff / (1000 * 60 * 60 * 24);
+  const diffDays = diff / (1000 * 86400);
 
   return Math.floor(diffDays);
 };
@@ -35,4 +35,11 @@ export const formatTime = (seconds: number) => {
     )}:${String(s).padStart(2, '0')}`;
   }
   return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+};
+
+// 특정 연도만큼 이전 날짜를 반환하는 함수
+export const getDateYearsAgo = (years: number): string => {
+  const today = new Date();
+  today.setFullYear(today.getFullYear() - years);
+  return formatDate(today);
 };
