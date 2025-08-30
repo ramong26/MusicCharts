@@ -8,7 +8,7 @@ export const metadata = {
 
 export default function PlaylistPage() {
   return (
-    <div className="flex flex-col gap-10 w-full">
+    <div className="flex flex-col items-center">
       <HowPlaylist />
       <SubmitPlaylist />
     </div>
